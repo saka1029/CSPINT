@@ -42,6 +42,13 @@ public class TestBitSet {
         assertEquals(64, bs.size());
         assertEquals(5, bs.length());
         assertEquals(2, bs.cardinality());
+    }
+    
+    @Test
+    public void testBitSetIterator() {
+        BitSet bs = new BitSet(4);
+        bs.set(3);
+        bs.set(4);
         Iterator<Integer> it =  new BitSetIterator(bs);
         assertTrue(it.hasNext());
         assertEquals(3, it.next());
