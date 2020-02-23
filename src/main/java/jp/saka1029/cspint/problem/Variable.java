@@ -18,8 +18,13 @@ public class Variable {
         this.domain = domain;
     }
 
-    void add(Constraint c) {
+    void constraint(Constraint c) {
         this._constraints.add(c);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("variable(%s %s:%s)", id, name, domain);
     }
 
 }
