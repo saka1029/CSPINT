@@ -1,20 +1,26 @@
-package jp.saka1029.cspint.problem;
+package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Constraint {
+public class Constraint {
 
+    public final Predicate predicate;
     private final List<Variable> _variables = new ArrayList<>();
     public final List<Variable> variables = Collections.unmodifiableList(_variables);
 
-    protected Constraint(Variable... variables) {
+    Constraint(Predicate predicate, Variable... variables) {
+        this.predicate = predicate;
         for (Variable v : variables) {
             this._variables.add(v);
-            v.constraint(this);
+            v.add(this);
         }
     }
+
+//    public static Constraint of(Predicate predicate, Variable... variables) {
+//        return new Constraint(predicate, variables);
+//    }
 
     @Override
     public String toString() {

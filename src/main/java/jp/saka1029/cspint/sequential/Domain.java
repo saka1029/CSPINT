@@ -1,9 +1,8 @@
-package jp.saka1029.cspint.problem;
+package jp.saka1029.cspint.sequential;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
-public class Domain implements Iterable<Integer> {
+public class Domain {
 
     private final int[] values;
 
@@ -32,20 +31,14 @@ public class Domain implements Iterable<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
-        return Arrays.stream(values).iterator();
-    }
-
-    @Override
     public int hashCode() {
         return Arrays.hashCode(values);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Domain)) return false;
-        Domain o = (Domain)obj;
-        return Arrays.equals(values, o.values);
+        return obj instanceof Domain
+            && Arrays.equals(((Domain)obj).values, values);
     }
 
     @Override
