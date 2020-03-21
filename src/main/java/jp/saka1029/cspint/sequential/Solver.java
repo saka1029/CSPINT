@@ -1,7 +1,6 @@
 package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,32 +11,14 @@ public class Solver {
 
     static Logger logger = Logger.getLogger(Solver.class.getName());
 
-    public static Constraint[][] constraintArrays(Problem problem) {
-        int variableSize = problem.variables.size();
-        Map<Variable, Integer> variableIndexes = new HashMap<>();
-        int p = 0;
-        for (Variable v : problem.variables)
-            variableIndexes.put(v, p++);
-        Constraint[][] result = new Constraint[variableSize][];
-        for (Constraint c : problem.constraints) {
-            int max = c.variables.stream()
-                .mapToInt(v -> variableIndexes.get(v))
-                .max().getAsInt();
-            Constraint[] cs = result[max];
-            result[max] = cs = cs == null ? new Constraint[1] : Arrays.copyOf(cs, cs.length + 1);
-            result[max][cs.length - 1] = c;
-        }
-        for (int i = 0; i < variableSize; ++i)
-            logger.info(problem.variables.get(i) + ":" + Arrays.toString(result[i]));
-        return result;
-    }
-
-    public static List<List<Constraint>> constraintLists(Problem problem) {
-        int variableSize = problem.variables.size();
+    public static List<List<Constraint>> constraintLists(Problem problem, List<Variable> resolvingOrder) {
+        int variableSize = resolvingOrder.size();
+        if (problem.variables.size() != variableSize)
+            throw new IllegalArgumentException("invalid variableOrder size");
         Map<Variable, Integer> variableIndexes = new HashMap<>();
         List<List<Constraint>> result = new ArrayList<>(variableSize);
         int p = 0;
-        for (Variable v : problem.variables) {
+        for (Variable v : resolvingOrder) {
             variableIndexes.put(v, p++);
             result.add(new ArrayList<>());
         }
@@ -47,15 +28,17 @@ public class Solver {
                 .max().getAsInt();
             result.get(max).add(c);
         }
-        for (int i = 0; i < variableSize; ++i)
-            logger.info(problem.variables.get(i) + ":" + result.get(i));
+//        for (int i = 0; i < variableSize; ++i)
+//            logger.info(resolvingOrder.get(i) + ":" + result.get(i));
         return result;
     }
 
-    public void solve(Problem problem, Answer answer) {
+    public void solve(Problem problem, List<Variable> resolvingOrder, Answer answer) {
         int variableSize = problem.variables.size();
+        if (resolvingOrder.size() != variableSize)
+            throw new IllegalArgumentException("invalid resolvingOrder size");
         Map<Variable, Integer> result = new LinkedHashMap<>();
-        List<List<Constraint>> constraints = constraintLists(problem);
+        List<List<Constraint>> constraints = constraintLists(problem, resolvingOrder);
         int[] testArgs = new int[variableSize];
         new Object() {
 
@@ -71,11 +54,10 @@ public class Solver {
                     answer.answer(result);
                     return;
                 }
-                Variable variable = problem.variables.get(i);
+                Variable variable = resolvingOrder.get(i);
                 Domain domain = variable.domain;
                 L: for (int j = 0, size = domain.size(); j < size; ++j) {
-                    int value = domain.get(j);
-                    result.put(variable, value);
+                    result.put(variable, domain.get(j));
                     for (Constraint constraint : constraints.get(i))
                         if (!test(constraint))
                             continue L;
@@ -83,5 +65,9 @@ public class Solver {
                 }
             }
         }.solve(0);
+    }
+
+    public void solve(Problem problem, Answer answer) {
+        solve(problem, problem.variables, answer);
     }
 }
