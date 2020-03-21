@@ -2,26 +2,28 @@ package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Problem {
 
     static Logger logger = Logger.getLogger(Problem.class.getName());
 
-    private final Set<String> variableNames = new HashSet<>();
+    private final Map<String, Variable> variableNames = new HashMap<>();
     private final List<Constraint> _constraints = new ArrayList<>();
     public final List<Constraint> constraints = Collections.unmodifiableList(_constraints);
     private final List<Variable> _variables = new ArrayList<>();
     public final List<Variable> variables = Collections.unmodifiableList(_variables);
 
     public Variable variable(String name, Domain domain) {
-        if (variableNames.contains(name))
+        if (name == null)
+            throw new NullPointerException("name");
+        if (variableNames.containsKey(name))
             throw new IllegalArgumentException("duplicated variable name: " + name);
-        variableNames.add(name);
         Variable v = new Variable(name, domain);
+        variableNames.put(name, v);
         _variables.add(v);
         return v;
     }
@@ -32,6 +34,10 @@ public class Problem {
         for (Variable v : variables)
             v.add(c);
         return c;
+    }
+
+    public Variable variable(String name) {
+        return variableNames.get(name);
     }
 
     public Constraint constraint(Predicate1 predicate, Variable v0) {
