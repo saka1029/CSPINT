@@ -68,10 +68,7 @@ class TestSendMoreMoney {
         Variable R = p.variable("R", zero);
         Variable Y = p.variable("Y", zero);
         Variable[] variables = {S, E, N, D, M, O, R, Y};
-        for (Variable x : variables)
-            for (Variable y : variables)
-                if (x.name.compareTo(y.name) < 0)
-                    p.constraint((a, b) -> a != b, x, y);
+        p.allDifferent(variables);
         p.constraint(
             (s, e, n, d, m, o, r, y) -> number(s, e, n, d) + number(m, o, r, e) == number(m, o, n, e, y),
             S, E, N, D, M, O, R, Y);
@@ -96,10 +93,7 @@ class TestSendMoreMoney {
         Variable R = p.variable("R", zero);
         Variable Y = p.variable("Y", zero);
         Variable[] variables = {S, E, N, D, M, O, R, Y};
-        for (Variable x : variables)
-            for (Variable y : variables)
-                if (x.name.compareTo(y.name) < 0)
-                    p.constraint((a, b) -> a != b, x, y);
+        p.allDifferent(variables);
         // C3 C2 C1
         // S E N D
         // + M O R E

@@ -2,6 +2,7 @@ package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class Solver {
 
     public void solve(Problem problem, List<Variable> resolvingOrder, Answer answer) {
         int variableSize = problem.variables.size();
-        if (resolvingOrder.size() != variableSize)
+        if (new HashSet<>(resolvingOrder).size() != variableSize)
             throw new IllegalArgumentException("invalid resolvingOrder size");
         Map<Variable, Integer> result = new LinkedHashMap<>();
         List<List<Constraint>> constraints = constraintLists(problem, resolvingOrder);
