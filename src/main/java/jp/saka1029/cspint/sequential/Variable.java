@@ -22,7 +22,7 @@ public class Variable {
 
     @Override
     public String toString() {
-        return String.format("%s:%s", name, domain);
+        return name;
     }
 
 }

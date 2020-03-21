@@ -5,8 +5,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class Problem {
+
+    static Logger logger = Logger.getLogger(Problem.class.getName());
 
     private final Set<String> variableNames = new HashSet<>();
     private final List<Constraint> _constraints = new ArrayList<>();
@@ -23,12 +26,54 @@ public class Problem {
         return v;
     }
 
-    public Constraint constraint(Predicate predicate, Variable... variables) {
+    private Constraint constraint0(Predicate0 predicate, Variable... variables) {
         Constraint c = new Constraint(predicate, variables);
         _constraints.add(c);
         for (Variable v : variables)
             v.add(c);
         return c;
+    }
+
+    public Constraint constraint(Predicate1 predicate, Variable v0) {
+        return constraint0(predicate, v0);
+    }
+
+    public Constraint constraint(Predicate2 predicate, Variable v0, Variable v1) {
+        return constraint0(predicate, v0, v1);
+    }
+
+    public Constraint constraint(Predicate3 predicate, Variable v0, Variable v1, Variable v2) {
+        return constraint0(predicate, v0, v1, v2);
+    }
+
+    public Constraint constraint(Predicate4 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3) {
+        return constraint0(predicate, v0, v1, v2, v3);
+    }
+
+    public Constraint constraint(Predicate5 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4) {
+        return constraint0(predicate, v0, v1, v2, v3, v4);
+    }
+
+    public Constraint constraint(Predicate6 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4, Variable v5) {
+        return constraint0(predicate, v0, v1, v2, v3, v4, v5);
+    }
+
+    public Constraint constraint(Predicate7 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4, Variable v5, Variable v6) {
+        return constraint0(predicate, v0, v1, v2, v3, v4, v5, v6);
+    }
+
+    public Constraint constraint(Predicate8 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4, Variable v5, Variable v6, Variable v7) {
+        return constraint0(predicate, v0, v1, v2, v3, v4, v5, v6, v7);
+    }
+
+    public Constraint constraint(Predicate9 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8) {
+        return constraint0(predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8);
     }
 
 }

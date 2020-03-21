@@ -14,18 +14,18 @@ class TestProblem {
     @Test
     void testVariable() {
         Problem p = new Problem();
-        Variable a = p.variable("a", Domain.range(1, 4));
+        Variable A = p.variable("a", Domain.range(1, 4));
         assertEquals(1, p.variables.size());
-        assertEquals(a, p.variables.get(0));
+        assertEquals(A, p.variables.get(0));
         assertEquals(Domain.of(1, 2, 3), p.variables.get(0).domain);
         assertEquals(0, p.variables.get(0).constraints.size());
-        Variable b = p.variable("b", Domain.range(1, 3));
+        Variable B = p.variable("b", Domain.range(1, 3));
         assertEquals(2, p.variables.size());
-        assertEquals(a, p.variables.get(0));
-        assertEquals(b, p.variables.get(1));
+        assertEquals(A, p.variables.get(0));
+        assertEquals(B, p.variables.get(1));
         assertEquals(Domain.of(1, 2), p.variables.get(1).domain);
         assertEquals(0, p.variables.get(1).constraints.size());
-        Constraint c = p.constraint(args -> args[0] != args[1], a, b);
+        Constraint c = p.constraint((x, y) -> x != y, A, B);
     }
 
 }
