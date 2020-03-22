@@ -22,6 +22,10 @@ public class Domain {
         return new Domain(values);
     }
 
+    public static Domain rangeClosed(int start, int end) {
+        return range(start, end + 1);
+    }
+
     public int size() {
         return values.length;
     }

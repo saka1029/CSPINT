@@ -12,6 +12,8 @@ public class Solver {
 
     static Logger logger = Logger.getLogger(Solver.class.getName());
 
+    public int[] callCount;
+
     public static List<List<Constraint>> constraintLists(Problem problem, List<Variable> resolvingOrder) {
         int variableSize = resolvingOrder.size();
         if (problem.variables.size() != variableSize)
@@ -38,6 +40,7 @@ public class Solver {
         int variableSize = problem.variables.size();
         if (new HashSet<>(resolvingOrder).size() != variableSize)
             throw new IllegalArgumentException("invalid resolvingOrder size");
+        callCount = new int[variableSize];
         Map<Variable, Integer> result = new LinkedHashMap<>();
         List<List<Constraint>> constraints = constraintLists(problem, resolvingOrder);
         int[] testArgs = new int[variableSize];
@@ -51,6 +54,7 @@ public class Solver {
             }
 
             void solve(int i) {
+                if (i > 0) ++callCount[i - 1];
                 if (i >= variableSize) {
                     answer.answer(result);
                     return;

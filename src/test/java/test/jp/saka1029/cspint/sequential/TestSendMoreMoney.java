@@ -2,6 +2,10 @@ package test.jp.saka1029.cspint.sequential;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -55,7 +59,7 @@ class TestSendMoreMoney {
     };
 
     @Test
-    public void testSingleConstraint() {
+    public void test単一制約() {
         Domain zero = Domain.range(0, 10);
         Domain one = Domain.range(1, 10);
         Problem p = new Problem();
@@ -73,7 +77,10 @@ class TestSendMoreMoney {
             (s, e, n, d, m, o, r, y) -> number(s, e, n, d) + number(m, o, r, e) == number(m, o, n, e, y),
             S, E, N, D, M, O, R, Y);
         Solver solver = new Solver();
+        logger.info("単一制約");
+        logger.info("束縛順:" + p.variables);
         solver.solve(p, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
     }
 
     static Problem digitConstraint() {
@@ -107,14 +114,17 @@ class TestSendMoreMoney {
     }
 
     @Test
-    public void testDigitConstraintSimple() {
+    public void test桁ごとの制約_宣言順() {
         Problem p = digitConstraint();
         Solver solver = new Solver();
+        logger.info("桁ごとの制約_宣言順");
+        logger.info("束縛順:" + p.variables);
         solver.solve(p, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
     }
 
     @Test
-    public void testDigitConstraintRightToLeft() {
+    public void test桁ごとの制約_右から左() {
         Problem p = digitConstraint();
         List<Variable> resolvingOrder = List.of(
             p.variable("D"), p.variable("E"), p.variable("Y"), p.variable("C1"),
@@ -122,7 +132,52 @@ class TestSendMoreMoney {
             p.variable("O"), p.variable("C3"),
             p.variable("S"), p.variable("M"));
         Solver solver = new Solver();
+        logger.info("桁ごとの制約_右から左");
+        logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
+    }
+
+    @Test
+    public void test桁ごとの制約_左から右() {
+        Problem p = digitConstraint();
+        List<Variable> resolvingOrder = List.of(
+            p.variable("C3"), p.variable("S"), p.variable("M"), p.variable("O"),
+            p.variable("C2"), p.variable("E"), p.variable("N"),
+            p.variable("C1"), p.variable("R"),
+            p.variable("D"), p.variable("Y"));
+        Solver solver = new Solver();
+        logger.info("桁ごとの制約_左から右");
+        logger.info("束縛順:" + resolvingOrder);
+        solver.solve(p, resolvingOrder, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
+    }
+
+    @Test
+    public void test桁ごとの制約_ドメインの小さいものから() {
+        Problem p = digitConstraint();
+        List<Variable> resolvingOrder = List.of(
+            p.variable("C1"), p.variable("C2"), p.variable("C3"),
+            p.variable("S"), p.variable("M"),
+            p.variable("O"), p.variable("E"), p.variable("N"),
+            p.variable("R"), p.variable("D"), p.variable("Y"));
+        Solver solver = new Solver();
+        logger.info("桁ごとの制約_ドメインの小さいものから");
+        logger.info("束縛順:" + resolvingOrder);
+        solver.solve(p, resolvingOrder, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
+    }
+
+    @Test
+    public void test桁ごとの制約_ドメインサイズの昇順でソート() {
+        Problem p = digitConstraint();
+        List<Variable> resolvingOrder = new ArrayList<>(p.variables);
+        Collections.sort(resolvingOrder, Comparator.comparing(v -> v.domain.size()));
+        Solver solver = new Solver();
+        logger.info("桁ごとの制約_ドメインサイズの昇順でソート");
+        logger.info("束縛順:" + resolvingOrder);
+        solver.solve(p, resolvingOrder, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.callCount));
     }
 
 }
