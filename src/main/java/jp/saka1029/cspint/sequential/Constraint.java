@@ -20,7 +20,7 @@ public class Constraint {
 
     @Override
     public String toString() {
-        return "constraint" + _variables;
+        return "制約" + _variables;
     }
 
 }
