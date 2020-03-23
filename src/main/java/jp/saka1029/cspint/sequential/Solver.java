@@ -12,16 +12,16 @@ public class Solver {
 
     static Logger logger = Logger.getLogger(Solver.class.getName());
 
-    public int[] callCount;
+    public int[] bindCount;
 
-    public static List<List<Constraint>> constraintLists(Problem problem, List<Variable> resolvingOrder) {
-        int variableSize = resolvingOrder.size();
-        if (problem.variables.size() != variableSize)
-            throw new IllegalArgumentException("invalid variableOrder size");
+    public static List<List<Constraint>> constraintLists(Problem problem, List<Variable> bindingOrder) {
+        int variableSize = problem.variables.size();
+        if (new HashSet<>(bindingOrder).size() != variableSize)
+            throw new IllegalArgumentException("invalid bindingOrder size");
         Map<Variable, Integer> variableIndexes = new HashMap<>();
         List<List<Constraint>> result = new ArrayList<>(variableSize);
         int p = 0;
-        for (Variable v : resolvingOrder) {
+        for (Variable v : bindingOrder) {
             variableIndexes.put(v, p++);
             result.add(new ArrayList<>());
         }
@@ -32,17 +32,17 @@ public class Solver {
             result.get(max).add(c);
         }
 //        for (int i = 0; i < variableSize; ++i)
-//            logger.info(resolvingOrder.get(i) + ":" + result.get(i));
+//            logger.info(bindingOrder.get(i) + ":" + result.get(i));
         return result;
     }
 
-    public void solve(Problem problem, List<Variable> resolvingOrder, Answer answer) {
+    public void solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
         int variableSize = problem.variables.size();
-        if (new HashSet<>(resolvingOrder).size() != variableSize)
-            throw new IllegalArgumentException("invalid resolvingOrder size");
-        callCount = new int[variableSize];
+        if (new HashSet<>(bindingOrder).size() != variableSize)
+            throw new IllegalArgumentException("invalid bindingOrder size");
+        bindCount = new int[variableSize];
         Map<Variable, Integer> result = new LinkedHashMap<>();
-        List<List<Constraint>> constraints = constraintLists(problem, resolvingOrder);
+        List<List<Constraint>> constraints = constraintLists(problem, bindingOrder);
         int[] testArgs = new int[variableSize];
         new Object() {
 
@@ -54,12 +54,12 @@ public class Solver {
             }
 
             void solve(int i) {
-                if (i > 0) ++callCount[i - 1];
+                if (i > 0) ++bindCount[i - 1];
                 if (i >= variableSize) {
                     answer.answer(result);
                     return;
                 }
-                Variable variable = resolvingOrder.get(i);
+                Variable variable = bindingOrder.get(i);
                 Domain domain = variable.domain;
                 L: for (int j = 0, size = domain.size(); j < size; ++j) {
                     result.put(variable, domain.get(j));

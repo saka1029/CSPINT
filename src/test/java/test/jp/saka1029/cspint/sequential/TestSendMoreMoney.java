@@ -21,7 +21,7 @@ import jp.saka1029.cspint.sequential.Variable;
 
 class TestSendMoreMoney {
 
-    Logger logger = Logger.getLogger(TestSendMoreMoney.class.getName());
+    static Logger logger = Logger.getLogger(TestSendMoreMoney.class.getName());
 
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);
@@ -42,6 +42,7 @@ class TestSendMoreMoney {
 
         @Override
         public void answer(Map<Variable, Integer> result) {
+            logger.info("answer: " + result);
             if (result.containsKey(problem.variable("C2"))) {
                 assertEquals(1, (int) value(result, "C1"));
                 assertEquals(1, (int) value(result, "C2"));
@@ -80,7 +81,7 @@ class TestSendMoreMoney {
         logger.info("単一制約");
         logger.info("束縛順:" + p.variables);
         solver.solve(p, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
     static Problem digitConstraint() {
@@ -120,7 +121,7 @@ class TestSendMoreMoney {
         logger.info("桁ごとの制約_宣言順");
         logger.info("束縛順:" + p.variables);
         solver.solve(p, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -135,7 +136,22 @@ class TestSendMoreMoney {
         logger.info("桁ごとの制約_右から左");
         logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
+    }
+
+    @Test
+    public void test桁ごとの制約_右から左2() {
+        Problem p = digitConstraint();
+        List<Variable> resolvingOrder = List.of(
+            p.variable("C1"), p.variable("D"), p.variable("E"), p.variable("Y"),
+            p.variable("C2"), p.variable("N"), p.variable("R"),
+            p.variable("C3"), p.variable("O"),
+            p.variable("S"), p.variable("M"));
+        Solver solver = new Solver();
+        logger.info("桁ごとの制約_右から左2");
+        logger.info("束縛順:" + resolvingOrder);
+        solver.solve(p, resolvingOrder, new AssertAnswer(p));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -150,7 +166,7 @@ class TestSendMoreMoney {
         logger.info("桁ごとの制約_左から右");
         logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -165,7 +181,7 @@ class TestSendMoreMoney {
         logger.info("桁ごとの制約_ドメインの小さいものから");
         logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -177,7 +193,7 @@ class TestSendMoreMoney {
         logger.info("桁ごとの制約_ドメインサイズの昇順でソート");
         logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.callCount));
+        logger.info(Arrays.toString(solver.bindCount));
     }
 
 }
