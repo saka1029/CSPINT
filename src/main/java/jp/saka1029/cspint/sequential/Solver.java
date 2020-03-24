@@ -1,6 +1,8 @@
 package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,7 +16,7 @@ public class Solver {
 
     public int[] bindCount;
 
-    public static List<List<Constraint>> constraintLists(Problem problem, List<Variable> bindingOrder) {
+    public static List<List<Constraint>> constraintLists(Problem problem, Collection<Variable> bindingOrder) {
         int variableSize = problem.variables.size();
         if (new HashSet<>(bindingOrder).size() != variableSize)
             throw new IllegalArgumentException("invalid bindingOrder size");
@@ -42,6 +44,7 @@ public class Solver {
             throw new IllegalArgumentException("invalid bindingOrder size");
         bindCount = new int[variableSize];
         Map<Variable, Integer> result = new LinkedHashMap<>();
+        Map<Variable, Integer> protectedResult = Collections.unmodifiableMap(result);
         List<List<Constraint>> constraints = constraintLists(problem, bindingOrder);
         int[] testArgs = new int[variableSize];
         new Object() {
