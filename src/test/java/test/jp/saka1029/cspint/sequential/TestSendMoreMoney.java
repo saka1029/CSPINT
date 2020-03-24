@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.sequential.Answer;
+import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
@@ -194,6 +195,33 @@ class TestSendMoreMoney {
         logger.info("束縛順:" + resolvingOrder);
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
         logger.info(Arrays.toString(solver.bindCount));
+    }
+    
+    @Test
+    public void test制約の効果測定() {
+    	Problem p = digitConstraint();
+    	for (Constraint c : p.constraints) {
+    		int[] count = {0, 0};
+    		List<Variable> variables = c.variables;
+    		int size = variables.size();
+    		int[] values = new int[size];
+    		new Object() {
+    			void run(int index) {
+    				if (index >= size) {
+    					++count[0];
+    					if (c.predicate.test(values))
+							++count[1];
+    				} else {
+    					Domain domain = variables.get(index).domain;
+    					for (int i = 0, size = domain.size(); i < size; ++i) {
+    						values[index] = domain.get(i);
+    						run(index + 1);
+    					}
+    				}
+    			}
+    		}.run(0);
+			System.out.println(c + " : " + count[1] + " / " + count[0] + " = " + ((double)count[1]) / count[0]);
+    	}
     }
 
 }
