@@ -22,7 +22,7 @@ import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
-class TestSudoku {
+public class TestSudoku {
 
 	static Logger logger = Logger.getLogger(TestSudoku.class.getName());
 
