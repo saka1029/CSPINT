@@ -103,8 +103,8 @@ class TestSendMoreMoney {
         Variable Y = p.variable("Y", zero);
         Variable[] variables = {S, E, N, D, M, O, R, Y};
         p.allDifferent(variables);
-        // C3 C2 C1
-        // S E N D
+        //  C3 C2 C1
+        //   S E N D
         // + M O R E
         // -------------
         // M O N E Y
