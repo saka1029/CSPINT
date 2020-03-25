@@ -38,7 +38,7 @@ public class Solver {
         return result;
     }
 
-    public void solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
+    public int solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
         int variableSize = problem.variables.size();
         if (new HashSet<>(bindingOrder).size() != variableSize)
             throw new IllegalArgumentException("invalid bindingOrder size");
@@ -47,6 +47,7 @@ public class Solver {
         Map<Variable, Integer> protectedResult = Collections.unmodifiableMap(result);
         List<List<Constraint>> constraints = constraintLists(problem, bindingOrder);
         int[] testArgs = new int[variableSize];
+        int[] count = {0};
         new Object() {
 
             boolean test(Constraint constraint) {
@@ -59,7 +60,8 @@ public class Solver {
             void solve(int i) {
                 if (i > 0) ++bindCount[i - 1];
                 if (i >= variableSize) {
-                    answer.answer(result);
+                	++count[0];
+                    answer.answer(protectedResult);
                     return;
                 }
                 Variable variable = bindingOrder.get(i);
@@ -73,9 +75,10 @@ public class Solver {
                 }
             }
         }.solve(0);
+        return count[0];
     }
 
-    public void solve(Problem problem, Answer answer) {
-        solve(problem, problem.variables, answer);
+    public int solve(Problem problem, Answer answer) {
+        return solve(problem, problem.variables, answer);
     }
 }
