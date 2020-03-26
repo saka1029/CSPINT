@@ -274,4 +274,21 @@ public class TestSudoku {
 		logger.info("合計束縛回数: " + Arrays.stream(solver.bindCount).sum());
 	}
 
+	@Test
+	void testGood_at_Sudoku_Heres_some_youll_never_complete() {
+		// http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
+		int[][] question = {
+			{ 0, 0, 0, 7, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 4, 3, 0, 2, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+			{ 0, 0, 0, 5, 0, 9, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 4, 1, 8 },
+			{ 0, 0, 0, 0, 8, 1, 0, 0, 0 },
+			{ 0, 0, 2, 0, 0, 0, 0, 5, 0 },
+			{ 0, 4, 0, 0, 0, 0, 3, 0, 0 },
+		};
+		solve("Good at Sudoku? Here’s some you’ll never complete", question);
+	}
+
 }

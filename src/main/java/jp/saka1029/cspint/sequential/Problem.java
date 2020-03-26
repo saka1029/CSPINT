@@ -28,16 +28,16 @@ public class Problem {
         return v;
     }
 
+    public Variable variable(String name) {
+        return variableNames.get(name);
+    }
+
     public Constraint constraint(Predicate0 predicate, Variable... variables) {
         Constraint c = new Constraint(predicate, variables);
         _constraints.add(c);
         for (Variable v : variables)
             v.add(c);
         return c;
-    }
-
-    public Variable variable(String name) {
-        return variableNames.get(name);
     }
 
     public Constraint constraint(Predicate1 predicate, Variable v0) {
@@ -80,6 +80,11 @@ public class Problem {
     public Constraint constraint(Predicate9 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8) {
         return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8);
+    }
+
+    public Constraint constraint(Predicate10 predicate, Variable v0, Variable v1, Variable v2,
+        Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8, Variable v9) {
+        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
     }
 
     public void allDifferent(Variable... variables) {
