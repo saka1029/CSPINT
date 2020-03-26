@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -70,16 +69,52 @@ public class TestSudoku {
 			logger.info(Arrays.toString(row));
 	}
 
+	static void addConstraintSet(Variable[][] matrix, Variable[][] constraintSet) {
+	    int index = 0;
+	    for (int r = 0; r < ROWS; ++r, ++index)
+	        for (int c = 0; c < COLS; ++c)
+	            constraintSet[index][c] = matrix[r][c];
+	    for (int c = 0; c < COLS; ++c, ++index)
+	        for (int r = 0; r < ROWS; ++r)
+	            constraintSet[index][r] = matrix[r][c];
+	    for (int i = 0; i < ROWS; i += SMALL_ROWS)
+            for (int j = 0; j < COLS; j += SMALL_COLS, ++index)
+                for (int r = i, rmax = i + SMALL_ROWS, k = 0; r < rmax; ++r)
+                    for (int c = j, cmax = j + SMALL_COLS; c < cmax; ++c, ++k)
+                        constraintSet[index][k] = matrix[r][c];
+	}
+
+	static List<Variable> sudokuOptimizer(Problem problem) {
+	    Variable[][] matrix = new Variable[ROWS][COLS];
+	    for (Variable v : problem.variables) {
+	        String[] axis = v.name.split("@");
+	        matrix[Integer.parseInt(axis[0])][Integer.parseInt(axis[1])] = v;
+	    }
+	    Variable[][] constraintSet = new Variable[ROWS * 3][ROWS];
+	    addConstraintSet(matrix, constraintSet);
+	    Set<Variable> set = new LinkedHashSet<>();
+	    for (Variable v : problem.variables)
+	        if (v.domain.size() == 1)
+	            set.add(v);
+	    Arrays.sort(constraintSet, Comparator.comparingInt(
+	        va -> Arrays.stream(va).mapToInt(v -> v.domain.size()).sum()));
+	    for (Variable[] va : constraintSet)
+	        for (Variable v : va)
+	            set.add(v);
+	    return new ArrayList<>(set);
+	}
+
 	static void solve(String name, int[][] question) {
 		logger.info(name);
 		Problem problem = new Problem();
 		defineVariables(problem, question);
 		defineConstraints(problem);
 		Solver solver = new Solver();
-		// ドメインの小さい順に束縛
-		List<Variable> order = problem.variables.stream()
-		    .sorted(Comparator.comparing(v -> v.domain.size()))
-		    .collect(Collectors.toList());
+//		// ドメインの小さい順に束縛
+//		List<Variable> order = problem.variables.stream()
+//		    .sorted(Comparator.comparing(v -> v.domain.size()))
+//		    .collect(Collectors.toList());
+		List<Variable> order = sudokuOptimizer(problem);
 		assertEquals(1, solver.solve(problem, order, map -> print(map)));
 		logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
 		logger.info("合計束縛回数: " + Arrays.stream(solver.bindCount).sum());
@@ -213,25 +248,6 @@ public class TestSudoku {
 	        .mapToInt(v -> v.domain.size())
 	        .sum();
 	}
-
-	static Comparator<Constraint> variableSize = Comparator.comparing(c -> -c.variables.size());
-	static Comparator<Constraint> variableSizeAndDomainSize = variableSize.thenComparing(c -> domainSize(c));
-
-	// 制約が持つ変数のすべてのドメイン数の和が小さいもの順に束縛する。
-	static List<Variable> optimize(Problem problem) {
-	    Set<Variable> set = new LinkedHashSet<>();
-//	    problem.variables.stream()
-//	        .filter(v -> v.domain.size() == 1)
-//	        .forEach(v -> set.add(v));
-	    problem.constraints.stream()
-//	        .sorted(variableSizeAndDomainSize)
-	        .sorted(Comparator.comparing(c -> domainSize(c)))
-	        .flatMap(c -> c.variables.stream()
-	            .sorted(Comparator.comparing(v -> v.domain.size())))
-	        .forEach(v -> set.add(v));
-	    return new ArrayList<>(set);
-	}
-
 	@Test
 	void testEvil_sudoku_with_17_initial_values() {
 		// https://www.free-sudoku.com/sudoku.php?dchoix=evil
@@ -252,7 +268,7 @@ public class TestSudoku {
         defineConstraints(problem);
         Solver solver = new Solver();
         // ドメインの小さい順に束縛
-        List<Variable> order = optimize(problem);
+        List<Variable> order = sudokuOptimizer(problem);
         assertEquals(1, solver.solve(problem, order, map -> print(map)));
         logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
 		logger.info("合計束縛回数: " + Arrays.stream(solver.bindCount).sum());
