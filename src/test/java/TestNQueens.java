@@ -27,17 +27,17 @@ class TestNQueens {
             }
         Solver solver = new Solver();
         int answers = solver.solve(problem, m -> {});
-        logger.info("n=" + n + " : answers=" + answers
-            + " : elapse=" + (System.currentTimeMillis() - start) + "ms.");
-        return answers;
 //        int[] count = {0};
-//        return solver.solve(problem, m -> {
+//        int answers = solver.solve(problem, m -> {
 //            logger.info("** answer " + (++count[0]));
 //            for (int i = 0; i < n; ++i) {
 //                int c = m.get(rows[i]);
 //                logger.info(".".repeat(c) + "X" + ".".repeat(n - c -1));
 //            }
 //        });
+        logger.info("n=" + n + " : answers=" + answers
+            + " : elapse=" + (System.currentTimeMillis() - start) + "ms.");
+        return answers;
     }
 
     @Test
