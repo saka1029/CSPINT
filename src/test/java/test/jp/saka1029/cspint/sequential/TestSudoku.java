@@ -84,6 +84,16 @@ public class TestSudoku {
                         constraintSet[index][k] = matrix[r][c];
 	}
 
+	/**
+	 * 9x9の数独に特化した効率の良い変数の束縛順序を返します。
+	 * 具体的には以下を返します。
+	 * (1) 値が確定している変数
+	 * (2) 上記以外の変数の中から行単位、列単位または3x3の領域単位で見て、
+	 *     値が確定している変数をより多く含むものから順に変数を選択します。
+	 * 
+	 * @param problem 対象となる数独の問題を指定します。
+	 * @return 変数の束縛順序をリストで返します。
+	 */
 	static List<Variable> sudokuOptimizer(Problem problem) {
 	    Variable[][] matrix = new Variable[ROWS][COLS];
 	    for (Variable v : problem.variables) {
@@ -289,6 +299,20 @@ public class TestSudoku {
 			{ 0, 4, 0, 0, 0, 0, 3, 0, 0 },
 		};
 		solve("Good at Sudoku? Here’s some you’ll never complete", question);
+	}
+	
+	@Test
+	public void foo() {
+		int[] domain = {1, 2, 3};
+		int x = 0;
+		for (int a : domain)
+			for (int b : domain)
+				if (a < b)
+					for (int c : domain) {
+						System.out.printf("a=%d b=%d c=%d count=%d%n", a, b, c, ++x);
+						if (a + b == c)
+							System.out.printf("%d %d %d%n", a, b, c);
+					}
 	}
 
 }
