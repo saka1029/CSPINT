@@ -20,8 +20,8 @@ class Test魔方陣 {
 
     static void 魔方陣(final int n) {
         Problem problem = new Problem();
-        int max = n * n;
-        int sum = n * (n * n + 1) / 2;
+        int max = n * n;                // セルの総数
+        int sum = n * (n * n + 1) / 2;  // 各行、列の合計
         Domain number = Domain.rangeClosed(1, max);
         // 変数定義
         Variable[][] cells = IntStream.range(0, n)
@@ -33,25 +33,26 @@ class Test魔方陣 {
         problem.allDifferent(Arrays.stream(cells)
             .flatMap(a -> Arrays.stream(a))
             .toArray(Variable[]::new));
-        Predicate0 checkSum = a -> Arrays.stream(a).sum() == sum;
-        // 行ごとの制約
+        // 合計の制約を表すラムダ式
+        Predicate0 checkSum = intArray -> Arrays.stream(intArray).sum() == sum;
+        // 行ごとの合計の制約
         IntStream.range(0, n)
             .forEach(r -> problem.constraint(checkSum,
                 IntStream.range(0, n)
                     .mapToObj(c -> cells[r][c])
                     .toArray(Variable[]::new)));
-        // 列ごとの制約
+        // 列ごとの合計の制約
         IntStream.range(0, n)
             .forEach(c -> problem.constraint(checkSum,
                 IntStream.range(0, n)
                     .mapToObj(r -> cells[r][c])
                     .toArray(Variable[]::new)));
-        // 右下がり斜めの制約
+        // 右下がり斜めの合計の制約
         problem.constraint(checkSum,
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][r])
                 .toArray(Variable[]::new));
-        // 左下がり斜めの制約
+        // 左下がり斜めの合計の制約
         problem.constraint(checkSum,
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][n - r - 1])
