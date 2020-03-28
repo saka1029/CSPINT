@@ -113,4 +113,20 @@ class TestSolver {
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));
     }
 
+    @Test
+    public void test整数マスター() {
+        // https://www.youtube.com/watch?v=Z6oF_MWwsD4
+        // 1/x + 1/2y + 1/3z = 4/3
+        // 6yz + 3xz + 2xy = 8xyz
+        Problem p = new Problem();
+        Domain d = Domain.range(1, 100);
+        Variable X = p.variable("X", d);
+        Variable Y = p.variable("Y", d);
+        Variable Z = p.variable("Z", d);
+        p.constraint((x, y, z) -> 6*y*z + 3*x*z + 2*x*y == 8*x*y*z, X, Y, Z);
+        Solver s = new Solver();
+        s.solve(p, m -> System.out.println(m));
+        System.out.println(Arrays.toString(s.bindCount));
+    }
+
 }

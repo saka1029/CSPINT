@@ -21,11 +21,10 @@ class TestNQueens {
         Domain domain = Domain.range(0, n);
         Variable[] rows = IntStream.range(0, n)
             .mapToObj(i -> problem.variable("R" + i, domain)).toArray(Variable[]::new);
-        for (int i = 0; i < n; ++i)
-            for (int j = i + 1; j < n; ++j) {
-                int d = j - i;
-                problem.constraint((x, y) -> x != y && Math.abs(x - y) != d, rows[i], rows[j]);
-            }
+        IntStream.range(0,  n)
+           .forEach(i -> IntStream.range(i + 1, n)
+               .forEach(j -> problem.constraint(
+                   (x, y) -> x != y && Math.abs(x - y) != j - i, rows[i], rows[j])));
         Solver solver = new Solver();
         int answers = solver.solve(problem, m -> {});
 //        int[] count = {0};
