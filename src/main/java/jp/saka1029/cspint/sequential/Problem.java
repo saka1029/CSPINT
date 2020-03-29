@@ -127,12 +127,12 @@ public class Problem {
     	allDifferent(flat(variables));
     }
     
-    public void allDifferentRows(Variable[][] variables) {
+    public void allDifferentEachRows(Variable[][] variables) {
     	for (Variable[] row : variables)
     		allDifferent(row);
     }
     
-    public void allDifferentCols(Variable[][] variables) {
+    public void allDifferentEachColumns(Variable[][] variables) {
     	int rowSize = variables.length;
     	int colSize = variables[0].length;
     	Variable[] cols = new Variable[rowSize];

@@ -1,4 +1,4 @@
-package test.jp.saka1029.cspint.sequential;
+package test.saka1029.cspint.sequential.puzzle;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.Logger;

@@ -1,4 +1,4 @@
-package test.jp.saka1029.cspint.sequential;
+package test.saka1029.cspint.sequential.puzzle;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
@@ -55,7 +55,7 @@ class Test春からみんな新生活 {
             v[i][新生活列] = problem.variable(名前[i] + ".新生活", 新生活Domain);
         }
         // 年齢、新生活はそれぞれ異なる。
-        problem.allDifferentCols(v);
+        problem.allDifferentEachColumns(v);
         // セツオ：　　オレはこの春、結婚することになったんだ。
         problem.constraint(x -> x == 結婚, v[セツオ][新生活列]);
         // イクミ：　　私はセツオより一つ年上よ。
