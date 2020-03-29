@@ -125,8 +125,24 @@ class TestSolver {
         Variable Z = p.variable("Z", d);
         p.constraint((x, y, z) -> 6*y*z + 3*x*z + 2*x*y == 8*x*y*z, X, Y, Z);
         Solver s = new Solver();
-        s.solve(p, m -> System.out.println(m));
-        System.out.println(Arrays.toString(s.bindCount));
+        assertEquals(3, s.solve(p, m -> logger.info("answer: " + m)));
+        logger.info(Arrays.toString(s.bindCount));
+    }
+
+    @Test
+    public void test整数マスター25() {
+        // https://www.youtube.com/watch?v=rNDqZOnzFLo
+        // (n/m - n/2 + 1)l = 2  (n, m, l は3以上の整数)
+        // (2n - mn + 2m)l = 4m
+        Problem p = new Problem();
+        Domain d = Domain.range(3, 100);
+        Variable L = p.variable("L", d);
+        Variable M = p.variable("M", d);
+        Variable N = p.variable("N", d);
+        p.constraint((l, m, n) -> (2*n - m*n + 2*m)*l == 4*m, L, M, N);
+        Solver s = new Solver();
+        assertEquals(5, s.solve(p, m -> logger.info("answer: " + m)));
+        logger.info(Arrays.toString(s.bindCount));
     }
 
 }

@@ -20,7 +20,8 @@ class TestNQueens {
         Problem problem = new Problem();
         Domain domain = Domain.range(0, n);
         Variable[] rows = IntStream.range(0, n)
-            .mapToObj(i -> problem.variable("R" + i, domain)).toArray(Variable[]::new);
+            .mapToObj(i -> problem.variable("R" + i, domain))
+            .toArray(Variable[]::new);
         IntStream.range(0,  n)
            .forEach(i -> IntStream.range(i + 1, n)
                .forEach(j -> problem.constraint(
