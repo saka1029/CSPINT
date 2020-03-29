@@ -1,6 +1,7 @@
 package jp.saka1029.cspint.sequential;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -86,12 +87,60 @@ public class Problem {
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8, Variable v9) {
         return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
     }
+    
+    static class PredicateD2Support implements Predicate0 {
+
+    	final PredicateD2 predicate;
+    	final int rows, cols;
+
+    	PredicateD2Support(PredicateD2 predicate, int rows, int cols) {
+    		this.predicate = predicate;
+    		this.rows = rows;
+    		this.cols = cols;
+    	}
+
+		@Override
+		public boolean test(int... args) {
+			int[][] matrix = new int[rows][cols];
+			for (int r = 0, s = 0; r < rows; ++r, s += cols)
+                System.arraycopy(args, s, matrix[r], 0, cols);
+			return predicate.test(matrix);
+		}
+    }
+
+    public static Variable[] flat(Variable[][] variables) {
+    	return Arrays.stream(variables).flatMap(a -> Arrays.stream(a)).toArray(Variable[]::new);
+    }
+
+    public Constraint constraint(PredicateD2 predicate, Variable[][] variables) {
+    	return constraint(new PredicateD2Support(predicate, variables.length, variables[0].length), flat(variables));
+    }
 
     public void allDifferent(Variable... variables) {
         int size = variables.length;
         for (int i = 0; i < size; ++i)
             for (int j = i + 1; j < size; ++j)
                 constraint((x, y) -> x != y, variables[i], variables[j]);
+    }
+
+    public void allDifferent(Variable[][] variables) {
+    	allDifferent(flat(variables));
+    }
+    
+    public void allDifferentRows(Variable[][] variables) {
+    	for (Variable[] row : variables)
+    		allDifferent(row);
+    }
+    
+    public void allDifferentCols(Variable[][] variables) {
+    	int rowSize = variables.length;
+    	int colSize = variables[0].length;
+    	Variable[] cols = new Variable[rowSize];
+    	for (int c = 0; c < colSize; ++c) {
+            for (int r = 0; r < rowSize; ++r)
+            	cols[r] = variables[r][c];
+            allDifferent(cols);
+    	}
     }
 
 }

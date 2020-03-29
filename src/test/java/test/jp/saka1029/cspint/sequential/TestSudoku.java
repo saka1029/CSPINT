@@ -120,10 +120,6 @@ public class TestSudoku {
 		defineVariables(problem, question);
 		defineConstraints(problem);
 		Solver solver = new Solver();
-//		// ドメインの小さい順に束縛
-//		List<Variable> order = problem.variables.stream()
-//		    .sorted(Comparator.comparing(v -> v.domain.size()))
-//		    .collect(Collectors.toList());
 		List<Variable> order = sudokuOptimizer(problem);
 		assertEquals(1, solver.solve(problem, order, map -> print(map)));
 		logger.info("束縛回数: " + Arrays.toString(solver.bindCount));

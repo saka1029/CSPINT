@@ -54,30 +54,27 @@ class Test春からみんな新生活 {
             v[i][年齢列] = problem.variable(名前[i] + ".年齢", 年齢Domain);
             v[i][新生活列] = problem.variable(名前[i] + ".新生活", 新生活Domain);
         }
-        Variable[] flat = Arrays.stream(v).flatMap(a -> Arrays.stream(a)).toArray(Variable[]::new);
-        problem.allDifferent(IntStream.range(0, 人数).mapToObj(i -> v[i][年齢列]).toArray(Variable[]::new));
-        problem.allDifferent(IntStream.range(0, 人数).mapToObj(i -> v[i][新生活列]).toArray(Variable[]::new));
+        // 年齢、新生活はそれぞれ異なる。
+        problem.allDifferentCols(v);
         // セツオ：　　オレはこの春、結婚することになったんだ。
         problem.constraint(x -> x == 結婚, v[セツオ][新生活列]);
+        // イクミ：　　私はセツオより一つ年上よ。
         problem.constraint((x, y) -> x == y + 1, v[イクミ][年齢列], v[セツオ][年齢列]);
-        // 25才で転職する人がいる
-        problem.constraint(a -> {
-            boolean result = false;
-            for (int i = 0, size = a.length; i < size; i += 列数)
-                result |= a[i + 年齢列] == 25 && a[i + 新生活列] == 転職;
-            return result;
-        }, flat) ;
+        // ２５才で思い切って転職する人がいるのね。
+        problem.constraint(a -> IntStream.range(0, 人数)
+        	.anyMatch(i -> a[i][年齢列] == 25 && a[i][新生活列] == 転職), v);
+        // カナコ：　　私は海外転勤になっちゃった。
         problem.constraint(x -> x == 海外転勤, v[カナコ][新生活列]);
+        //             私はツキコとは１才違いで、
         problem.constraint((x, y) -> Math.abs(x - y) == 1, v[カナコ][年齢列], v[ツキコ][年齢列]);
+        //             セツオとは３才違いよ。
         problem.constraint((x, y) -> Math.abs(x - y) == 3, v[カナコ][年齢列], v[セツオ][年齢列]);
+        // シンイチ：　カナコ姉さんはしっかりしていますよね。
         problem.constraint((x, y) -> x < y, v[シンイチ][年齢列], v[カナコ][年齢列]);
-        // 30才でペット
-        problem.constraint(a -> {
-            boolean result = false;
-            for (int i = 0, size = a.length; i < size; i += 列数)
-                result |= a[i + 年齢列] == 30 && a[i + 新生活列] == ペットを飼う;
-            return result;
-        }, flat) ;
+        // 　　　　　　ところで、３０才の記念にペットを飼い始めたのは誰だっけ？
+        problem.constraint(a -> IntStream.range(0, 人数)
+			.anyMatch(i -> a[i][年齢列] == 30 && a[i][新生活列] == ペットを飼う), v) ;
+        // ツキコ：　　私もイクミ姉さんのように仕事頑張らないとね。
         problem.constraint((x, y) -> x < y, v[ツキコ][年齢列], v[イクミ][年齢列]);
         Solver solver = new Solver();
         solver.solve(problem, m -> {
