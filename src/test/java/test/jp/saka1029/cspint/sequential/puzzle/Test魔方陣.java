@@ -1,4 +1,4 @@
-package test.jp.saka1029.cspint.sequential;
+package test.jp.saka1029.cspint.sequential.puzzle;
 
 import static org.junit.Assert.*;
 

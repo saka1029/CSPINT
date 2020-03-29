@@ -36,8 +36,6 @@ public class Problem {
     public Constraint constraint(Predicate0 predicate, Variable... variables) {
         Constraint c = new Constraint(predicate, variables);
         _constraints.add(c);
-        for (Variable v : variables)
-            v.add(c);
         return c;
     }
 
@@ -87,7 +85,7 @@ public class Problem {
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8, Variable v9) {
         return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
     }
-    
+
     static class PredicateD2Support implements Predicate0 {
 
     	final PredicateD2 predicate;
@@ -126,13 +124,13 @@ public class Problem {
     public void allDifferent(Variable[][] variables) {
     	allDifferent(flat(variables));
     }
-    
-    public void allDifferentRows(Variable[][] variables) {
+
+    public void allDifferentEachRows(Variable[][] variables) {
     	for (Variable[] row : variables)
     		allDifferent(row);
     }
-    
-    public void allDifferentCols(Variable[][] variables) {
+
+    public void allDifferentEachColumns(Variable[][] variables) {
     	int rowSize = variables.length;
     	int colSize = variables[0].length;
     	Variable[] cols = new Variable[rowSize];
