@@ -129,7 +129,7 @@ public class Problem {
     	for (Variable[] row : variables)
     		allDifferent(row);
     }
-
+    
     public void allDifferentEachColumns(Variable[][] variables) {
     	int rowSize = variables.length;
     	int colSize = variables[0].length;
