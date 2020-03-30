@@ -79,10 +79,10 @@ class TestSendMoreMoney {
             (s, e, n, d, m, o, r, y) -> number(s, e, n, d) + number(m, o, r, e) == number(m, o, n, e, y),
             S, E, N, D, M, O, R, Y);
         Solver solver = new Solver();
-        logger.info("単一制約");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + p.variables);
-        solver.solve(p, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     static Problem digitConstraint() {
@@ -119,10 +119,10 @@ class TestSendMoreMoney {
     public void test桁ごとの制約_宣言順() {
         Problem p = digitConstraint();
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_宣言順");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + p.variables);
-        solver.solve(p, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -134,10 +134,10 @@ class TestSendMoreMoney {
             p.variable("O"), p.variable("C3"),
             p.variable("S"), p.variable("M"));
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_右から左");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
-        solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -149,10 +149,10 @@ class TestSendMoreMoney {
             p.variable("C3"), p.variable("O"),
             p.variable("S"), p.variable("M"));
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_右から左2");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
-        solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -164,10 +164,10 @@ class TestSendMoreMoney {
             p.variable("C1"), p.variable("R"),
             p.variable("D"), p.variable("Y"));
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_左から右");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
-        solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -179,10 +179,10 @@ class TestSendMoreMoney {
             p.variable("O"), p.variable("E"), p.variable("N"),
             p.variable("R"), p.variable("D"), p.variable("Y"));
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_ドメインの小さいものから");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
-        solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
@@ -191,14 +191,15 @@ class TestSendMoreMoney {
         List<Variable> resolvingOrder = new ArrayList<>(p.variables);
         Collections.sort(resolvingOrder, Comparator.comparing(v -> v.domain.size()));
         Solver solver = new Solver();
-        logger.info("桁ごとの制約_ドメインサイズの昇順でソート");
+        logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
-        solver.solve(p, resolvingOrder, new AssertAnswer(p));
-        logger.info(Arrays.toString(solver.bindCount));
+        assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
+        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     @Test
     public void test制約の効果測定() {
+        logger.info(Common.methodName());
     	Problem p = digitConstraint();
     	for (Constraint c : p.constraints) {
     		int[] count = {0, 0};
@@ -220,7 +221,7 @@ class TestSendMoreMoney {
     				}
     			}
     		}.run(0);
-			System.out.println(c + " : " + count[1] + " / " + count[0] + " = " + ((double)count[1]) / count[0]);
+			logger.info(c + " : " + count[1] + " / " + count[0] + " = " + ((double)count[1]) / count[0]);
     	}
     }
 

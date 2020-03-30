@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,22 @@ public class Solver {
 
     public int[] bindCount;
 
-    public static List<List<Constraint>> constraintLists(Problem problem, Collection<Variable> bindingOrder) {
+    /**
+     * (例)
+     * problem.variables = {A, B, C}
+     * problem.constraintOrder = {制約[A, B], 制約[B, C], 制約[A, C]}
+     * bindingOrder = {C, B, A}
+     * とすると
+     * このメソッドは制約順序として以下のリストを返します。
+     * {{}, {制約[B, C]}, {制約[A, B], 制約[A, C]}}
+     * ３つのリストはそれぞれbindigOrder内の変数C, B, Aに対応します。
+     * @param problem
+     * @param bindingOrder
+     * @return
+     */
+    public static List<List<Constraint>> constraintOrder(Problem problem, Collection<Variable> bindingOrder) {
         int variableSize = problem.variables.size();
-        if (new HashSet<>(bindingOrder).size() != variableSize)
+        if (bindingOrder.size() != variableSize)
             throw new IllegalArgumentException("invalid bindingOrder size");
         Map<Variable, Integer> variableIndexes = new HashMap<>();
         List<List<Constraint>> result = new ArrayList<>(variableSize);
@@ -45,7 +57,7 @@ public class Solver {
         bindCount = new int[variableSize];
         Map<Variable, Integer> result = new LinkedHashMap<>();
         Map<Variable, Integer> protectedResult = Collections.unmodifiableMap(result);
-        List<List<Constraint>> constraints = constraintLists(problem, bindingOrder);
+        List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
         int[] testArgs = new int[variableSize];
         int[] count = {0};
         new Object() {

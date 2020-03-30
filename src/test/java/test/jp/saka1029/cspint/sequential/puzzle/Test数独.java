@@ -1,7 +1,5 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +18,7 @@ import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class Test数独 {
-	
+
 	static final Logger logger = Logger.getLogger(Test数独.class.getName());
 
 	static final int SIZE = 9;
@@ -39,10 +36,10 @@ class Test数独 {
             }
 		return variables;
 	}
-	
+
 	static List<Variable[]> defineConstraints(Problem problem, Variable[][] variables) {
 		List<Variable[]> differentVariablesSet = new ArrayList<>();
-		// 行の変数を集める。
+		// 行の変数を集めます。
 		for (int row = 0; row < SIZE; ++row)
 			differentVariablesSet.add(Arrays.copyOf(variables[row], SIZE));
 		// 列の変数を集めます。
@@ -70,7 +67,7 @@ class Test数独 {
 
 	static List<Variable> defineBindingOrder(Variable[][] variables, List<Variable[]> differentVariablesSet) {
 		Set<Variable> bindingOrder = new LinkedHashSet<>();
-		// 値が確定している変数を追加します。
+		// 値が確定している変数を結果に追加します。
 		for (Variable[] a : variables)
 			for (Variable v : a)
 				if (v.domain.size() == 1)
@@ -84,7 +81,7 @@ class Test数独 {
 				bindingOrder.add(v);
 		return new ArrayList<>(bindingOrder);
 	}
-	
+
 	static void printResult(Variable[][] variables, Map<Variable, Integer> answer) {
         StringBuilder sb = new StringBuilder();
 		for (int row = 0; row < SIZE; ++row) {
@@ -128,4 +125,131 @@ class Test数独 {
 		数独(question);
 	}
 
+	@Test
+	void test難問SUDOKU() {
+		// 難問SUDOKU の例題
+		// https://www.danboko.net/
+		int[][] question = {
+			{ 2, 0, 0, 4, 0, 6, 0, 0, 9 },
+			{ 0, 3, 1, 0, 5, 0, 6, 8, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 6, 0, 0, 9, 0, 5, 0, 0, 4 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 8, 0, 6, 0, 7, 0, 9, 0 },
+			{ 5, 0, 0, 0, 0, 0, 0, 0, 2 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 4, 9, 5, 0, 1, 8, 3, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void testナンプレ問題10() {
+		// https://si-coding.net/sudoku10.html
+		int[][] question = {
+			{ 0, 0, 1, 0, 9, 0, 0, 0, 0 },
+			{ 0, 5, 0, 4, 0, 0, 0, 0, 2 },
+			{ 8, 0, 3, 0, 1, 0, 5, 0, 0 },
+			{ 0, 0, 6, 0, 0, 0, 0, 2, 0 },
+			{ 0, 0, 0, 0, 6, 0, 0, 0, 8 },
+			{ 2, 0, 0, 8, 0, 3, 0, 6, 5 },
+			{ 0, 0, 0, 0, 0, 6, 0, 0, 4 },
+			{ 0, 0, 0, 0, 0, 4, 0, 7, 0 },
+			{ 0, 9, 2, 0, 0, 0, 0, 0, 3 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void test問題22001難問() {
+		// https://number-place-puzzle.net/22001.html#content
+		int[][] question = {
+			{ 0, 5, 0, 7, 0, 0, 6, 0, 0 },
+			{ 7, 1, 0, 0, 2, 0, 0, 4, 0 },
+			{ 0, 8, 0, 0, 0, 5, 0, 0, 0 },
+			{ 0, 0, 0, 8, 0, 0, 4, 7, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 5 },
+			{ 1, 2, 0, 3, 0, 0, 0, 6, 0 },
+			{ 0, 0, 0, 0, 0, 6, 2, 0, 8 },
+			{ 0, 0, 0, 0, 0, 7, 0, 3, 0 },
+			{ 0, 0, 3, 5, 0, 0, 0, 0, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void testナンプレNo601010() {
+		// https://numpre7.com/np601010
+		int[][] question = {
+			{ 0, 0, 1, 0, 6, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 1, 5, 0, 0 },
+			{ 0, 8, 0, 3, 0, 0, 0, 0, 9 },
+			{ 0, 7, 0, 4, 0, 9, 8, 0, 0 },
+			{ 2, 0, 0, 0, 0, 0, 0, 0, 4 },
+			{ 0, 0, 6, 1, 0, 2, 0, 5, 0 },
+			{ 4, 0, 0, 0, 0, 5, 0, 7, 0 },
+			{ 0, 0, 9, 6, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 7, 0, 6, 0, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void testOurHardestSudokuAndHowToSolveIt() {
+	    // YouTube
+		// https://youtu.be/-ZZFEgCQsvA
+		int[][] question = {
+			{ 0, 0, 1, 0, 6, 0, 0, 5, 9 },
+			{ 0, 0, 0, 0, 0, 3, 0, 2, 0 },
+			{ 0, 6, 0, 0, 8, 0, 0, 0, 0 },
+			{ 4, 0, 0, 0, 0, 0, 5, 0, 0 },
+			{ 0, 2, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 7, 0, 2, 0, 0, 4, 8, 0 },
+			{ 8, 0, 0, 0, 0, 0, 9, 0, 5 },
+			{ 7, 0, 0, 6, 0, 9, 0, 3, 0 },
+			{ 0, 0, 5, 0, 0, 0, 0, 4, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void testEvil_sudoku_with_17_initial_values() {
+		// https://www.free-sudoku.com/sudoku.php?dchoix=evil
+		int[][] question = {
+			{ 1, 0, 0, 7, 0, 0, 0, 0, 6 },
+			{ 0, 8, 0, 0, 0, 0, 0, 9, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 6, 0, 0, 4, 0, 0, 2, 0, 0 },
+			{ 4, 0, 0, 0, 8, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 9, 0, 0, 5, 0 },
+			{ 0, 5, 3, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 2, 0, 0, 4, 0, 0 },
+			{ 0, 9, 0, 0, 0, 0, 0, 0, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
+
+	@Test
+	void testGood_at_Sudoku_Heres_some_youll_never_complete() {
+		// http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
+		int[][] question = {
+			{ 0, 0, 0, 7, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 4, 3, 0, 2, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+			{ 0, 0, 0, 5, 0, 9, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 4, 1, 8 },
+			{ 0, 0, 0, 0, 8, 1, 0, 0, 0 },
+			{ 0, 0, 2, 0, 0, 0, 0, 5, 0 },
+			{ 0, 4, 0, 0, 0, 0, 3, 0, 0 },
+		};
+		logger.info(Common.methodName());
+		数独(question);
+	}
 }

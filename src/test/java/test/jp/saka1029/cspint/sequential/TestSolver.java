@@ -40,7 +40,7 @@ class TestSolver {
         Constraint bc = problem.constraint(diff, b, c);
         Constraint abc = problem.constraint(equation, a, b, c);
         Solver solver = new Solver();
-        List<List<Constraint>> constraints = Solver.constraintLists(problem, problem.variables);
+        List<List<Constraint>> constraints = Solver.constraintOrder(problem, problem.variables);
         assertEquals(3, problem.variables.size());
         assertEquals(3, constraints.size());
         assertEquals(0, constraints.get(0).size());
@@ -87,7 +87,7 @@ class TestSolver {
         p.constraint((a, d, g) -> a < d && d < g, A, D, G);
         Solver s = new Solver();
         s.solve(p, a -> logger.info("answer: " + a));
-        List<List<Constraint>> order = Solver.constraintLists(p, p.variables);
+        List<List<Constraint>> order = Solver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));
@@ -100,14 +100,14 @@ class TestSolver {
         String[] names = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
         Variable[] vars = Stream.of(names).map(n -> p.variable(n, digit)).toArray(Variable[]::new);
         p.allDifferent(vars);
-        p.constraint(v -> {
+        p.constraintVarargs(v -> {
             int bc = number(v[1], v[2]), ef = number(v[4], v[5]), hi = number(v[7], v[8]);
             return v[0] * ef * hi + v[3] * bc * hi + v[6] * bc * ef == bc * ef * hi;
-        }, vars[0], vars[1], vars[2], vars[3], vars[4], vars[5], vars[6], vars[7], vars[8]);
+        }, vars);
         p.constraint((a, d, g) -> a < d && d < g, vars[0], vars[3], vars[6]);
         Solver s = new Solver();
         s.solve(p, a -> logger.info("answer: " + a));
-        List<List<Constraint>> order = Solver.constraintLists(p, p.variables);
+        List<List<Constraint>> order = Solver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));

@@ -26,11 +26,26 @@ public class TestDomain {
         assertEquals(4, d.get(2));
     }
 
+    @Test
+    public void testHashCodeEquals() {
+        assertEquals(Domain.of(1, 2).hashCode(), Domain.range(1, 3).hashCode());
+        assertNotEquals(Domain.of(0), Domain.of(1));
+        assertNotEquals("abc", Domain.of(1));
+    }
 
     @Test
     public void testToString() {
         Domain d = Domain.range(2, 5);
         assertEquals("[2, 3, 4]", d.toString());
+    }
+
+    @Test
+    public void testRangeException() {
+        try {
+            Domain.range(9, 3);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
     }
 
 }

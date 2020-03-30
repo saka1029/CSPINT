@@ -33,57 +33,57 @@ public class Problem {
         return variableNames.get(name);
     }
 
-    public Constraint constraint(Predicate0 predicate, Variable... variables) {
+    public Constraint constraintVarargs(Predicate0 predicate, Variable... variables) {
         Constraint c = new Constraint(predicate, variables);
         _constraints.add(c);
         return c;
     }
 
     public Constraint constraint(Predicate1 predicate, Variable v0) {
-        return constraint((Predicate0)predicate, v0);
+        return constraintVarargs(predicate, v0);
     }
 
     public Constraint constraint(Predicate2 predicate, Variable v0, Variable v1) {
-        return constraint((Predicate0)predicate, v0, v1);
+        return constraintVarargs(predicate, v0, v1);
     }
 
     public Constraint constraint(Predicate3 predicate, Variable v0, Variable v1, Variable v2) {
-        return constraint((Predicate0)predicate, v0, v1, v2);
+        return constraintVarargs(predicate, v0, v1, v2);
     }
 
     public Constraint constraint(Predicate4 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3);
+        return constraintVarargs(predicate, v0, v1, v2, v3);
     }
 
     public Constraint constraint(Predicate5 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4);
     }
 
     public Constraint constraint(Predicate6 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4, v5);
     }
 
     public Constraint constraint(Predicate7 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5, Variable v6) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4, v5, v6);
     }
 
     public Constraint constraint(Predicate8 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4, v5, v6, v7);
     }
 
     public Constraint constraint(Predicate9 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8);
     }
 
     public Constraint constraint(Predicate10 predicate, Variable v0, Variable v1, Variable v2,
         Variable v3, Variable v4, Variable v5, Variable v6, Variable v7, Variable v8, Variable v9) {
-        return constraint((Predicate0)predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
+        return constraintVarargs(predicate, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
     }
 
     static class PredicateD2Support implements Predicate0 {
@@ -111,7 +111,7 @@ public class Problem {
     }
 
     public Constraint constraint(PredicateD2 predicate, Variable[][] variables) {
-    	return constraint(new PredicateD2Support(predicate, variables.length, variables[0].length), flat(variables));
+    	return constraintVarargs(new PredicateD2Support(predicate, variables.length, variables[0].length), flat(variables));
     }
 
     public void allDifferent(Variable... variables) {
