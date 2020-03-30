@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/test/java/test/jp/saka1029/cspint/sequential/puzzle/TestSendMoreMoney.java
 package test.jp.saka1029.cspint.sequential.puzzle;
-=======
-package test.saka1029.cspint.sequential.puzzle;
->>>>>>> 7e8a2dd51adace096e2a91229a2601ffd7966e3e:src/test/java/test/saka1029/cspint/sequential/puzzle/TestSendMoreMoney.java
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -200,7 +196,7 @@ class TestSendMoreMoney {
         solver.solve(p, resolvingOrder, new AssertAnswer(p));
         logger.info(Arrays.toString(solver.bindCount));
     }
-    
+
     @Test
     public void test制約の効果測定() {
     	Problem p = digitConstraint();

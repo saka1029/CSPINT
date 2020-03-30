@@ -1,10 +1,5 @@
-<<<<<<< HEAD:src/test/java/test/jp/saka1029/cspint/sequential/puzzle/Test春からみんな新生活.java
 package test.jp.saka1029.cspint.sequential.puzzle;
-=======
-package test.saka1029.cspint.sequential.puzzle;
->>>>>>> 7e8a2dd51adace096e2a91229a2601ffd7966e3e:src/test/java/test/saka1029/cspint/sequential/puzzle/Test春からみんな新生活.java
 
-import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;

@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/test/java/test/jp/saka1029/cspint/sequential/puzzle/TestSudoku.java
 package test.jp.saka1029.cspint.sequential.puzzle;
-=======
-package test.saka1029.cspint.sequential.puzzle;
->>>>>>> 7e8a2dd51adace096e2a91229a2601ffd7966e3e:src/test/java/test/saka1029/cspint/sequential/puzzle/TestSudoku.java
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -94,7 +90,7 @@ public class TestSudoku {
 	 * (1) 値が確定している変数
 	 * (2) 上記以外の変数の中から行単位、列単位または3x3の領域単位で見て、
 	 *     値が確定している変数をより多く含むものから順に変数を選択します。
-	 * 
+	 *
 	 * @param problem 対象となる数独の問題を指定します。
 	 * @return 変数の束縛順序をリストで返します。
 	 */
@@ -300,7 +296,7 @@ public class TestSudoku {
 		};
 		solve("Good at Sudoku? Here’s some you’ll never complete", question);
 	}
-	
+
 	@Test
 	public void foo() {
 		int[] domain = {1, 2, 3};

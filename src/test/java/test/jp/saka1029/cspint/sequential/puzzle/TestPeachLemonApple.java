@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/test/java/test/jp/saka1029/cspint/sequential/puzzle/TestPeachLemonApple.java
 package test.jp.saka1029.cspint.sequential.puzzle;
-=======
-package test.saka1029.cspint.sequential.puzzle;
->>>>>>> 7e8a2dd51adace096e2a91229a2601ffd7966e3e:src/test/java/test/saka1029/cspint/sequential/puzzle/TestPeachLemonApple.java
 
 import java.util.ArrayList;
 import java.util.Arrays;
