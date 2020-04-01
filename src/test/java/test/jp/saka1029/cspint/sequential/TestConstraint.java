@@ -41,4 +41,12 @@ class TestConstraint {
         }
     }
 
+    @Test
+    void testToString() {
+        Problem p = new Problem();
+        Variable v = p.variable("v", Domain.of(1, 2));
+        Constraint c = p.constraint(x -> x == 1, v);
+        assertEquals("制約[v]", c.toString());
+    }
+
 }

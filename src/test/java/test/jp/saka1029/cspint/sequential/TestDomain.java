@@ -27,10 +27,21 @@ public class TestDomain {
     }
 
     @Test
+    public void testRangeClosed() {
+        Domain d = Domain.rangeClosed(2, 5);
+        assertEquals(4, d.size());
+        assertEquals(2, d.get(0));
+        assertEquals(3, d.get(1));
+        assertEquals(4, d.get(2));
+        assertEquals(5, d.get(3));
+    }
+
+    @Test
     public void testHashCodeEquals() {
+        assertEquals(Domain.of(1, 2), Domain.range(1, 3));
         assertEquals(Domain.of(1, 2).hashCode(), Domain.range(1, 3).hashCode());
         assertNotEquals(Domain.of(0), Domain.of(1));
-        assertNotEquals("abc", Domain.of(1));
+        assertNotEquals(Domain.of(1), "abc");
     }
 
     @Test
