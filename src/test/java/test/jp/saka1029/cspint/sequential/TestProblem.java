@@ -31,18 +31,19 @@ class TestProblem {
     @Test
     void testVariable() {
         Problem p = new Problem();
-        Variable A = p.variable("a", Domain.range(1, 4));
+        Variable A = p.variable("A", Domain.range(1, 4));
         assertEquals(1, p.variables.size());
         assertEquals(A, p.variables.get(0));
         assertEquals(Domain.of(1, 2, 3), p.variables.get(0).domain);
         assertEquals(0, p.variables.get(0).constraints.size());
-        Variable B = p.variable("b", Domain.range(1, 3));
+        Variable B = p.variable("B", Domain.range(1, 3));
         assertEquals(2, p.variables.size());
         assertEquals(List.of(A, B), p.variables);
         assertEquals(Domain.of(1, 2), p.variables.get(1).domain);
         assertEquals(0, p.variables.get(1).constraints.size());
         Constraint c = p.constraint((x, y) -> x != y, A, B);
         assertEquals(List.of(c), p.constraints);
+        assertEquals(B, p.variable("B"));
     }
 
     @Test
@@ -63,43 +64,97 @@ class TestProblem {
         Constraint CA = problem.constraint(PA, A);
         assertEquals(PA, CA.predicate);
         assertEquals(List.of(CA), problem.constraints);
-        Predicate2 PB = (a, b) -> a == 1 && a == b;
+        assertTrue(CA.predicate.test(1));
+        Predicate2 PB = (a, b) -> a == 1 && b == 2;
         Constraint CB = problem.constraint(PB, A, B);
         assertEquals(PB, CB.predicate);
         assertEquals(List.of(CA, CB), problem.constraints);
-        Predicate3 PC = (a, b, c) -> a == 1 && a == b && b == c;
+        assertTrue(CB.predicate.test(1, 2));
+        Predicate3 PC = (a, b, c) -> a == 1 && b == 2 && c == 3;
         Constraint CC = problem.constraint(PC, A, B, C);
         assertEquals(PC, CC.predicate);
         assertEquals(List.of(CA, CB, CC), problem.constraints);
-        Predicate4 PD = (a, b, c, d) -> a == 1 && a == b && b == c && c == d;
+        assertTrue(CC.predicate.test(1, 2, 3));
+        Predicate4 PD = (a, b, c, d) -> a == 1 && b == 2 && c == 3 && d == 4;
         Constraint CD = problem.constraint(PD, A, B, C, D);
         assertEquals(PD, CD.predicate);
         assertEquals(List.of(CA, CB, CC, CD), problem.constraints);
-        Predicate5 PE = (a, b, c, d, e) -> a == 1 && a == b && b == c && c == d && d == e;
+        assertTrue(CD.predicate.test(1, 2, 3, 4));
+        Predicate5 PE = (a, b, c, d, e) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5;
         Constraint CE = problem.constraint(PE, A, B, C, D, E);
         assertEquals(PE, CE.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE), problem.constraints);
-        Predicate6 PF = (a, b, c, d, e, f) -> a == 1 && a == b && b == c && c == d && d == e && e == f;
+        assertTrue(CE.predicate.test(1, 2, 3, 4, 5));
+        Predicate6 PF = (a, b, c, d, e, f) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5 && f == 6;
         Constraint CF = problem.constraint(PF, A, B, C, D, E, F);
         assertEquals(PF, CF.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE, CF), problem.constraints);
-        Predicate7 PG = (a, b, c, d, e, f, g) -> a == 1 && a == b && b == c && c == d && d == e && e == f && f == g;
+        assertTrue(CF.predicate.test(1, 2, 3, 4, 5, 6));
+        Predicate7 PG = (a, b, c, d, e, f, g) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5 && f == 6 && g == 7;
         Constraint CG = problem.constraint(PG, A, B, C, D, E, F, G);
         assertEquals(PG, CG.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE, CF, CG), problem.constraints);
-        Predicate8 PH = (a, b, c, d, e, f, g, h) -> a == 1 && a == b && b == c && c == d && d == e && e == f && f == g && g == h;
+        assertTrue(CG.predicate.test(1, 2, 3, 4, 5, 6, 7));
+        Predicate8 PH = (a, b, c, d, e, f, g, h) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5 && f == 6 && g == 7 && h == 8;
         Constraint CH = problem.constraint(PH, A, B, C, D, E, F, G, H);
         assertEquals(PH, CH.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE, CF, CG, CH), problem.constraints);
-        Predicate9 PI = (a, b, c, d, e, f, g, h, i) -> a == 1 && a == b && b == c && c == d && d == e && e == f && f == g && g == h && h == i;
+        assertTrue(CH.predicate.test(1, 2, 3, 4, 5, 6, 7, 8));
+        Predicate9 PI = (a, b, c, d, e, f, g, h, i) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5 && f == 6 && g == 7 && h == 8 && i == 9;
         Constraint CI = problem.constraint(PI, A, B, C, D, E, F, G, H, I);
         assertEquals(PI, CI.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE, CF, CG, CH, CI), problem.constraints);
-        Predicate10 PJ = (a, b, c, d, e, f, g, h, i, j) -> a == 1 && a == b && b == c && c == d && d == e && e == f && f == g && g == h && h == i && i == j;
+        assertTrue(CI.predicate.test(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        Predicate10 PJ = (a, b, c, d, e, f, g, h, i, j) -> a == 1 && b == 2 && c == 3 && d == 4 && e == 5 && f == 6 && g == 7 && h == 8 && i == 9 && j == 10;
         Constraint CJ = problem.constraint(PJ, A, B, C, D, E, F, G, H, I, J);
         assertEquals(PJ, CJ.predicate);
         assertEquals(List.of(CA, CB, CC, CD, CE, CF, CG, CH, CI, CJ), problem.constraints);
-        assertTrue(CJ.predicate.test(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+        assertTrue(CJ.predicate.test(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+    }
+    
+    @Test
+    public void testConstraint2D() {
+    	Problem p = new Problem();
+        Domain d = Domain.range(0, 2);
+        Variable A = p.variable("A", d);
+        Variable B = p.variable("B", d);
+        Variable C = p.variable("C", d);
+        Variable D = p.variable("D", d);
+        Variable[][] V = { {A, B}, {C, D} };
+        Constraint c = p.constraint(v -> v[0][0] + v[0][1] == v[1][0] + v[1][1], V);
+        assertEquals(List.of(A, B, C, D), c.variables);
+        assertTrue(c.predicate.test(0, 2, 1, 1));
+    }
+
+    
+    @Test
+    public void testAllDifferentEachRows() {
+    	Problem p = new Problem();
+        Domain d = Domain.range(0, 2);
+        Variable A = p.variable("A", d);
+        Variable B = p.variable("B", d);
+        Variable C = p.variable("C", d);
+        Variable D = p.variable("D", d);
+        Variable[][] V = { {A, B}, {C, D} };
+        p.allDifferentEachRows(V);
+        assertEquals(2, p.constraints.size());
+        assertEquals(Set.of(List.of(A, B), List.of(C, D)),
+        	p.constraints.stream().map(c -> c.variables).collect(Collectors.toSet()));
+    }
+    
+    @Test
+    public void testAllDifferentEachColumns() {
+    	Problem p = new Problem();
+        Domain d = Domain.range(0, 2);
+        Variable A = p.variable("A", d);
+        Variable B = p.variable("B", d);
+        Variable C = p.variable("C", d);
+        Variable D = p.variable("D", d);
+        Variable[][] V = { {A, B}, {C, D} };
+        p.allDifferentEachColumns(V);
+        assertEquals(2, p.constraints.size());
+        assertEquals(Set.of(List.of(A, C), List.of(B, D)),
+        	p.constraints.stream().map(c -> c.variables).collect(Collectors.toSet()));
     }
 
     @Test

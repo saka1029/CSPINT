@@ -144,5 +144,25 @@ class TestSolver {
         assertEquals(5, s.solve(p, m -> logger.info("answer: " + m)));
         logger.info(Arrays.toString(s.bindCount));
     }
+    
+    @Test
+    public void testInvalidBindingOrder() {
+        Problem p = new Problem();
+        Domain d = Domain.range(0, 100);
+        Variable A = p.variable("A", d);
+        Variable B = p.variable("B", d);
+        Solver s = new Solver();
+        try {
+        	Solver.constraintOrder(p, List.of(B));
+        	fail();
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+        	s.solve(p, List.of(A), m ->{});
+        	fail();
+        } catch (IllegalArgumentException e) {
+        }
+    	
+    }
 
 }
