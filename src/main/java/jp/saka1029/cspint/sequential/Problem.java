@@ -110,8 +110,10 @@ public class Problem {
     	return Arrays.stream(variables).flatMap(a -> Arrays.stream(a)).toArray(Variable[]::new);
     }
 
-    public Constraint constraint(PredicateD2 predicate, Variable[][] variables) {
-    	return constraintVarargs(new PredicateD2Support(predicate, variables.length, variables[0].length), flat(variables));
+    public Constraint constraint(PredicateD2 predicate, Variable[]... variables) {
+    	return constraintVarargs(
+    	    new PredicateD2Support(predicate, variables.length, variables[0].length),
+    	    flat(variables));
     }
 
     public void allDifferent(Variable... variables) {

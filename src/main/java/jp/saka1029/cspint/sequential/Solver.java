@@ -93,4 +93,15 @@ public class Solver {
     public int solve(Problem problem, Answer answer) {
         return solve(problem, problem.variables, answer);
     }
+    
+    public static void printConstraintOrder(Problem problem, List<Variable> bindingOrder) {
+    	List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
+    	List<Variable> variables = problem.variables;
+    	for (int i = 0, size = variables.size(); i < size; ++i)
+    		logger.info(String.format("%4d %s : %s", i, variables.get(i), constraints.get(i)));
+    }
+
+    public static void printConstraintOrder(Problem problem) {
+    	printConstraintOrder(problem, problem.variables);
+    }
 }
