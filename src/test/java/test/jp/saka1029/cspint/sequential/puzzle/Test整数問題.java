@@ -16,9 +16,9 @@ import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
-class Test数学 {
-	
-	static final Logger logger = Logger.getLogger(Test数学.class.getName());
+class Test整数問題 {
+
+	static final Logger logger = Logger.getLogger(Test整数問題.class.getName());
 
 	static int number(int... d) {
 		return IntStream.of(d).reduce(0, (a, b) -> a * 10 + b);
@@ -136,4 +136,39 @@ class Test数学 {
 		s.solve(p, m -> logger.info("answer: " + m));
 	}
 
+	/**
+	 * https://youtu.be/0tvF39-zpSg
+	 * a, b はすべて自然数
+	 * a² + b² = 2020
+	 */
+	@Test
+	public void test整数問題2020() {
+		logger.info(Common.methodName());
+		final int RIGHT = 2020;
+		Problem p = new Problem();
+		Domain d = Domain.range(1, RIGHT);
+		Variable A = p.variable("A", d);
+		Variable B = p.variable("B", d);
+		p.constraint((a, b) -> a * a + b * b == RIGHT, A, B);
+		Solver s = new Solver();
+		s.solve(p, m -> logger.info("answer: " + m));
+	}
+
+	/**
+	 * https://www.youtube.com/watch?v=ZTH7m5IiJv8
+	 * n, m は自然数
+	 * n² + 785 = 3^m
+	 */
+	@Test
+	public void test整数問題nm() {
+		logger.info(Common.methodName());
+		final int MAX = 1000;
+		Problem p = new Problem();
+		Domain d = Domain.range(1, MAX);
+		Variable N = p.variable("N", d);
+		Variable M = p.variable("M", d);
+		p.constraint((n, m) -> n * n + 785 == (int)Math.pow(3, m), N, M);
+		Solver s = new Solver();
+		s.solve(p, m -> logger.info("answer: " + m));
+	}
 }
