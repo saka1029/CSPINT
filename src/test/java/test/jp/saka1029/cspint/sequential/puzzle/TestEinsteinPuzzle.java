@@ -59,7 +59,18 @@ public class TestEinsteinPuzzle {
 
     static String name(int i, int j) { return i + "@" + Attribute.values()[j]; }
     
-    static Variable[][] selectColumn(Variable[][] matrix, int... selections) {
+    static Variable[] selectColumn(Variable[][] matrix, int selection) {
+        int rows = matrix.length;
+        Variable[] result = new Variable[rows];
+        for (int r = 0; r < rows; ++r)
+            result[r] = matrix[r][selection];
+        return result;
+    }
+    static Variable[] selectColumn(Variable[][] matrix, Attribute selection) {
+        return selectColumn(matrix, selection.ordinal());
+    }
+
+    static Variable[][] selectColumns(Variable[][] matrix, int... selections) {
         int rows = matrix.length;
         int cols = selections.length;
         Variable[][] result = new Variable[rows][cols];
@@ -69,7 +80,12 @@ public class TestEinsteinPuzzle {
         return result;
     }
 
-    @Disabled
+    static Variable[][] selectColumns(Variable[][] matrix, Attribute... selections) {
+        return selectColumns(matrix, Arrays.stream(selections)
+            .mapToInt(a -> a.ordinal())
+            .toArray());
+    }
+
     @Test
     void test() {
         Problem p = new Problem();
@@ -81,65 +97,63 @@ public class TestEinsteinPuzzle {
         p.allDifferentEachColumns(v);
         //  2. The Englishman lives in the red house.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Nationality.ordinal()] == Nationality.Englishman.ordinal()
-                && r[Attribute.Color.ordinal()] == Color.Red.ordinal()), v);
+        	.anyMatch(r -> r[0] == Nationality.Englishman.ordinal() && r[1] == Color.Red.ordinal()),
+        	selectColumns(v, Attribute.Nationality, Attribute.Color));
         //  3. The Spaniard owns the dog.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Nationality.ordinal()] == Nationality.Spaniard.ordinal()
-        		&& r[Attribute.Pet.ordinal()] == Pet.Dog.ordinal()), v);
+        	.anyMatch(r -> r[0] == Nationality.Spaniard.ordinal() && r[1] == Pet.Dog.ordinal()),
+        	selectColumns(v, Attribute.Nationality, Attribute.Pet));
         //  4. Coffee is drunk in the green house.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Drink.ordinal()] == Drink.Coffee.ordinal()
-        		&& r[Attribute.Color.ordinal()] == Color.Green.ordinal()), v);
+        	.anyMatch(r -> r[0] == Drink.Coffee.ordinal() && r[1] == Color.Green.ordinal()),
+        	selectColumns(v, Attribute.Drink, Attribute.Color));
         //  5. The Ukrainian drinks tea.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Nationality.ordinal()] == Nationality.Ukrainian.ordinal()
-        		&& r[Attribute.Drink.ordinal()] == Drink.Tea.ordinal()), v);
+        	.anyMatch(r -> r[0] == Nationality.Ukrainian.ordinal() && r[1] == Drink.Tea.ordinal()),
+        	selectColumns(v, Attribute.Nationality, Attribute.Drink));
         //  6. The green house is immediately to the right of the ivory house.
-        p.constraint(a -> IntStream.range(1, NUM_HOUSES)
-            .anyMatch(i -> a[i][Attribute.Color.ordinal()] == Color.Green.ordinal()
-                && a[i - 1][Attribute.Color.ordinal()] == Color.Ivory.ordinal()), v);
+        p.constraintVarargs(a -> IntStream.range(1, NUM_HOUSES)
+            .anyMatch(i -> a[i] == Color.Green.ordinal() && a[i - 1] == Color.Ivory.ordinal()),
+            selectColumn(v, Attribute.Color));
         //  7. The Old Gold smoker owns snails.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Smoke.ordinal()] == Smoke.OldGold.ordinal()
-        		&& r[Attribute.Pet.ordinal()] == Pet.Snails.ordinal()), v);
+        	.anyMatch(r -> r[0] == Smoke.OldGold.ordinal() && r[1] == Pet.Snails.ordinal()),
+        	selectColumns(v, Attribute.Smoke, Attribute.Pet));
         //  8. Kools are smoked in the yellow house.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Smoke.ordinal()] == Smoke.Kools.ordinal()
-        		&& r[Attribute.Color.ordinal()] == Color.Yellow.ordinal()), v);
+        	.anyMatch(r -> r[0] == Smoke.Kools.ordinal() && r[1] == Color.Yellow.ordinal()),
+        	selectColumns(v, Attribute.Smoke, Attribute.Color));
         //  9. Milk is drunk in the middle house.
         p.constraint(x -> x == Drink.Milk.ordinal(), v[2][Attribute.Drink.ordinal()]);
         // 10. The Norwegian lives in the first house.
         p.constraint(x -> x == Nationality.Norwegian.ordinal(), v[0][Attribute.Nationality.ordinal()]);
         // 11. The man who smokes Chesterfields lives in the house next to the man with the fox.
         p.constraint(a -> IntStream.range(1, NUM_HOUSES)
-            .anyMatch(i -> a[i][Attribute.Smoke.ordinal()] == Smoke.Chesterfield.ordinal()
-                && a[i - 1][Attribute.Pet.ordinal()] == Pet.Fox.ordinal()
-                || a[i][Attribute.Pet.ordinal()] == Pet.Fox.ordinal()
-                && a[i - 1][Attribute.Smoke.ordinal()] == Smoke.Chesterfield.ordinal()) , v);
+            .anyMatch(i -> a[i][0] == Smoke.Chesterfield.ordinal() && a[i - 1][1] == Pet.Fox.ordinal()
+                || a[i][1] == Pet.Fox.ordinal() && a[i - 1][0] == Smoke.Chesterfield.ordinal()),
+            selectColumns(v, Attribute.Smoke, Attribute.Pet));
         // 12. Kools are smoked in the house next to the house where the horse is kept.
         p.constraint(a -> IntStream.range(1, NUM_HOUSES)
-            .anyMatch(i -> a[i][Attribute.Smoke.ordinal()] == Smoke.Kools.ordinal()
-                && a[i - 1][Attribute.Pet.ordinal()] == Pet.Horse.ordinal()
-                || a[i][Attribute.Pet.ordinal()] == Pet.Horse.ordinal()
-                && a[i - 1][Attribute.Smoke.ordinal()] == Smoke.Kools.ordinal()) , v);
+            .anyMatch(i -> a[i][0] == Smoke.Kools.ordinal() && a[i - 1][1] == Pet.Horse.ordinal()
+                || a[i][1] == Pet.Horse.ordinal() && a[i - 1][0] == Smoke.Kools.ordinal()),
+            selectColumns(v, Attribute.Smoke, Attribute.Pet));
         // 13. The Lucky Strike smoker drinks orange juice.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Smoke.ordinal()] == Smoke.LuckyStrike.ordinal()
-        		&& r[Attribute.Drink.ordinal()] == Drink.OrangeJuice.ordinal()), v);
+        	.anyMatch(r -> r[0] == Smoke.LuckyStrike.ordinal() && r[1] == Drink.OrangeJuice.ordinal()),
+        	selectColumns(v, Attribute.Smoke, Attribute.Drink));
         // 14. The Japanese smokes Parliaments.
         p.constraint(a -> Arrays.stream(a)
-        	.anyMatch(r -> r[Attribute.Nationality.ordinal()] == Nationality.Japanese.ordinal()
-        		&& r[Attribute.Smoke.ordinal()] == Smoke.Parliament.ordinal()), v);
+        	.anyMatch(r -> r[0] == Nationality.Japanese.ordinal() && r[1] == Smoke.Parliament.ordinal()),
+        	selectColumns(v, Attribute.Nationality, Attribute.Smoke));
         // 15. The Norwegian lives next to the blue house.
         p.constraint(a -> IntStream.range(1, NUM_HOUSES)
-            .anyMatch(i -> a[i][Attribute.Nationality.ordinal()] == Nationality.Norwegian.ordinal()
-                && a[i - 1][Attribute.Color.ordinal()] == Color.Blue.ordinal()
-                || a[i][Attribute.Color.ordinal()] == Color.Blue.ordinal()
-                && a[i - 1][Attribute.Nationality.ordinal()] == Nationality.Norwegian.ordinal()) , v);
+            .anyMatch(i -> a[i][0] == Nationality.Norwegian.ordinal() && a[i - 1][1] == Color.Blue.ordinal()
+                || a[i][1] == Color.Blue.ordinal() && a[i - 1][0] == Nationality.Norwegian.ordinal()),
+            selectColumns(v, Attribute.Nationality, Attribute.Color));
         Solver.printConstraintOrder(p);
         Solver s = new Solver();
         s.solve(p, m -> logger.info("answer: " + m));
+        logger.info(Arrays.toString(s.bindCount));
     }
 
 }
