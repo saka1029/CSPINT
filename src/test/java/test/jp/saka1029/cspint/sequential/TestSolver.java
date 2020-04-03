@@ -55,12 +55,10 @@ class TestSolver {
             Map.of(a, 2, b, 1, c, 3)
         );
         assertEquals(expected, actual);
+        Solver.printConstraintOrder(problem);
+        Solver.printConstraintOrder(problem);
     }
 
-    static int number(int... digits) {
-        return IntStream.of(digits).reduce(0, (a, b) -> 10 * a + b);
-    }
-    
     @Test
     public void testInvalidBindingOrder() {
         Problem p = new Problem();
