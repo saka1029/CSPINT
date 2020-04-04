@@ -17,6 +17,10 @@ public class Constraint {
             v.add(this);
         }
     }
+    
+    public boolean isAllDifferent() {
+        return predicate == Problem.DIFFERENT;
+    }
 
     @Override
     public String toString() {

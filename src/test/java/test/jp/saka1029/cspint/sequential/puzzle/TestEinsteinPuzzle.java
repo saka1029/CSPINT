@@ -114,7 +114,7 @@ public class TestEinsteinPuzzle {
     static List<Variable> bindingOrder(Problem p, Variable[][] v) {
         Set<Variable> bindOrderSet = p.constraints.stream()
             .sorted(Comparator.comparing(
-                c -> c.predicate == Problem.DIFFERENT
+                c -> c.isAllDifferent()
                     ? Integer.MAX_VALUE     // allDifferentの制約は最後にします。
                     : c.variables.size()))  // 変数の数が小さいもの順にソートします。
             .flatMap(c -> c.variables.stream()) // 制約に含まれる変数を取り出します。

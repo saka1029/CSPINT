@@ -116,7 +116,7 @@ public class Problem {
     	    flat(variables));
     }
 
-    public static final Predicate2 DIFFERENT = (x, y) -> x != y;
+    static final Predicate2 DIFFERENT = (x, y) -> x != y;
     
     public void allDifferent(Variable... variables) {
         int size = variables.length;
