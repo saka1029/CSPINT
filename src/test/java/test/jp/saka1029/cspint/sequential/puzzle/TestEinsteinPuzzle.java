@@ -2,13 +2,21 @@ package test.jp.saka1029.cspint.sequential.puzzle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
@@ -40,6 +48,14 @@ import jp.saka1029.cspint.sequential.Variable;
  * Drink        : Coffee      Water         Tea         Milk          Orange juice  
  * Smoke        : Kools       Chesterfield  Old Gold    Lucky Strike  Parliament
  * Pet          : Dog         Fox           Horse       Snails        Zebra
+ * 
+ * answer:
+ * House        1           2               3           4               5
+ * Color        Yellow      Blue            Red         Ivory           Green
+ * Nationality  Norwegian   Ukrainian       Englishman  Spaniard        Japanese
+ * Drink        Water       Tea             Milk        Orange juice    Coffee
+ * Smoke        Kools       Chesterfield    Old Gold    Lucky Strike    Parliament
+ * Pet          Fox         Horse           Snails      Dog             Zebra
  * 
  */
 public class TestEinsteinPuzzle {
@@ -84,6 +100,38 @@ public class TestEinsteinPuzzle {
         return selectColumns(matrix, Arrays.stream(selections)
             .mapToInt(a -> a.ordinal())
             .toArray());
+    }
+    
+    /**
+     * この問題用の変数束縛順序のリストを返します。
+     * アルゴリズムは以下のとおりです。
+     * 
+     * AllDifferentを除くすべての制約について、
+     * 制約に含まれる変数の数が小さいもの順にソートします。
+     * 得られた制約に含まれる変数を順次LinkedHasSetに追加します。
+     * 結果をリストに変換したものを返します。
+     */
+    static List<Variable> bindingOrder(Problem p, Variable[][] v) {
+        Set<Variable> bindOrderSet = p.constraints.stream()
+            .sorted(Comparator.comparing(
+                c -> c.predicate == Problem.DIFFERENT
+                    ? Integer.MAX_VALUE     // allDifferentの制約は最後にします。
+                    : c.variables.size()))  // 変数の数が小さいもの順にソートします。
+            .flatMap(c -> c.variables.stream()) // 制約に含まれる変数を取り出します。
+            .collect(Collectors.toCollection(LinkedHashSet::new));  //　結果をLinkedHasSetに集約します。
+        return new ArrayList<>(bindOrderSet);   // 結果をリストに変換します。
+    }
+    
+    static void printResult(Variable[][] v, Map<Variable, Integer> result) {
+        logger.info("Answer:");
+        for (int r = 0; r < NUM_HOUSES; ++r)
+            logger.info(String.format("house %d: %s %s %s %s %s",
+                r,
+                Color.values()[result.get(v[r][Attribute.Color.ordinal()])],
+                Nationality.values()[result.get(v[r][Attribute.Nationality.ordinal()])],
+                Drink.values()[result.get(v[r][Attribute.Drink.ordinal()])],
+                Smoke.values()[result.get(v[r][Attribute.Smoke.ordinal()])],
+                Pet.values()[result.get(v[r][Attribute.Pet.ordinal()])]));
     }
 
     @Test
@@ -150,10 +198,11 @@ public class TestEinsteinPuzzle {
             .anyMatch(i -> a[i][0] == Nationality.Norwegian.ordinal() && a[i - 1][1] == Color.Blue.ordinal()
                 || a[i][1] == Color.Blue.ordinal() && a[i - 1][0] == Nationality.Norwegian.ordinal()),
             selectColumns(v, Attribute.Nationality, Attribute.Color));
-        Solver.printConstraintOrder(p);
         Solver s = new Solver();
-        s.solve(p, m -> logger.info("answer: " + m));
-        logger.info(Arrays.toString(s.bindCount));
+        List<Variable> bindingOrder = bindingOrder(p, v);
+        Solver.printConstraintOrder(p, bindingOrder);
+        s.solve(p, bindingOrder, m -> printResult(v, m));
+        logger.info("binding count: " + Arrays.toString(s.bindCount));
     }
 
 }

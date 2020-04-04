@@ -116,11 +116,13 @@ public class Problem {
     	    flat(variables));
     }
 
+    public static final Predicate2 DIFFERENT = (x, y) -> x != y;
+    
     public void allDifferent(Variable... variables) {
         int size = variables.length;
         for (int i = 0; i < size; ++i)
             for (int j = i + 1; j < size; ++j)
-                constraint((x, y) -> x != y, variables[i], variables[j]);
+                constraint(DIFFERENT, variables[i], variables[j]);
     }
 
     public void allDifferent(Variable[][] variables) {
