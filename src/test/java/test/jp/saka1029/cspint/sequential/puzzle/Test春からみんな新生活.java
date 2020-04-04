@@ -51,8 +51,6 @@ class Test春からみんな新生活 {
     static final int 年齢列 = 属性.年齢.ordinal();
     static final int 新生活列 = 属性.新生活.ordinal();
 
-//    static int o(Enum e) { return e.ordinal(); }
-
     @Test
     void test() {
         Domain 新生活Domain = Domain.of(Arrays.stream(新生活.values()).mapToInt(新生活::ordinal).toArray());
@@ -85,13 +83,16 @@ class Test春からみんな新生活 {
 			.anyMatch(r -> r[年齢列] == 30 && r[新生活列] == 新生活.ペットを飼う.ordinal()), v) ;
         // ツキコ：　　私もイクミ姉さんのように仕事頑張らないとね。
         problem.constraint((x, y) -> x < y, v[ツキコ行][年齢列], v[イクミ行][年齢列]);
+        Solver.printConstraintOrder(problem);
         Solver solver = new Solver();
         solver.solve(problem, m -> {
+            logger.info("Answer:");
             for (名前 name : 名前.values())
-                logger.info(String.format("%s : %s才 %s",
+                logger.info(String.format("%sは%s才で%s",
                     name, m.get(problem.variable(name + ".年齢")),
                     新生活.values()[m.get(problem.variable(name + ".新生活"))]));
         });
+        logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
     }
 
 }
