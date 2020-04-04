@@ -1,6 +1,10 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
 import java.util.Arrays;
+<<<<<<< HEAD
+=======
+import java.util.Map.Entry;
+>>>>>>> branch 'master' of https://github.com/saka1029/CSPINT.git
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
