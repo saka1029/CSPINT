@@ -1,8 +1,7 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import java.util.Map.Entry;
+import java.util.Arrays;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,52 +35,62 @@ class Test春からみんな新生活 {
 
     static final Logger logger = Logger.getLogger(Test春からみんな新生活.class.toString());
 
-    static final int セツオ = 0, イクミ = 1, カナコ = 2, シンイチ = 3, ツキコ = 4, 人数 = 5;
-    static final String[] 名前 = {"セツオ", "イクミ", "カナコ", "シンイチ", "ツキコ"};
-    static final int 国内転勤 = 0, 海外転勤 = 1, 転職 = 2, 結婚 = 3, ペットを飼う = 4;
-    static final String[] 新生活名 = {"国内転勤", "海外転勤", "転職", "結婚", "ペットを飼う"};
+    enum 名前 { セツオ, イクミ, カナコ, シンイチ, ツキコ };
+    static final int 人数 = 名前.values().length;
+    static final int セツオ行 = 名前.セツオ.ordinal();
+    static final int イクミ行 = 名前.イクミ.ordinal();
+    static final int カナコ行 = 名前.カナコ.ordinal();
+    static final int シンイチ行 = 名前.シンイチ.ordinal();
+    static final int ツキコ行 = 名前.ツキコ.ordinal();
+
+    enum 新生活 { 国内転勤, 海外転勤, 転職, 結婚, ペットを飼う }
     static final int[] 年齢 = { 25, 26, 27, 29, 30 };
-    static final int 年齢列 = 0, 新生活列 = 1, 列数 = 2;
+
+    enum 属性 { 年齢, 新生活 };
+    static final int 列数 = 属性.values().length;
+    static final int 年齢列 = 属性.年齢.ordinal();
+    static final int 新生活列 = 属性.新生活.ordinal();
+
+//    static int o(Enum e) { return e.ordinal(); }
 
     @Test
     void test() {
-        Domain 新生活Domain = Domain.of(国内転勤, 海外転勤, 転職, 結婚, ペットを飼う);
+        Domain 新生活Domain = Domain.of(Arrays.stream(新生活.values()).mapToInt(新生活::ordinal).toArray());
         Domain 年齢Domain = Domain.of(年齢);
         Problem problem = new Problem();
         Variable[][] v = new Variable[人数][列数];
         for (int i = 0; i < 人数; ++i) {
-            v[i][年齢列] = problem.variable(名前[i] + ".年齢", 年齢Domain);
-            v[i][新生活列] = problem.variable(名前[i] + ".新生活", 新生活Domain);
+            v[i][年齢列] = problem.variable(名前.values()[i] + ".年齢", 年齢Domain);
+            v[i][新生活列] = problem.variable(名前.values()[i] + ".新生活", 新生活Domain);
         }
         // 年齢、新生活はそれぞれ異なる。
         problem.allDifferentEachColumns(v);
         // セツオ：　　オレはこの春、結婚することになったんだ。
-        problem.constraint(x -> x == 結婚, v[セツオ][新生活列]);
+        problem.constraint(x -> x == 新生活.結婚.ordinal(), v[セツオ行][新生活列]);
         // イクミ：　　私はセツオより一つ年上よ。
-        problem.constraint((x, y) -> x == y + 1, v[イクミ][年齢列], v[セツオ][年齢列]);
+        problem.constraint((x, y) -> x == y + 1, v[イクミ行][年齢列], v[セツオ行][年齢列]);
         // ２５才で思い切って転職する人がいるのね。
-        problem.constraint(a -> IntStream.range(0, 人数)
-        	.anyMatch(i -> a[i][年齢列] == 25 && a[i][新生活列] == 転職), v);
+        problem.constraint(a -> Arrays.stream(a)
+        	.anyMatch(r -> r[年齢列] == 25 && r[新生活列] == 新生活.転職.ordinal()), v);
         // カナコ：　　私は海外転勤になっちゃった。
-        problem.constraint(x -> x == 海外転勤, v[カナコ][新生活列]);
+        problem.constraint(x -> x == 新生活.海外転勤.ordinal(), v[カナコ行][新生活列]);
         //             私はツキコとは１才違いで、
-        problem.constraint((x, y) -> Math.abs(x - y) == 1, v[カナコ][年齢列], v[ツキコ][年齢列]);
+        problem.constraint((x, y) -> Math.abs(x - y) == 1, v[カナコ行][年齢列], v[ツキコ行][年齢列]);
         //             セツオとは３才違いよ。
-        problem.constraint((x, y) -> Math.abs(x - y) == 3, v[カナコ][年齢列], v[セツオ][年齢列]);
+        problem.constraint((x, y) -> Math.abs(x - y) == 3, v[カナコ行][年齢列], v[セツオ行][年齢列]);
         // シンイチ：　カナコ姉さんはしっかりしていますよね。
-        problem.constraint((x, y) -> x < y, v[シンイチ][年齢列], v[カナコ][年齢列]);
+        problem.constraint((x, y) -> x < y, v[シンイチ行][年齢列], v[カナコ行][年齢列]);
         // 　　　　　　ところで、３０才の記念にペットを飼い始めたのは誰だっけ？
-        problem.constraint(a -> IntStream.range(0, 人数)
-			.anyMatch(i -> a[i][年齢列] == 30 && a[i][新生活列] == ペットを飼う), v) ;
+        problem.constraint(a -> Arrays.stream(a)
+			.anyMatch(r -> r[年齢列] == 30 && r[新生活列] == 新生活.ペットを飼う.ordinal()), v) ;
         // ツキコ：　　私もイクミ姉さんのように仕事頑張らないとね。
-        problem.constraint((x, y) -> x < y, v[ツキコ][年齢列], v[イクミ][年齢列]);
+        problem.constraint((x, y) -> x < y, v[ツキコ行][年齢列], v[イクミ行][年齢列]);
         Solver solver = new Solver();
         solver.solve(problem, m -> {
-            for (Entry<Variable, Integer> e : m.entrySet())
-                if (e.getKey().name.endsWith("新生活"))
-                    logger.info(e.getKey() + "=" + 新生活名[e.getValue()]);
-                else
-                    logger.info(e.getKey() + "=" + e.getValue());
+            for (名前 name : 名前.values())
+                logger.info(String.format("%s : %s才 %s",
+                    name, m.get(problem.variable(name + ".年齢")),
+                    新生活.values()[m.get(problem.variable(name + ".新生活"))]));
         });
     }
 
