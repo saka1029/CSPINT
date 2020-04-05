@@ -28,7 +28,7 @@ class TestNQueens {
                .forEach(j -> problem.constraint(
                    (x, y) -> x != y && Math.abs(x - y) != j - i, rows[i], rows[j])));
         Solver solver = new Solver();
-        int answers = solver.solve(problem, m -> {});
+//        logger.info(n + "-Queens");
 //        int[] count = {0};
 //        int answers = solver.solve(problem, m -> {
 //            logger.info("** answer " + (++count[0]));
@@ -37,6 +37,7 @@ class TestNQueens {
 //                logger.info(".".repeat(c) + "X" + ".".repeat(n - c -1));
 //            }
 //        });
+        int answers = solver.solve(problem, m -> {});
         logger.info("n=" + n + " : answers=" + answers
             + " : elapse=" + (System.currentTimeMillis() - start) + "ms.");
         return answers;
