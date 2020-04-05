@@ -23,10 +23,12 @@ class TestNQueens {
         Variable[] rows = IntStream.range(0, n)
             .mapToObj(i -> problem.variable("R" + i, domain))
             .toArray(Variable[]::new);
-        IntStream.range(0,  n)
-           .forEach(i -> IntStream.range(i + 1, n)
-               .forEach(j -> problem.constraint(
-                   (x, y) -> x != y && Math.abs(x - y) != j - i, rows[i], rows[j])));
+        for (int i = 0; i < n; ++i)
+            for (int j = i + 1; j < n; ++j) {
+                int distance = j - i;
+                problem.constraint(
+                   (x, y) -> x != y && Math.abs(x - y) != distance, rows[i], rows[j]);
+            }
         Solver solver = new Solver();
 //        logger.info(n + "-Queens");
 //        int[] count = {0};
