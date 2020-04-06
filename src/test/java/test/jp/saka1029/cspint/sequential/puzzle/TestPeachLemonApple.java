@@ -17,6 +17,16 @@ import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
+/**
+ * 覆面算
+ * http://www.angelfire.com/mac/macmizuno/j1/apple.html 
+ * 
+ *   P  E  A  C  H
+ * + L  E  M  O  N
+ * ---------------
+ *   A  P  P  L  E
+ *
+ */
 class TestPeachLemonApple {
 
     static Logger logger = Logger.getLogger(TestPeachLemonApple.class.getName());
@@ -24,9 +34,34 @@ class TestPeachLemonApple {
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);
     }
+    
+    @Test
+    public void test単一式による制約() {
+        logger.info("*****" + Common.methodName());
+        Problem problem = new Problem();
+        Domain first = Domain.rangeClosed(1, 9);
+        Domain digits = Domain.rangeClosed(0, 9);
+        Variable P = problem.variable("P", first);
+        Variable E = problem.variable("E", digits);
+        Variable A = problem.variable("A", first);
+        Variable C = problem.variable("C", digits);
+        Variable H = problem.variable("H", digits);
+        Variable L = problem.variable("L", first);
+        Variable M = problem.variable("M", digits);
+        Variable O = problem.variable("O", digits);
+        Variable N = problem.variable("N", digits);
+        problem.allDifferent(P, E, A, C, H, L, M, O, N);
+        problem.constraint((p, e, a, c, h, l, m, o, n) ->
+            number(p, e, a, c, h) + number(l, e, m, o, n) == number(a, p, p, l, e),
+            P, E, A, C, H, L, M, O, N);
+        Solver solver = new Solver();
+        solver.solve(problem, m -> logger.info("answer: " + m));
+        logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
+    }
 
     @Test
-    public void testPeachLemonApple() {
+    public void test桁ごとの制約で変数宣言順() {
+        logger.info("*****" + Common.methodName());
         Problem problem = new Problem();
         Domain first = Domain.rangeClosed(1, 9);
         Domain digits = Domain.rangeClosed(0, 9);
@@ -48,18 +83,6 @@ class TestPeachLemonApple {
         Variable N = problem.variable("N", digits);
         problem.allDifferent(P, E, A, C, H, L, M, O, N);
         Predicate5 addDigit = (c0, a, b, c, c1) -> c0 + a + b == c + c1 * 10;
-        //   C4 C3 C2 C1
-        //   P  E  A  C  H
-        // + L  E  M  O  N
-        // ---------------
-        //   A  P  P  L  E
-
-        // 束縛回数: [1, 2, 4, 8, 16, 144, 68, 480, 3360, 20160, 5160, 1400, 192, 8]
-        //        problem.constraint((p, e, a, c, h, l, m, o, n) ->
-        //            number(p, e, a, c, h) + number(l, e, m, o, n) == number(a, p, p, l, e),
-        //            P, E, A, C, H, L, M, O, N);
-
-        // 束縛回数: [1, 2, 18, 144, 56, 112, 43, 86, 35, 70, 350, 64, 192, 8]
         problem.constraint(addDigit,  Z, H, N, E, C1);
         problem.constraint(addDigit, C1, C, O, L, C2);
         problem.constraint(addDigit, C2, A, M, P, C3);
@@ -84,7 +107,8 @@ class TestPeachLemonApple {
     }
 
     @Test
-    public void testPeachLemonAppleConstraintOrder() {
+    public void test桁ごとの制約で制約順ただしAllDifferentは最後() {
+        logger.info("*****" + Common.methodName());
         Problem problem = new Problem();
         Domain first = Domain.rangeClosed(1, 9);
         Domain digits = Domain.rangeClosed(0, 9);
@@ -105,18 +129,6 @@ class TestPeachLemonApple {
         Variable C2 = problem.variable("C2", carry);
         Variable C4 = problem.variable("C4", carry);
         Predicate5 addDigit = (c0, c1, a, b, c) -> c0 + a + b == c + c1 * 10;
-        //   C4 C3 C2 C1
-        //   P  E  A  C  H
-        // + L  E  M  O  N
-        // ---------------
-        //   A  P  P  L  E
-
-        // 束縛回数: [1, 2, 4, 8, 16, 144, 68, 480, 3360, 20160, 5160, 1400, 192, 8]
-        //        problem.constraint((p, e, a, c, h, l, m, o, n) ->
-        //            number(p, e, a, c, h) + number(l, e, m, o, n) == number(a, p, p, l, e),
-        //            P, E, A, C, H, L, M, O, N);
-
-        // 束縛回数: [1, 2, 18, 144, 56, 112, 43, 86, 35, 70, 350, 64, 192, 8]
         problem.constraint(addDigit, C4,  Z, P, L, A);
         problem.constraint(addDigit, C3, C4, E, E, P);
         problem.constraint(addDigit, C2, C3, A, M, P);
