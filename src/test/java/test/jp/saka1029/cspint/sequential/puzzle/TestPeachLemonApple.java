@@ -83,11 +83,11 @@ class TestPeachLemonApple {
         Variable N = problem.variable("N", digits);
         problem.allDifferent(P, E, A, C, H, L, M, O, N);
         Predicate5 addDigit = (c0, a, b, c, c1) -> c0 + a + b == c + c1 * 10;
-        problem.constraint(addDigit, C4, P, L, A, Z);
-        problem.constraint(addDigit, C3, E, E, P, C4);
-        problem.constraint(addDigit, C2, A, M, P, C3);
-        problem.constraint(addDigit, C1, C, O, L, C2);
         problem.constraint(addDigit,  Z, H, N, E, C1);
+        problem.constraint(addDigit, C1, C, O, L, C2);
+        problem.constraint(addDigit, C2, A, M, P, C3);
+        problem.constraint(addDigit, C3, E, E, P, C4);
+        problem.constraint(addDigit, C4, P, L, A, Z);
         Solver solver = new Solver();
         solver.solve(problem, m -> {
             logger.info("answer: " + m);
