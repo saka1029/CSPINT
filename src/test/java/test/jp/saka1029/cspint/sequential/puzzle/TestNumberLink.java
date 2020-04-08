@@ -51,29 +51,35 @@ public class TestNumberLink {
         return variables;
     }
 
-    static Predicate5 C52 = (v, a, b, c, d) -> v == a && v == b && v != c && v != d ||
+    static Predicate5 C52 = (v, a, b, c, d) ->
+        v == a && v == b && v != c && v != d ||
         v == a && v != b && v == c && v != d ||
         v == a && v != b && v != c && v == d ||
         v != a && v == b && v == c && v != d ||
         v != a && v == b && v != c && v == d ||
         v != a && v != b && v == c && v == d;
 
-    static Predicate4 C42 = (v, a, b, c) -> v == a && v == b && v != c ||
+    static Predicate4 C42 = (v, a, b, c) ->
+        v == a && v == b && v != c ||
         v == a && v != b && v == c ||
         v != a && v == b && v == c;
 
-    static Predicate3 C32 = (v, a, b) -> v == a && v == b;
+    static Predicate3 C32 = (v, a, b) ->
+        v == a && v == b;
 
-    static Predicate5 C51 = (v, a, b, c, d) -> v == a && v != b && v != c && v != d ||
+    static Predicate5 C51 = (v, a, b, c, d) ->
+        v == a && v != b && v != c && v != d ||
         v != a && v == b && v != c && v != d ||
         v != a && v != b && v == c && v != d ||
         v != a && v != b && v != c && v == d;
 
-    static Predicate4 C41 = (v, a, b, c) -> v == a && v != b && v != c ||
+    static Predicate4 C41 = (v, a, b, c) ->
+        v == a && v != b && v != c ||
         v != a && v == b && v != c ||
         v != a && v != b && v == c;
 
-    static Predicate3 C31 = (v, a, b) -> v == a && v != b ||
+    static Predicate3 C31 = (v, a, b) ->
+        v == a && v != b ||
         v != a && v == b;
 
     static Variable[] neighbors(Variable[][] variables, int r, int c) {
@@ -142,6 +148,37 @@ public class TestNumberLink {
             bindOrder.addAll(o.v.variables);
         return new ArrayList<>(bindOrder);
     }
+
+//    static List<Variable> defineBindingOrder(Problem problem, Variable[][] variables) {
+//        Set<Variable> bindingOrder = new LinkedHashSet<>();
+//        int rows = variables.length;
+//        int cols = variables[0].length;
+//        for (Variable v : problem.variables)
+//            if (v.domain.size() == 1)
+//                bindingOrder.add(v);
+//        List<IntVariable> intVars = new ArrayList<>();
+//        new Object() {
+//            int count(int r, int c) {
+//                if (r >= 0 && c >= 0 && r < rows && c < cols)
+//                    return variables[r][c].domain.size() == 1 ? 1 : 0;
+//                else
+//                    return 1;
+//            }
+//
+//            void gather() {
+//                for (int r = 0; r < rows; ++r)
+//                    for (int c = 0; c < cols; ++c)
+//                        intVars.add(new IntVariable(
+//                            count(r - 1, c) + count(r + 1, c)
+//                            + count(r, c - 1) + count(r, c + 1),
+//                            variables[r][c]));
+//            }
+//        }.gather();
+//        intVars.stream()
+//            .sorted(Comparator.comparing(x -> -x.n))
+//            .forEach(x -> bindingOrder.add(x.v));
+//        return new ArrayList<>(bindingOrder);
+//    }
 
     static void answer(Variable[][] variables, Map<Variable, Integer> m) {
         logger.info("answer:");
