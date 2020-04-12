@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Test;
-
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate5;
@@ -45,7 +43,7 @@ class Test虫食い算 {
      *  L  M  N  O
      *
      */
-    @Test
+//    @Test
     void test完全虫食い算() {
         Problem p = new Problem();
         Domain FIRST = Domain.rangeClosed(1, 9);
@@ -91,7 +89,7 @@ class Test虫食い算 {
         return new ArrayList<>(set);
     }
 
-    @Test
+//    @Test
     void test完全虫食い算桁ごと() {
         Problem p = new Problem();
         Domain FIRST = Domain.rangeClosed(1, 9);

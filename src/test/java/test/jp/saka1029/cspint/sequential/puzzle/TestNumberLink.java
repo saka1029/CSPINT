@@ -235,6 +235,59 @@ public class TestNumberLink {
     }
 
     /**
+     * なべさんの遊び場情報　ナンバーリンク
+     * http://nabejoho.webcrow.jp/puzzle/num.html
+     */
+    @Test
+    public void testなべさんの遊び場情報() {
+        logger.info(Common.methodName());
+        int[][] board = {
+            {0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0},
+            {0, 0, 3, 0, 1},
+            {0, 2, 0, 0, 2},
+            {0, 1, 0, 0, 3},
+        };
+        solveNumberLink(board);
+    }
+
+    @Ignore
+    @Test
+    public void testNumberlink0() {
+        logger.info(Common.methodName());
+        int[][] board = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 1, 2, 3, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 5, 0, 0, 0, 0},
+            {0, 0, 0, 0, 6, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 7, 3, 4},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 4, 0, 0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 7, 0, 2, 6, 0},
+            {0, 0, 0, 0, 0, 5, 0, 0, 0},
+        };
+        solveNumberLink(board);
+    }
+
+    @Ignore
+    @Test
+    public void testNumberlink1() {
+        logger.info(Common.methodName());
+        int[][] board = {
+            {3, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 2, 5},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 4, 0, 0, 0},
+            {0, 0, 0, 2, 0, 0, 0, 0, 0},
+            {0, 0, 0, 5, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {4, 0, 0, 0, 0, 0, 0, 3, 0},
+        };
+        solveNumberLink(board);
+    }
+
+    /**
      * [Numberlink - vol.1]
      * https://www.pazru.net/puzzle/numberlink/01/
      */
