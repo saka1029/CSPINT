@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class Solver {
@@ -48,6 +50,13 @@ public class Solver {
 //        for (int i = 0; i < variableSize; ++i)
 //            logger.info(bindingOrder.get(i) + ":" + result.get(i));
         return result;
+    }
+
+    public static List<Variable> bindingOrder(Collection<Constraint> constraintOrder) {
+        Set<Variable> set = new LinkedHashSet<>();
+        for (Constraint c : constraintOrder)
+            set.addAll(c.variables);
+        return new ArrayList<>(set);
     }
 
     public int solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
@@ -93,7 +102,7 @@ public class Solver {
     public int solve(Problem problem, Answer answer) {
         return solve(problem, problem.variables, answer);
     }
-    
+
     public static void printConstraintOrder(Problem problem, List<Variable> bindingOrder) {
     	List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
     	for (int i = 0, size = bindingOrder.size(); i < size; ++i)
