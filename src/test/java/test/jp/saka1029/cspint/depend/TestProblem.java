@@ -1,6 +1,7 @@
 package test.jp.saka1029.cspint.depend;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +15,7 @@ import jp.saka1029.cspint.depend.DerivedVariable;
 import jp.saka1029.cspint.depend.Domain;
 import jp.saka1029.cspint.depend.Predicate;
 import jp.saka1029.cspint.depend.Problem;
+import jp.saka1029.cspint.depend.Variable;
 
 class TestProblem {
 
@@ -51,6 +53,40 @@ class TestProblem {
         assertEquals(List.of(A, B, C, D), p.variables());
         assertEquals(List.of(C, T), p.dependents());
         logger.info(p.toString());
+    }
+    
+    @Test
+    public void testVariableError() {
+        Problem p = new Problem();
+        Domain d = Domain.of(1);
+        BaseVariable V = p.variable("V", d);
+        try {
+            BaseVariable W = p.variable("V", d);
+            fail();
+        } catch (IllegalArgumentException e) {}
+        try {
+            DerivedVariable W = p.variable("V", a -> a[0] + 1, V);
+            fail();
+        } catch (IllegalArgumentException e) {}
+        try {
+            DerivedVariable W = p.variable("V", a -> a[0] + 1, V);
+            fail();
+        } catch (IllegalArgumentException e) {}
+        try {
+            DerivedVariable W = p.variable("W", a -> a[0] + 1);
+            fail();
+        } catch (IllegalArgumentException e) {}
+    }
+    
+    @Test
+    public void testConstraintError() {
+        Problem p = new Problem();
+        Domain d = Domain.of(1);
+        Variable V = p.variable("V", d);
+        try {
+            Constraint W = p.constraint(a -> a[0] == 1);
+            fail();
+        } catch (IllegalArgumentException e) {}
     }
 
 }

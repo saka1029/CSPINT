@@ -16,7 +16,7 @@ public class DerivedVariable extends Variable implements Dependent {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(derivation, "derivation");
         Objects.requireNonNull(variables, "variables");
-        if (variables.length < 0)
+        if (variables.length <= 0)
             throw new IllegalArgumentException("variables");
         this.derivation = derivation;
         this.variables = List.of(variables);

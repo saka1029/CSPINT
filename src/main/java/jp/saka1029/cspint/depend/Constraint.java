@@ -14,7 +14,7 @@ public class Constraint implements Dependent {
     Constraint(Predicate predicate, Variable... variables) {
         Objects.requireNonNull(predicate, "predicate");
         Objects.requireNonNull(variables, "variables");
-        if (variables.length < 0)
+        if (variables.length <= 0)
             throw new IllegalArgumentException("variables");
         this.predicate = predicate;
         this.variables = List.of(variables);

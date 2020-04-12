@@ -20,8 +20,6 @@ public class Problem {
     private final Map<String, Variable> variableMap = new LinkedHashMap<>();
 
     public BaseVariable variable(String name, Domain domain) {
-        Objects.requireNonNull(name, "name");
-        Objects.requireNonNull(domain, "domain");
         if (variableMap.containsKey(name))
             throw new IllegalArgumentException("変数名(" + name + ")が重複しています");
         BaseVariable result = new BaseVariable(name, domain);
@@ -31,11 +29,6 @@ public class Problem {
     }
 
     public DerivedVariable variable(String name, Derivation derivation, Variable... variables) {
-        Objects.requireNonNull(name, "name");
-        Objects.requireNonNull(derivation, "derivation");
-        Objects.requireNonNull(variables, "variables");
-        if (variables.length <= 0)
-            throw new IllegalArgumentException("variables");
         if (variableMap.containsKey(name))
             throw new IllegalArgumentException("変数名(" + name + ")が重複しています");
         DerivedVariable result = new DerivedVariable(name, derivation, variables);
@@ -51,10 +44,6 @@ public class Problem {
     }
 
     public Constraint constraint(Predicate predicate, Variable... variables) {
-        Objects.requireNonNull(predicate, "predicate");
-        Objects.requireNonNull(variables, "variables");
-        if (variables.length <= 0)
-            throw new IllegalArgumentException("variables");
         Constraint result = new Constraint(predicate, variables);
         _dependents.add(result);
         return result;
