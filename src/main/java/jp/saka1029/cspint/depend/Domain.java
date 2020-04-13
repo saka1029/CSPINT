@@ -34,6 +34,11 @@ public class Domain {
         return values[index];
     }
 
+
+    public boolean contains(int n) {
+        return Arrays.stream(values).anyMatch(i -> i == n);
+    }
+
     @Override
     public int hashCode() {
         return Arrays.hashCode(values);

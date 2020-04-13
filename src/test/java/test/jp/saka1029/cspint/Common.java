@@ -1,8 +1,8 @@
-package test.jp.saka1029.cspint.sequential.puzzle;
+package test.jp.saka1029.cspint;
 
 public class Common {
 
-	static String methodName() {
+	public static String methodName() {
 		return Thread.currentThread().getStackTrace()[2].getMethodName();
 	}
 

@@ -1,7 +1,6 @@
 package test.jp.saka1029.cspint.depend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -52,9 +51,10 @@ class TestProblem {
         assertEquals(A, p.variable("A"));
         assertEquals(List.of(A, B, C, D), p.variables());
         assertEquals(List.of(C, T), p.dependents());
+        assertEquals(3, p.baseVariables().size());
         logger.info(p.toString());
     }
-    
+
     @Test
     public void testVariableError() {
         Problem p = new Problem();
@@ -77,7 +77,7 @@ class TestProblem {
             fail();
         } catch (IllegalArgumentException e) {}
     }
-    
+
     @Test
     public void testConstraintError() {
         Problem p = new Problem();

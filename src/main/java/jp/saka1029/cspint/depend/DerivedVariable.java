@@ -24,6 +24,4 @@ public class DerivedVariable extends Variable implements Dependent {
             v.add(this);
     }
 
-
-
 }

@@ -13,6 +13,10 @@ public class Problem {
     private final List<Variable> variables = Collections.unmodifiableList(_variables);
     public List<Variable> variables() { return variables; }
 
+    private final List<BaseVariable> _baseVariables = new ArrayList<>();
+    private final List<BaseVariable> baseVariables = Collections.unmodifiableList(_baseVariables);
+    public List<BaseVariable> baseVariables() { return baseVariables; }
+
     private final List<Dependent> _dependents = new ArrayList<>();
     private final List<Dependent> dependents = Collections.unmodifiableList(_dependents);
     public List<Dependent> dependents() { return dependents; }
@@ -24,6 +28,7 @@ public class Problem {
             throw new IllegalArgumentException("変数名(" + name + ")が重複しています");
         BaseVariable result = new BaseVariable(name, domain);
         _variables.add(result);
+        _baseVariables.add(result);
         variableMap.put(name, result);
         return result;
     }

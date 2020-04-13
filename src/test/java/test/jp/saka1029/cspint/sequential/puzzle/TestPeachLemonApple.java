@@ -16,11 +16,12 @@ import jp.saka1029.cspint.sequential.Predicate5;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
+import test.jp.saka1029.cspint.Common;
 
 /**
  * 覆面算
- * http://www.angelfire.com/mac/macmizuno/j1/apple.html 
- * 
+ * http://www.angelfire.com/mac/macmizuno/j1/apple.html
+ *
  *   P  E  A  C  H
  * + L  E  M  O  N
  * ---------------
@@ -34,7 +35,7 @@ class TestPeachLemonApple {
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);
     }
-    
+
     @Test
     public void test単一式による制約() {
         logger.info("*****" + Common.methodName());
