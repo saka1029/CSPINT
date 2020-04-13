@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.depend.BaseVariable;
 import jp.saka1029.cspint.depend.Constraint;
-import jp.saka1029.cspint.depend.Derivation;
+import jp.saka1029.cspint.depend.Derivation2;
 import jp.saka1029.cspint.depend.DerivedVariable;
 import jp.saka1029.cspint.depend.Domain;
-import jp.saka1029.cspint.depend.Predicate;
+import jp.saka1029.cspint.depend.Predicate2;
 import jp.saka1029.cspint.depend.Problem;
 import jp.saka1029.cspint.depend.Variable;
 
@@ -31,10 +31,10 @@ class TestProblem {
         Domain d = Domain.of(1, 2, 3);
         BaseVariable A = p.variable("A", d);
         BaseVariable B = p.variable("B", d);
-        Derivation E = a -> a[0] + a[1];
+        Derivation2 E = (a, b) -> a + b;
         DerivedVariable C = p.variable("C", E, A, B);
         BaseVariable D = p.variable("D", d);
-        Predicate P = a -> a[0] < a[1];
+        Predicate2 P = (a, b) -> a < b;
         Constraint T = p.constraint(P, C, D);
         assertEquals("A", A.name());
         assertEquals(d, A.domain());
@@ -65,11 +65,11 @@ class TestProblem {
             fail();
         } catch (IllegalArgumentException e) {}
         try {
-            DerivedVariable W = p.variable("V", a -> a[0] + 1, V);
+            DerivedVariable W = p.variable("V", a -> a + 1, V);
             fail();
         } catch (IllegalArgumentException e) {}
         try {
-            DerivedVariable W = p.variable("V", a -> a[0] + 1, V);
+            DerivedVariable W = p.variable("V", a -> a + 1, V);
             fail();
         } catch (IllegalArgumentException e) {}
         try {

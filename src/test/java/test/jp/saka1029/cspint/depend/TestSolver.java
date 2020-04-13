@@ -30,8 +30,8 @@ class TestSolver {
         BaseVariable A = p.variable("A", d);
         BaseVariable B = p.variable("B", d);
         BaseVariable C = p.variable("C", d);
-        p.constraint(a -> a[0] + a[1] == a[2], A, B, C);
-        p.constraint(a -> a[0] < a[1], A, B);
+        p.constraint((a, b, c) -> a + b == c, A, B, C);
+        p.constraint((a, b) -> a < b, A, B);
         Solver s = new Solver();
         assertEquals(1, s.solve(p, m -> logger.info("*** answer: " + m)));
         logger.info("bind count: " + Arrays.toString(s.bindCount));
@@ -50,8 +50,8 @@ class TestSolver {
         BaseVariable A = p.variable("A", d);
         BaseVariable B = p.variable("B", d);
         DerivedVariable C = p.variable("C", a -> a[0] + a[1], A, B);
-        p.constraint(a -> a[0] < a[1], A, B);
-        p.constraint(a -> d.contains(a[0]), C);
+        p.constraint((a, b) -> a < b, A, B);
+        p.constraint(c -> d.contains(c), C);
         Solver s = new Solver();
         assertEquals(1, s.solve(p, m -> logger.info("*** answer: " + m)));
         logger.info("bind count: " + Arrays.toString(s.bindCount));
@@ -66,13 +66,13 @@ class TestSolver {
     void testDerivedVariable2() {
         logger.info(Common.methodName());
         Problem p = new Problem();
-        Domain d = Domain.of(1, 2, 3);
-        BaseVariable A = p.variable("A", d);
-        BaseVariable B = p.variable("B", d);
-        BaseVariable D = p.variable("D", d);
+        Domain domain = Domain.of(1, 2, 3);
+        BaseVariable A = p.variable("A", domain);
+        BaseVariable B = p.variable("B", domain);
+        BaseVariable D = p.variable("D", domain);
         DerivedVariable C = p.variable("C", a -> a[0] + a[1], A, B);
-        p.constraint(a -> a[0] < a[1], A, B);
-        p.constraint(a -> a[0] == a[1], C, D);
+        p.constraint((a, b) -> a < b, A, B);
+        p.constraint((c, d) -> c == d, C, D);
         Solver s = new Solver();
         assertEquals(1, s.solve(p, m -> logger.info("*** answer: " + m)));
         logger.info("bind count: " + Arrays.toString(s.bindCount));
