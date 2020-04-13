@@ -3,14 +3,11 @@ package test.jp.saka1029.cspint.sequential;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +57,17 @@ class TestSolver {
     }
 
     @Test
+    public void testConstraintOrder() {
+        Problem p = new Problem();
+        Domain d = Domain.range(0, 100);
+        Variable A = p.variable("A", d);
+        Variable B = p.variable("B", d);
+        Constraint C1 = p.constraint(a -> a < 2, A);
+        Constraint C2 = p.constraint(b -> b < 2, B);
+        assertEquals(List.of(B, A), Solver.bindingOrder(List.of(C2, C1)));
+    }
+
+    @Test
     public void testInvalidBindingOrder() {
         Problem p = new Problem();
         Domain d = Domain.range(0, 100);
@@ -76,7 +84,7 @@ class TestSolver {
         	fail();
         } catch (IllegalArgumentException e) {
         }
-    	
+
     }
 
 }
