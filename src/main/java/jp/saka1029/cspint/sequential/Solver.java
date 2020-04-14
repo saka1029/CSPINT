@@ -3,7 +3,7 @@ package jp.saka1029.cspint.sequential;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -20,32 +20,33 @@ public class Solver {
     /**
      * (例)
      * problem.variables = {A, B, C}
-     * problem.constraintOrder = {制約[A, B], 制約[B, C], 制約[A, C]}
+     * problem.constraints = {制約[A, B], 制約[B, C], 制約[A, C]}
      * bindingOrder = {C, B, A}
      * とすると
      * このメソッドは制約順序として以下のリストを返します。
      * {{}, {制約[B, C]}, {制約[A, B], 制約[A, C]}}
      * ３つのリストはそれぞれbindigOrder内の変数C, B, Aに対応します。
      * @param problem
-     * @param bindingOrder
+     * @param bindingOrder 変数を束縛する順序をリストで指定します。
+     *        problemで定義されたすべての変数を1回ずつ含んでいる必要があります。
      * @return
      */
     public static List<List<Constraint>> constraintOrder(Problem problem, Collection<Variable> bindingOrder) {
         int variableSize = problem.variables.size();
         if (bindingOrder.size() != variableSize)
             throw new IllegalArgumentException("invalid bindingOrder size");
-        Map<Variable, Integer> variableIndexes = new HashMap<>();
         List<List<Constraint>> result = new ArrayList<>(variableSize);
-        int p = 0;
+        Set<Variable> set = new HashSet<>();
+        Set<Constraint> done = new HashSet<>();
         for (Variable v : bindingOrder) {
-            variableIndexes.put(v, p++);
-            result.add(new ArrayList<>());
-        }
-        for (Constraint c : problem.constraints) {
-            int max = c.variables.stream()
-                .mapToInt(v -> variableIndexes.get(v))
-                .max().getAsInt();
-            result.get(max).add(c);
+            set.add(v);
+            List<Constraint> list = new ArrayList<>();
+            result.add(list);
+            for (Constraint c : problem.constraints)
+                if (!done.contains(c) && set.containsAll(c.variables)) {
+                    list.add(c);
+                    done.add(c);
+                }
         }
 //        for (int i = 0; i < variableSize; ++i)
 //            logger.info(bindingOrder.get(i) + ":" + result.get(i));
