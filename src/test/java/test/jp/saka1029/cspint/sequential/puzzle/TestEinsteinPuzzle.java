@@ -160,7 +160,7 @@ public class TestEinsteinPuzzle {
         	.anyMatch(r -> r[0] == Nationality.Ukrainian.ordinal() && r[1] == Drink.Tea.ordinal()),
         	selectColumns(v, Attribute.Nationality, Attribute.Drink));
         //  6. The green house is immediately to the right of the ivory house.
-        p.constraintVarargs(a -> IntStream.range(1, NUM_HOUSES)
+        p.constraint(a -> IntStream.range(1, NUM_HOUSES)
             .anyMatch(i -> a[i] == Color.Green.ordinal() && a[i - 1] == Color.Ivory.ordinal()),
             selectColumn(v, Attribute.Color));
         //  7. The Old Gold smoker owns snails.

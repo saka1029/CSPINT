@@ -69,17 +69,16 @@ class Test数独 {
 	static List<Variable> defineBindingOrder(Variable[][] variables, List<Variable[]> differentVariablesSet) {
 		Set<Variable> bindingOrder = new LinkedHashSet<>();
 		// 値が確定している変数を結果に追加します。
-		for (Variable[] a : variables)
-			for (Variable v : a)
-				if (v.domain.size() == 1)
-					bindingOrder.add(v);
-		// 各制約セットをDomainサイズの小さいもの順にソートします。
-		differentVariablesSet.sort(Comparator.comparing(
-            a -> Arrays.stream(a).mapToInt(v -> v.domain.size()).sum()));
-		/// 各制約セット内の変数を追加します。
-		for (Variable[] a : differentVariablesSet)
-			for (Variable v : a)
-				bindingOrder.add(v);
+		Arrays.stream(variables)
+		    .forEach(a -> Arrays.stream(a)
+		        .filter(v -> v.domain.size() == 1)
+		        .forEach(v -> bindingOrder.add(v)));
+		differentVariablesSet.stream()
+            // 各制約セットをDomainサイズの小さいもの順にソートします。
+		    .sorted(Comparator.comparing(a -> Arrays.stream(a).mapToInt(v -> v.domain.size()).sum()))
+            /// 各制約セット内の変数を追加します。
+		    .forEach(a -> Arrays.stream(a)
+		        .forEach(v -> bindingOrder.add(v)));
 		return new ArrayList<>(bindingOrder);
 	}
 

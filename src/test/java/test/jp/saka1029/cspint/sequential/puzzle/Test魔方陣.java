@@ -37,23 +37,23 @@ class Test魔方陣 {
         Predicate0 checkSum = intArray -> Arrays.stream(intArray).sum() == sum;
         // 行ごとの合計の制約
         IntStream.range(0, n)
-            .forEach(r -> problem.constraintVarargs(checkSum,
+            .forEach(r -> problem.constraint(checkSum,
                 IntStream.range(0, n)
                     .mapToObj(c -> cells[r][c])
                     .toArray(Variable[]::new)));
         // 列ごとの合計の制約
         IntStream.range(0, n)
-            .forEach(c -> problem.constraintVarargs(checkSum,
+            .forEach(c -> problem.constraint(checkSum,
                 IntStream.range(0, n)
                     .mapToObj(r -> cells[r][c])
                     .toArray(Variable[]::new)));
         // 右下がり斜めの合計の制約
-        problem.constraintVarargs(checkSum,
+        problem.constraint(checkSum,
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][r])
                 .toArray(Variable[]::new));
         // 左下がり斜めの合計の制約
-        problem.constraintVarargs(checkSum,
+        problem.constraint(checkSum,
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][n - r - 1])
                 .toArray(Variable[]::new));

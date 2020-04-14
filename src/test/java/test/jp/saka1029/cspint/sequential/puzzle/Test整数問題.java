@@ -67,7 +67,7 @@ class Test整数問題 {
         String[] names = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
         Variable[] vars = Stream.of(names).map(n -> p.variable(n, digit)).toArray(Variable[]::new);
         p.allDifferent(vars);
-        p.constraintVarargs(v -> {
+        p.constraint(v -> {
             int bc = number(v[1], v[2]), ef = number(v[4], v[5]), hi = number(v[7], v[8]);
             return v[0] * ef * hi + v[3] * bc * hi + v[6] * bc * ef == bc * ef * hi;
         }, vars);
