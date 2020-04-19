@@ -87,14 +87,18 @@ public class Solver {
                     return;
                 }
                 Variable variable = bindingOrder.get(i);
-                Domain domain = variable.domain;
-                L: for (int j = 0, size = domain.size(); j < size; ++j) {
-                    result.put(variable, domain.get(j));
-                    for (Constraint constraint : constraints.get(i))
-                        if (!test(constraint))
-                            continue L;
-                    solve(i + 1);
-                }
+                variable.domain.stream()
+                    .forEach(value -> {
+                        result.put(variable, value);
+                        if (constraints.get(i).stream().allMatch(c -> test(c)))
+                            solve(i + 1);
+                    });
+//                Domain domain = variable.domain;
+//                for (int j = 0, size = domain.size(); j < size; ++j) {
+//                    result.put(variable, domain.get(j));
+//                    if (constraints.get(i).stream().allMatch(c -> test(c)))
+//                        solve(i + 1);
+//                }
             }
         }.solve(0);
         return count[0];

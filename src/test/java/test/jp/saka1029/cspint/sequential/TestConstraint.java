@@ -30,6 +30,17 @@ class TestConstraint {
     }
 
     @Test
+    public void testIsDifferent() {
+        Problem p = new Problem();
+        Variable V = p.variable("V", Domain.of(1, 2));
+        Variable W = p.variable("W", Domain.of(1, 2));
+        Constraint c = p.constraint((v, w) -> v != w, V, W);
+        p.allDifferent(V, W);
+        assertFalse(c.isAllDifferent());
+        assertTrue(p.constraints.get(1).isAllDifferent());
+    }
+
+    @Test
     void testVariablesUnmodifiable() {
         Problem p = new Problem();
         Variable v = p.variable("v", Domain.of(1, 2));

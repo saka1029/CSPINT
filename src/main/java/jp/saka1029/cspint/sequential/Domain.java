@@ -1,6 +1,7 @@
 package jp.saka1029.cspint.sequential;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Domain {
 
@@ -32,6 +33,10 @@ public class Domain {
 
     public int get(int index) {
         return values[index];
+    }
+
+    public IntStream stream() {
+        return IntStream.of(values);
     }
 
     @Override

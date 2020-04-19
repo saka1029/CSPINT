@@ -2,6 +2,9 @@ package test.jp.saka1029.cspint.sequential;
 
 import static org.junit.Assert.*;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 
 import jp.saka1029.cspint.sequential.Domain;
@@ -34,6 +37,15 @@ public class TestDomain {
         assertEquals(3, d.get(1));
         assertEquals(4, d.get(2));
         assertEquals(5, d.get(3));
+    }
+
+    @Test
+    public void testStream() {
+        Domain d = Domain.of(2, 4, 8, 9);
+        Set<Integer> actual = d.stream().parallel()
+            .mapToObj(i -> i)
+            .collect(Collectors.toSet());
+        assertEquals(Set.of(2, 4, 8, 9), actual);
     }
 
     @Test
