@@ -3,11 +3,11 @@ package jp.saka1029.cspint.sequential;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 public class ParallelSolver {
 
@@ -34,13 +34,19 @@ public class ParallelSolver {
         return result;
     }
 
-    public void solve(Problem problem, Answer answer) {
+    public void solve(Problem problem, int parallelIndex, Answer answer) {
         List<Variable> bindingOrder = problem.variables;
         int size = bindingOrder.size();
         List<List<Constraint>> constraintOrder = constraintOrder(problem, bindingOrder);
-        class CoreSolver implements Runnable {
+        class CoreSolver extends Thread {
 
-            Map<Variable, Integer> result;
+            final int index;
+            final Map<Variable, Integer> result;
+
+            CoreSolver(int index, Map<Variable, Integer> result) {
+                this.index = index;
+                this.result = new LinkedHashMap<>(result);
+            }
 
             boolean test(Constraint c) {
                 return c.predicate.test(c.variables.stream()
@@ -53,27 +59,76 @@ public class ParallelSolver {
                     .allMatch(c -> test(c));
             }
 
-            void solve(int i, boolean parallel) {
-                if (i >= size) {
-                    answer.answer(result);
-                    return;
+//            void bind(int i) {
+//                List<Thread> threads = null;
+//                if (i == parallelIndex) threads = new ArrayList<>();
+//                Variable v = bindingOrder.get(i);
+//                Domain d = v.domain;
+//                for (int j = 0, size = d.size(); j < size; ++j) {
+//                    int value = d.get(j);
+//                    result.put(v, value);
+//                    if (test(i))
+//                        if (i == parallelIndex) {
+//                            Thread t = new CoreSolver(i + 1, result);
+//                            threads.add(t);
+//                            t.start();
+//                        } else
+//                            solve(i);
+//                }
+//                if (i == parallelIndex) join(threads);
+//            }
+
+            void join(List<Thread> threads) {
+                try {
+                    for (Thread t : threads)
+                        t.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+            }
+
+            void solveParallel(int i) {
+                List<Thread> threads = new ArrayList<>();
                 Variable v = bindingOrder.get(i);
-                IntStream valueStream = v.domain.stream();
-                if (parallel) valueStream = valueStream.parallel();
-                valueStream
-                    .forEach(value -> {
-                        result.put(v, value);
-                        if (test(i))
-                            solve(i + 1, parallel);
-                    });
+                Domain d = v.domain;
+                for (int j = 0, size = d.size(); j < size; ++j) {
+                    int value = d.get(j);
+                    result.put(v, value);
+                    if (test(i)) {
+                        Thread t = new CoreSolver(i + 1, result);
+                        threads.add(t);
+                        t.start();
+                    }
+                }
+                join(threads);
+            }
+
+            void solveSequential(int i) {
+                Variable v = bindingOrder.get(i);
+                Domain d = v.domain;
+                for (int j = 0, size = d.size(); j < size; ++j) {
+                    int value = d.get(j);
+                    result.put(v, value);
+                    if (test(i))
+                        solve(i + 1);
+                }
+            }
+
+            void solve(int i) {
+                if (i >= size)
+                    answer.answer(result);
+                else if (i == parallelIndex)
+                    solveParallel(i);
+                else
+                    solveSequential(i);
             }
 
             @Override
             public void run() {
+                solve(index);
             }
         }
-        new CoreSolver().solve(0, false);
+        new CoreSolver(0, Map.of()).run();
     }
 
 }
