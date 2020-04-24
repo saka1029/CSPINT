@@ -12,12 +12,17 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runners.Parameterized.Parameters;
 
 import jp.saka1029.cspint.sequential.Answer;
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
+import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.SequentialSolver;
+import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
 
@@ -61,8 +66,14 @@ class TestSendMoreMoney {
 
     };
 
-    @Test
-    public void test単一制約() {
+
+    @Parameters
+    static List<Solver> parameters() {
+        return List.of(new SequentialSolver(), new ParallelSolver());
+    }
+
+	@ParameterizedTest @MethodSource("parameters")
+    public void test単一制約(Solver solver) {
         Domain zero = Domain.range(0, 10);
         Domain one = Domain.range(1, 10);
         Problem p = new Problem();
@@ -79,11 +90,11 @@ class TestSendMoreMoney {
         p.constraint(
             (s, e, n, d, m, o, r, y) -> number(s, e, n, d) + number(m, o, r, e) == number(m, o, n, e, y),
             S, E, N, D, M, O, R, Y);
-        SequentialSolver solver = new SequentialSolver();
+//        Solver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + p.variables);
         assertEquals(1, solver.solve(p, new AssertAnswer(p)));
-        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
+//        logger.info("束縛回数:" + Arrays.toString(solver.bindCount));
     }
 
     static Problem digitConstraint() {
