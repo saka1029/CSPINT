@@ -14,7 +14,7 @@ import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate5;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
 
@@ -55,7 +55,7 @@ class TestPeachLemonApple {
         problem.constraint((p, e, a, c, h, l, m, o, n) ->
             number(p, e, a, c, h) + number(l, e, m, o, n) == number(a, p, p, l, e),
             P, E, A, C, H, L, M, O, N);
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         solver.solve(problem, m -> logger.info("answer: " + m));
         logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
     }
@@ -89,7 +89,7 @@ class TestPeachLemonApple {
         problem.constraint(addDigit, C2, A, M, P, C3);
         problem.constraint(addDigit, C3, E, E, P, C4);
         problem.constraint(addDigit, C4, P, L, A, Z);
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         solver.solve(problem, m -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(P), m.get(E), m.get(A), m.get(C), m.get(H)));
@@ -136,7 +136,7 @@ class TestPeachLemonApple {
         problem.constraint(addDigit, C1, C2, C, O, L);
         problem.constraint(addDigit,  Z, C1, H, N, E);
         problem.allDifferent(P, E, A, C, H, L, M, O, N);
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         List<Variable> bindOrder = constraintOrder(problem.constraints);
         logger.info("bind order: " + bindOrder);
         solver.solve(problem, bindOrder, m -> {

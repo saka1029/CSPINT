@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate0;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class Test魔方陣 {
@@ -57,7 +57,7 @@ class Test魔方陣 {
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][n - r - 1])
                 .toArray(Variable[]::new));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         try {
             solver.solve(problem, m -> {
                 for (int r = 0; r < n; ++r) {

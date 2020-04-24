@@ -12,7 +12,7 @@ import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate5;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class Test虫食い算 {
@@ -72,7 +72,7 @@ class Test虫食い算 {
         p.constraint((f, g, h, i, j, k, l, m, n, o) ->
             number(f, g, h) + number(i, j, k) * 10 == number(l, m, n, o),
             F, G, H, I, J, K, L, M, N, O);
-        Solver s = new Solver();
+        SequentialSolver s = new SequentialSolver();
         int[] count = {0};
         s.solve(p, m -> ++count[0]);
         logger.info("解の数:" + count[0]);
@@ -131,7 +131,7 @@ class Test虫食い算 {
         p.constraint(MULT, A, E, C2, F, Z);
         p.constraint(MULT, B, E, C1, G, C2);
         p.constraint(MULT, C, E, Z, H, C1);
-        Solver s = new Solver();
+        SequentialSolver s = new SequentialSolver();
         List<Variable> bindingOrder = bindingOrder(p);
         int[] count = {0};
         s.solve(p, bindingOrder, m -> ++count[0]);
