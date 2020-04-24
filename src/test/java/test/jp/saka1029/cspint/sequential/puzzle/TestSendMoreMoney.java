@@ -17,7 +17,7 @@ import jp.saka1029.cspint.sequential.Answer;
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
 
@@ -79,7 +79,7 @@ class TestSendMoreMoney {
         p.constraint(
             (s, e, n, d, m, o, r, y) -> number(s, e, n, d) + number(m, o, r, e) == number(m, o, n, e, y),
             S, E, N, D, M, O, R, Y);
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + p.variables);
         assertEquals(1, solver.solve(p, new AssertAnswer(p)));
@@ -119,7 +119,7 @@ class TestSendMoreMoney {
     @Test
     public void test桁ごとの制約_宣言順() {
         Problem p = digitConstraint();
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + p.variables);
         assertEquals(1, solver.solve(p, new AssertAnswer(p)));
@@ -134,7 +134,7 @@ class TestSendMoreMoney {
             p.variable("N"), p.variable("R"), p.variable("C2"),
             p.variable("O"), p.variable("C3"),
             p.variable("S"), p.variable("M"));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
         assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
@@ -149,7 +149,7 @@ class TestSendMoreMoney {
             p.variable("C2"), p.variable("N"), p.variable("R"),
             p.variable("C3"), p.variable("O"),
             p.variable("S"), p.variable("M"));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
         assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
@@ -164,7 +164,7 @@ class TestSendMoreMoney {
             p.variable("C2"), p.variable("E"), p.variable("N"),
             p.variable("C1"), p.variable("R"),
             p.variable("D"), p.variable("Y"));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
         assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
@@ -179,7 +179,7 @@ class TestSendMoreMoney {
             p.variable("S"), p.variable("M"),
             p.variable("O"), p.variable("E"), p.variable("N"),
             p.variable("R"), p.variable("D"), p.variable("Y"));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
         assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));
@@ -191,7 +191,7 @@ class TestSendMoreMoney {
         Problem p = digitConstraint();
         List<Variable> resolvingOrder = new ArrayList<>(p.variables);
         Collections.sort(resolvingOrder, Comparator.comparing(v -> v.domain.size()));
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         logger.info(Common.methodName());
         logger.info("束縛順:" + resolvingOrder);
         assertEquals(1, solver.solve(p, resolvingOrder, new AssertAnswer(p)));

@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 
 /**
@@ -198,9 +198,9 @@ public class TestEinsteinPuzzle {
             .anyMatch(i -> a[i][0] == Nationality.Norwegian.ordinal() && a[i - 1][1] == Color.Blue.ordinal()
                 || a[i][1] == Color.Blue.ordinal() && a[i - 1][0] == Nationality.Norwegian.ordinal()),
             selectColumns(v, Attribute.Nationality, Attribute.Color));
-        Solver s = new Solver();
+        SequentialSolver s = new SequentialSolver();
         List<Variable> bindingOrder = bindingOrder(p, v);
-        Solver.printConstraintOrder(p, bindingOrder);
+        SequentialSolver.printConstraintOrder(p, bindingOrder);
         s.solve(p, bindingOrder, m -> printResult(v, m));
         logger.info("binding count: " + Arrays.toString(s.bindCount));
     }

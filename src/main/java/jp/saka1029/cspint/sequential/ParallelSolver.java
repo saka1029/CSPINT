@@ -7,9 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-public class ParallelSolver {
+public class ParallelSolver implements Solver {
 
     static Logger logger = Logger.getLogger(ParallelSolver.class.getName());
 
@@ -34,49 +35,43 @@ public class ParallelSolver {
         return result;
     }
 
-    public void solve(Problem problem, int parallelIndex, Answer answer) {
-        List<Variable> bindingOrder = problem.variables;
+    @Override
+    public int solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
         int size = bindingOrder.size();
         List<List<Constraint>> constraintOrder = constraintOrder(problem, bindingOrder);
+        AtomicInteger count = new AtomicInteger();
         class CoreSolver extends Thread {
 
+            final boolean isMainThread;
             final int index;
             final Map<Variable, Integer> result;
+            final int[] parameters;
 
-            CoreSolver(int index, Map<Variable, Integer> result) {
+            CoreSolver(boolean isMainThread, int index, Map<Variable, Integer> result) {
+                this.isMainThread = isMainThread;
                 this.index = index;
-                this.result = new LinkedHashMap<>(result);
+                this.result = result;
+                this.parameters = new int[size];
             }
 
-            boolean test(Constraint c) {
-                return c.predicate.test(c.variables.stream()
-                    .mapToInt(v -> result.get(v))
-                    .toArray());
+            CoreSolver() {
+                this(true, 0, new LinkedHashMap<>());
+            }
+
+            CoreSolver(int index, Map<Variable, Integer> result) {
+                this(false, index, new LinkedHashMap<>(result));
             }
 
             boolean test(int i) {
-                return constraintOrder.get(i).stream()
-                    .allMatch(c -> test(c));
+                for (Constraint c : constraintOrder.get(i)) {
+                    int p = 0;
+                    for (Variable v : c.variables)
+                        parameters[p++] = result.get(v);
+                    if (!c.predicate.test(parameters))
+                        return false;
+                }
+                return true;
             }
-
-//            void bind(int i) {
-//                List<Thread> threads = null;
-//                if (i == parallelIndex) threads = new ArrayList<>();
-//                Variable v = bindingOrder.get(i);
-//                Domain d = v.domain;
-//                for (int j = 0, size = d.size(); j < size; ++j) {
-//                    int value = d.get(j);
-//                    result.put(v, value);
-//                    if (test(i))
-//                        if (i == parallelIndex) {
-//                            Thread t = new CoreSolver(i + 1, result);
-//                            threads.add(t);
-//                            t.start();
-//                        } else
-//                            solve(i);
-//                }
-//                if (i == parallelIndex) join(threads);
-//            }
 
             void join(List<Thread> threads) {
                 try {
@@ -87,10 +82,12 @@ public class ParallelSolver {
                 }
             }
 
-            void solveParallel(int i) {
+            void bindParallel(int i) {
+//                logger.info(Thread.currentThread().getName() + ":parallel@" + i);
                 List<Thread> threads = new ArrayList<>();
                 Variable v = bindingOrder.get(i);
                 Domain d = v.domain;
+                logger.info("bindParallel i=" + i + " サブスレッド数=" + d.size());
                 for (int j = 0, size = d.size(); j < size; ++j) {
                     int value = d.get(j);
                     result.put(v, value);
@@ -103,7 +100,8 @@ public class ParallelSolver {
                 join(threads);
             }
 
-            void solveSequential(int i) {
+            void bindSequential(int i) {
+//                logger.info(Thread.currentThread().getName() + ":sequential@" + i);
                 Variable v = bindingOrder.get(i);
                 Domain d = v.domain;
                 for (int j = 0, size = d.size(); j < size; ++j) {
@@ -115,12 +113,13 @@ public class ParallelSolver {
             }
 
             void solve(int i) {
-                if (i >= size)
+                if (i >= size) {
+                    count.incrementAndGet();
                     answer.answer(result);
-                else if (i == parallelIndex)
-                    solveParallel(i);
+                } else if (isMainThread && bindingOrder.get(i).domain.size() > 1)
+                    bindParallel(i);
                 else
-                    solveSequential(i);
+                    bindSequential(i);
             }
 
             @Override
@@ -128,7 +127,13 @@ public class ParallelSolver {
                 solve(index);
             }
         }
-        new CoreSolver(0, Map.of()).run();
+        new CoreSolver().run();
+        return count.get();
+    }
+
+    @Override
+    public int solve(Problem problem, Answer answer) {
+        return solve(problem, problem.variables, answer);
     }
 
 }

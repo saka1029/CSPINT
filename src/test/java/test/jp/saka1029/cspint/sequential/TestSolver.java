@@ -16,7 +16,7 @@ import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate2;
 import jp.saka1029.cspint.sequential.Predicate3;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class TestSolver {
@@ -36,8 +36,8 @@ class TestSolver {
         Constraint ac = problem.constraint(diff, a, c);
         Constraint bc = problem.constraint(diff, b, c);
         Constraint abc = problem.constraint(equation, a, b, c);
-        Solver solver = new Solver();
-        List<List<Constraint>> constraints = Solver.constraintOrder(problem, problem.variables);
+        SequentialSolver solver = new SequentialSolver();
+        List<List<Constraint>> constraints = SequentialSolver.constraintOrder(problem, problem.variables);
         assertEquals(3, problem.variables.size());
         assertEquals(3, constraints.size());
         assertEquals(0, constraints.get(0).size());
@@ -52,8 +52,8 @@ class TestSolver {
             Map.of(a, 2, b, 1, c, 3)
         );
         assertEquals(expected, actual);
-        Solver.printConstraintOrder(problem);
-        Solver.printConstraintOrder(problem);
+        SequentialSolver.printConstraintOrder(problem);
+        SequentialSolver.printConstraintOrder(problem);
     }
 
     @Test
@@ -64,7 +64,7 @@ class TestSolver {
         Variable B = p.variable("B", d);
         Constraint C1 = p.constraint(a -> a < 2, A);
         Constraint C2 = p.constraint(b -> b < 2, B);
-        assertEquals(List.of(B, A), Solver.bindingOrder(List.of(C2, C1)));
+        assertEquals(List.of(B, A), SequentialSolver.bindingOrder(List.of(C2, C1)));
     }
 
     @Test
@@ -73,9 +73,9 @@ class TestSolver {
         Domain d = Domain.range(0, 100);
         Variable A = p.variable("A", d);
         Variable B = p.variable("B", d);
-        Solver s = new Solver();
+        SequentialSolver s = new SequentialSolver();
         try {
-        	Solver.constraintOrder(p, List.of(B));
+        	SequentialSolver.constraintOrder(p, List.of(B));
         	fail();
         } catch (IllegalArgumentException e) {
         }

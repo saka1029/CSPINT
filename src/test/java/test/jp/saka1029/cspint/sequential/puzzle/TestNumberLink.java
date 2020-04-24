@@ -19,7 +19,7 @@ import jp.saka1029.cspint.sequential.Predicate3;
 import jp.saka1029.cspint.sequential.Predicate4;
 import jp.saka1029.cspint.sequential.Predicate5;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
 
@@ -212,7 +212,7 @@ public class TestNumberLink {
         defineConstraint(problem, variables);
         List<Variable> bindingOrder = defineBindingOrder(problem, variables);
         printBindingOrder(variables, bindingOrder);
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
         solver.solve(problem, bindingOrder, m -> answer(variables, m));
         logger.info("binding count: " + Arrays.toString(solver.bindCount));
     }

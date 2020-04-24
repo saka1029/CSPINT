@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.Solver;
+import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class TestNQueens {
@@ -29,7 +29,7 @@ class TestNQueens {
                 problem.constraint(
                    (x, y) -> x != y && Math.abs(x - y) != distance, rows[i], rows[j]);
             }
-        Solver solver = new Solver();
+        SequentialSolver solver = new SequentialSolver();
 //        logger.info(n + "-Queens");
 //        int[] count = {0};
 //        int answers = solver.solve(problem, m -> {
