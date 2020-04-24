@@ -17,11 +17,12 @@ public class ParallelSolver implements Solver {
 
     public static List<List<Constraint>> constraintOrder(Problem problem, Collection<Variable> bindingOrder) {
         int variableSize = problem.variables.size();
+        int constraintSize = problem.constraints.size();
         if (bindingOrder.size() != variableSize)
             throw new IllegalArgumentException("invalid bindingOrder size");
         List<List<Constraint>> result = new ArrayList<>(variableSize);
-        Set<Variable> set = new HashSet<>();
-        Set<Constraint> done = new HashSet<>();
+        Set<Variable> set = new HashSet<>(variableSize);
+        Set<Constraint> done = new HashSet<>(constraintSize);
         for (Variable v : bindingOrder) {
             set.add(v);
             List<Constraint> list = new ArrayList<>();
@@ -37,7 +38,7 @@ public class ParallelSolver implements Solver {
 
     @Override
     public int solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
-        int size = bindingOrder.size();
+        int variableSize = bindingOrder.size();
         List<List<Constraint>> constraintOrder = constraintOrder(problem, bindingOrder);
         AtomicInteger count = new AtomicInteger();
         class CoreSolver extends Thread {
@@ -51,22 +52,23 @@ public class ParallelSolver implements Solver {
                 this.isMainThread = isMainThread;
                 this.index = index;
                 this.result = result;
-                this.parameters = new int[size];
+                this.parameters = new int[variableSize];
             }
 
+            // for main thread
             CoreSolver() {
-                this(true, 0, new LinkedHashMap<>());
+                this(true, 0, new LinkedHashMap<>(variableSize));
             }
 
+            // for sub thread
             CoreSolver(int index, Map<Variable, Integer> result) {
                 this(false, index, new LinkedHashMap<>(result));
             }
 
             boolean test(int i) {
                 for (Constraint c : constraintOrder.get(i)) {
-                    int p = 0;
-                    for (Variable v : c.variables)
-                        parameters[p++] = result.get(v);
+                    for (int p = 0, cmax = c.variables.size(); p < cmax; ++p)
+                        parameters[p] = result.get(c.variables.get(p));
                     if (!c.predicate.test(parameters))
                         return false;
                 }
@@ -84,13 +86,13 @@ public class ParallelSolver implements Solver {
 
             void bindParallel(int i) {
 //                logger.info(Thread.currentThread().getName() + ":parallel@" + i);
-                List<Thread> threads = new ArrayList<>();
                 Variable v = bindingOrder.get(i);
                 Domain d = v.domain;
-                logger.info("bindParallel i=" + i + " サブスレッド数=" + d.size());
-                for (int j = 0, size = d.size(); j < size; ++j) {
-                    int value = d.get(j);
-                    result.put(v, value);
+                int size = d.size();
+                List<Thread> threads = new ArrayList<>(size);
+                logger.info("bindParallel i=" + i + " サブスレッド数=" + size);
+                for (int p = 0; p < size; ++p) {
+                    result.put(v, d.get(p));
                     if (test(i)) {
                         Thread t = new CoreSolver(i + 1, result);
                         threads.add(t);
@@ -113,7 +115,7 @@ public class ParallelSolver implements Solver {
             }
 
             void solve(int i) {
-                if (i >= size) {
+                if (i >= variableSize) {
                     count.incrementAndGet();
                     answer.answer(result);
                 } else if (isMainThread && bindingOrder.get(i).domain.size() > 1)
