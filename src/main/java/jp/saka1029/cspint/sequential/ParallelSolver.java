@@ -107,8 +107,7 @@ public class ParallelSolver implements Solver {
                 Variable v = bindingOrder.get(i);
                 Domain d = v.domain;
                 for (int j = 0, size = d.size(); j < size; ++j) {
-                    int value = d.get(j);
-                    result.put(v, value);
+                    result.put(v, d.get(j));
                     if (test(i))
                         solve(i + 1);
                 }

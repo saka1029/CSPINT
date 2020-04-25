@@ -1,24 +1,29 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runners.Parameterized.Parameters;
 
 import jp.saka1029.cspint.sequential.Domain;
+import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Predicate0;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.SequentialSolver;
+import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class Test魔方陣 {
 
     static Logger logger = Logger.getLogger(Test魔方陣.class.getName());
 
-    static void 魔方陣(final int n) {
+    static void 魔方陣(final int n, Solver solver) {
         Problem problem = new Problem();
         int max = n * n;                // セルの総数
         int sum = n * (n * n + 1) / 2;  // 各行、列の合計
@@ -57,7 +62,7 @@ class Test魔方陣 {
             IntStream.range(0, n)
                 .mapToObj(r -> cells[r][n - r - 1])
                 .toArray(Variable[]::new));
-        SequentialSolver solver = new SequentialSolver();
+//        Solver solver = new SequentialSolver();
         try {
             solver.solve(problem, m -> {
                 for (int r = 0; r < n; ++r) {
@@ -69,14 +74,19 @@ class Test魔方陣 {
                 throw new RuntimeException("found");
             });
         } finally {
-            logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
+//            logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
         }
     }
 
-    @Test
-    public void test魔方陣() {
-        assertThrows(RuntimeException.class, () -> 魔方陣(3));
-        assertThrows(RuntimeException.class, () -> 魔方陣(4));
+    @Parameters
+    static List<Solver> parameters() {
+        return List.of(new SequentialSolver(), new ParallelSolver());
+    }
+
+	@ParameterizedTest @MethodSource("parameters")
+    public void test魔方陣(Solver solver) {
+        assertThrows(RuntimeException.class, () -> 魔方陣(3, solver));
+        assertThrows(RuntimeException.class, () -> 魔方陣(4, solver));
     }
 
 }
