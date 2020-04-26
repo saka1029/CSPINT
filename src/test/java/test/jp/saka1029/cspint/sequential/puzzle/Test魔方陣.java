@@ -1,7 +1,5 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.Assert.assertThrows;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -63,19 +61,15 @@ class Test魔方陣 {
                 .mapToObj(r -> cells[r][n - r - 1])
                 .toArray(Variable[]::new));
 //        Solver solver = new SequentialSolver();
-        try {
-            solver.solve(problem, m -> {
-                for (int r = 0; r < n; ++r) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int c = 0; c < n; ++c)
-                        sb.append(String.format("%3d", m.get(cells[r][c])));
-                    logger.info(sb.toString());
-                }
-                throw new RuntimeException("found");
-            });
-        } finally {
-//            logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
-        }
+        solver.solve(problem, (control, result) -> {
+            for (int r = 0; r < n; ++r) {
+                StringBuilder sb = new StringBuilder();
+                for (int c = 0; c < n; ++c)
+                    sb.append(String.format("%3d", result.get(cells[r][c])));
+                logger.info(sb.toString());
+            }
+            control.stop();
+        });
     }
 
     @Parameters
@@ -85,8 +79,8 @@ class Test魔方陣 {
 
 	@ParameterizedTest @MethodSource("parameters")
     public void test魔方陣(Solver solver) {
-        assertThrows(RuntimeException.class, () -> 魔方陣(3, solver));
-        assertThrows(RuntimeException.class, () -> 魔方陣(4, solver));
+        魔方陣(3, solver);
+        魔方陣(4, solver);
     }
 
 }

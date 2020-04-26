@@ -213,7 +213,7 @@ public class TestNumberLink {
         List<Variable> bindingOrder = defineBindingOrder(problem, variables);
         printBindingOrder(variables, bindingOrder);
         SequentialSolver solver = new SequentialSolver();
-        solver.solve(problem, bindingOrder, m -> answer(variables, m));
+        solver.solve(problem, bindingOrder, (c, m) -> answer(variables, m));
         logger.info("binding count: " + Arrays.toString(solver.bindCount));
     }
 

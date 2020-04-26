@@ -21,6 +21,7 @@ import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Problem;
+import jp.saka1029.cspint.sequential.SearchControl;
 import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
@@ -48,7 +49,7 @@ class TestSendMoreMoney {
         }
 
         @Override
-        public void answer(Map<Variable, Integer> result) {
+        public void answer(SearchControl control, Map<Variable, Integer> result) {
             logger.info("answer: " + result);
             if (result.containsKey(problem.variable("C2"))) {
                 assertEquals(1, (int) value(result, "C1"));

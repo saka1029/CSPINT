@@ -56,7 +56,7 @@ class TestPeachLemonApple {
             number(p, e, a, c, h) + number(l, e, m, o, n) == number(a, p, p, l, e),
             P, E, A, C, H, L, M, O, N);
         SequentialSolver solver = new SequentialSolver();
-        solver.solve(problem, m -> logger.info("answer: " + m));
+        solver.solve(problem, (c, m) -> logger.info("answer: " + m));
         logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
     }
 
@@ -90,7 +90,7 @@ class TestPeachLemonApple {
         problem.constraint(addDigit, C3, E, E, P, C4);
         problem.constraint(addDigit, C4, P, L, A, Z);
         SequentialSolver solver = new SequentialSolver();
-        solver.solve(problem, m -> {
+        solver.solve(problem, (c, m) -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(P), m.get(E), m.get(A), m.get(C), m.get(H)));
             logger.info("+" + number(m.get(L), m.get(E), m.get(M), m.get(O), m.get(N)));
@@ -139,7 +139,7 @@ class TestPeachLemonApple {
         SequentialSolver solver = new SequentialSolver();
         List<Variable> bindOrder = constraintOrder(problem.constraints);
         logger.info("bind order: " + bindOrder);
-        solver.solve(problem, bindOrder, m -> {
+        solver.solve(problem, bindOrder, (c, m) -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(P), m.get(E), m.get(A), m.get(C), m.get(H)));
             logger.info("+" + number(m.get(L), m.get(E), m.get(M), m.get(O), m.get(N)));

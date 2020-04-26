@@ -1,7 +1,5 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,10 +11,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.SequentialSolver;
@@ -24,7 +20,7 @@ import jp.saka1029.cspint.sequential.Variable;
 
 /**
  * The following version of the puzzle appeared in Life International in 1962:
- * 
+ *
  *  1. There are five houses.
  *  2. The Englishman lives in the red house.
  *  3. The Spaniard owns the dog.
@@ -40,15 +36,15 @@ import jp.saka1029.cspint.sequential.Variable;
  * 13. The Lucky Strike smoker drinks orange juice.
  * 14. The Japanese smokes Parliaments.
  * 15. The Norwegian lives next to the blue house.
- * 
+ *
  * Now, who drinks water? Who owns the zebra?
- * 
+ *
  * Color        : Red         Yellow        Blue        Ivory         Green
  * Nationality  : Englishman  Spaniard      Ukrainian   Norwegian     Japanese
- * Drink        : Coffee      Water         Tea         Milk          Orange juice  
+ * Drink        : Coffee      Water         Tea         Milk          Orange juice
  * Smoke        : Kools       Chesterfield  Old Gold    Lucky Strike  Parliament
  * Pet          : Dog         Fox           Horse       Snails        Zebra
- * 
+ *
  * answer:
  * House        1           2               3           4               5
  * Color        Yellow      Blue            Red         Ivory           Green
@@ -56,7 +52,7 @@ import jp.saka1029.cspint.sequential.Variable;
  * Drink        Water       Tea             Milk        Orange juice    Coffee
  * Smoke        Kools       Chesterfield    Old Gold    Lucky Strike    Parliament
  * Pet          Fox         Horse           Snails      Dog             Zebra
- * 
+ *
  */
 public class TestEinsteinPuzzle {
 
@@ -74,7 +70,7 @@ public class TestEinsteinPuzzle {
     enum Pet { Dog, Fox, Horse, Snails, Zebra }
 
     static String name(int i, int j) { return i + "@" + Attribute.values()[j]; }
-    
+
     static Variable[] selectColumn(Variable[][] matrix, int selection) {
         int rows = matrix.length;
         Variable[] result = new Variable[rows];
@@ -101,11 +97,11 @@ public class TestEinsteinPuzzle {
             .mapToInt(a -> a.ordinal())
             .toArray());
     }
-    
+
     /**
      * この問題用の変数束縛順序のリストを返します。
      * アルゴリズムは以下のとおりです。
-     * 
+     *
      * AllDifferentを除くすべての制約について、
      * 制約に含まれる変数の数が小さいもの順にソートします。
      * 得られた制約に含まれる変数を順次LinkedHasSetに追加します。
@@ -121,7 +117,7 @@ public class TestEinsteinPuzzle {
             .collect(Collectors.toCollection(LinkedHashSet::new));  //　結果をLinkedHasSetに集約します。
         return new ArrayList<>(bindOrderSet);   // 結果をリストに変換します。
     }
-    
+
     static void printResult(Variable[][] v, Map<Variable, Integer> result) {
         logger.info("Answer:");
         for (int r = 0; r < NUM_HOUSES; ++r)
@@ -201,7 +197,7 @@ public class TestEinsteinPuzzle {
         SequentialSolver s = new SequentialSolver();
         List<Variable> bindingOrder = bindingOrder(p, v);
         SequentialSolver.printConstraintOrder(p, bindingOrder);
-        s.solve(p, bindingOrder, m -> printResult(v, m));
+        s.solve(p, bindingOrder, (c, m) -> printResult(v, m));
         logger.info("binding count: " + Arrays.toString(s.bindCount));
     }
 

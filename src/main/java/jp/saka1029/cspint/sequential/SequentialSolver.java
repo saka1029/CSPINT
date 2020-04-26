@@ -69,6 +69,7 @@ public class SequentialSolver implements Solver {
         Map<Variable, Integer> result = new LinkedHashMap<>();
         Map<Variable, Integer> protectedResult = Collections.unmodifiableMap(result);
         List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
+        SearchControl control = new SearchControl();
         int[] testArgs = new int[variableSize];
         int[] count = {0};
         new Object() {
@@ -80,26 +81,29 @@ public class SequentialSolver implements Solver {
                 return constraint.predicate.test(testArgs);
             }
 
+            boolean test(int i) {
+                for (Constraint c : constraints.get(i))
+                    if (!test(c))
+                        return false;
+                return true;
+            }
+
             void solve(int i) {
+                if (control.isStopped()) return;
                 if (i > 0) ++bindCount[i - 1];
                 if (i >= variableSize) {
                 	++count[0];
-                    answer.answer(protectedResult);
+                    answer.answer(control, protectedResult);
                     return;
                 }
                 Variable variable = bindingOrder.get(i);
-                variable.domain.stream()
-                    .forEach(value -> {
-                        result.put(variable, value);
-                        if (constraints.get(i).stream().allMatch(c -> test(c)))
+                Domain domain = variable.domain;
+                for (int j = 0, size = domain.size(); j < size; ++j) {
+                    if (control.isStopped()) break;
+                    result.put(variable, domain.get(j));
+                        if (test(i))
                             solve(i + 1);
-                    });
-//                Domain domain = variable.domain;
-//                for (int j = 0, size = domain.size(); j < size; ++j) {
-//                    result.put(variable, domain.get(j));
-//                    if (constraints.get(i).stream().allMatch(c -> test(c)))
-//                        solve(i + 1);
-//                }
+                }
             }
         }.solve(0);
         return count[0];

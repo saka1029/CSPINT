@@ -110,7 +110,7 @@ class Test数独 {
 		List<Variable> bindingOrder = defineBindingOrder(variables, differentVariablesSet);
 //		Solver solver = new SequentialSolver();
 //		Solver solver = new ParallelSolver();
-		solver.solve(problem, bindingOrder, m -> printResult(variables, m));
+		solver.solve(problem, bindingOrder, (c, m) -> printResult(variables, m));
 	}
 
 	static List<Arguments> parameters() {

@@ -41,6 +41,7 @@ public class ParallelSolver implements Solver {
         int variableSize = bindingOrder.size();
         List<List<Constraint>> constraintOrder = constraintOrder(problem, bindingOrder);
         AtomicInteger count = new AtomicInteger();
+        SearchControl control = new SearchControl();
         class CoreSolver extends Thread {
 
             final boolean isMainThread;
@@ -92,6 +93,7 @@ public class ParallelSolver implements Solver {
                 List<Thread> threads = new ArrayList<>(size);
                 logger.info("bindParallel i=" + i + " サブスレッド数=" + size);
                 for (int p = 0; p < size; ++p) {
+                    if (control.isStopped()) break;
                     result.put(v, d.get(p));
                     if (test(i)) {
                         Thread t = new CoreSolver(i + 1, result);
@@ -107,6 +109,7 @@ public class ParallelSolver implements Solver {
                 Variable v = bindingOrder.get(i);
                 Domain d = v.domain;
                 for (int j = 0, size = d.size(); j < size; ++j) {
+                    if (control.isStopped()) break;
                     result.put(v, d.get(j));
                     if (test(i))
                         solve(i + 1);
@@ -114,9 +117,10 @@ public class ParallelSolver implements Solver {
             }
 
             void solve(int i) {
+                if (control.isStopped()) return;
                 if (i >= variableSize) {
                     count.incrementAndGet();
-                    answer.answer(result);
+                    answer.answer(control, result);
                 } else if (isMainThread && bindingOrder.get(i).domain.size() > 1)
                     bindParallel(i);
                 else

@@ -65,7 +65,7 @@ class TestKyotoOsakaTokyo {
         problem.constraint(addDigit, C4, K, O, T, Z);
         problem.allDifferent(K, O, T, Y, S, A);
         SequentialSolver solver = new SequentialSolver();
-        solver.solve(problem, m -> {
+        solver.solve(problem, (c, m) -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(K), m.get(Y), m.get(O), m.get(T), m.get(O)));
             logger.info("+" + number(m.get(O), m.get(S), m.get(A), m.get(K), m.get(A)));
@@ -117,7 +117,7 @@ class TestKyotoOsakaTokyo {
         SequentialSolver solver = new SequentialSolver();
         List<Variable> bindOrder = constraintOrder(problem.constraints);
         logger.info("bind order: " + bindOrder);
-        solver.solve(problem, m -> {
+        solver.solve(problem, (c, m) -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(K), m.get(Y), m.get(O), m.get(T), m.get(O)));
             logger.info("+" + number(m.get(O), m.get(S), m.get(A), m.get(K), m.get(A)));
