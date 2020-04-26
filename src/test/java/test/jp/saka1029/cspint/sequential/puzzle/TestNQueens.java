@@ -39,7 +39,7 @@ class TestNQueens {
 //                logger.info(".".repeat(c) + "X" + ".".repeat(n - c -1));
 //            }
 //        });
-        int answers = solver.solve(problem, m -> {});
+        int answers = solver.solve(problem, (c, m) -> {});
         logger.info("n=" + n + " : answers=" + answers
             + " : elapse=" + (System.currentTimeMillis() - start) + "ms.");
         return answers;

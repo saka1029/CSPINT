@@ -46,7 +46,7 @@ class TestSolver {
         assertEquals(3, constraints.get(2).size());
         assertEquals(Set.of(ac, bc, abc), new HashSet<>(constraints.get(2)));
         List<Map<Variable, Integer>> actual = new ArrayList<>();
-        solver.solve(problem, map -> actual.add(Map.copyOf(map)));
+        solver.solve(problem, (control, map) -> actual.add(Map.copyOf(map)));
         List<Map<Variable, Integer>> expected = List.of(
             Map.of(a, 1, b, 2, c, 3),
             Map.of(a, 2, b, 1, c, 3)
@@ -80,7 +80,7 @@ class TestSolver {
         } catch (IllegalArgumentException e) {
         }
         try {
-        	s.solve(p, List.of(A), m ->{});
+        	s.solve(p, List.of(A), (c, m) ->{});
         	fail();
         } catch (IllegalArgumentException e) {
         }

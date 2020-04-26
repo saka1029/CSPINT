@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface Answer {
 
-    void answer(Map<Variable, Integer> result);
+    void answer(SearchControl control, Map<Variable, Integer> result);
 
 }

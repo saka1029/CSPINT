@@ -1,7 +1,5 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.Assert.assertThrows;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,6 +16,7 @@ import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
+import test.jp.saka1029.cspint.Common;
 
 class Test魔方陣 {
 
@@ -63,19 +62,15 @@ class Test魔方陣 {
                 .mapToObj(r -> cells[r][n - r - 1])
                 .toArray(Variable[]::new));
 //        Solver solver = new SequentialSolver();
-        try {
-            solver.solve(problem, m -> {
-                for (int r = 0; r < n; ++r) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int c = 0; c < n; ++c)
-                        sb.append(String.format("%3d", m.get(cells[r][c])));
-                    logger.info(sb.toString());
-                }
-                throw new RuntimeException("found");
-            });
-        } finally {
-//            logger.info("束縛回数: " + Arrays.toString(solver.bindCount));
-        }
+        solver.solve(problem, (control, result) -> {
+            for (int r = 0; r < n; ++r) {
+                StringBuilder sb = new StringBuilder();
+                for (int c = 0; c < n; ++c)
+                    sb.append(String.format("%3d", result.get(cells[r][c])));
+                logger.info(sb.toString());
+            }
+            control.stop();
+        });
     }
 
     @Parameters
@@ -84,9 +79,15 @@ class Test魔方陣 {
     }
 
 	@ParameterizedTest @MethodSource("parameters")
-    public void test魔方陣(Solver solver) {
-        assertThrows(RuntimeException.class, () -> 魔方陣(3, solver));
-        assertThrows(RuntimeException.class, () -> 魔方陣(4, solver));
+    public void test魔方陣3(Solver solver) {
+	    logger.info(Common.methodName());
+        魔方陣(3, solver);
+    }
+
+	@ParameterizedTest @MethodSource("parameters")
+    public void test魔方陣4(Solver solver) {
+	    logger.info(Common.methodName());
+        魔方陣(4, solver);
     }
 
 }

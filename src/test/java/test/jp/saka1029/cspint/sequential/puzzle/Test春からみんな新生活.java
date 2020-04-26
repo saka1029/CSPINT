@@ -85,7 +85,7 @@ class Test春からみんな新生活 {
         problem.constraint((x, y) -> x < y, v[ツキコ行][年齢列], v[イクミ行][年齢列]);
         SequentialSolver.printConstraintOrder(problem);
         SequentialSolver solver = new SequentialSolver();
-        solver.solve(problem, m -> {
+        solver.solve(problem, (c, m) -> {
             logger.info("Answer:");
             for (名前 name : 名前.values())
                 logger.info(String.format("%sは%s才で%s",

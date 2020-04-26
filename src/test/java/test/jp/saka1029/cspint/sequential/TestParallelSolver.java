@@ -48,7 +48,7 @@ class TestParallelSolver {
         assertEquals(3, constraints.get(2).size());
         assertEquals(Set.of(ac, bc, abc), new HashSet<>(constraints.get(2)));
         Set<Map<Variable, Integer>> actual = Collections.synchronizedSet(new HashSet<>());
-        assertEquals(2, solver.solve(problem, map -> actual.add(Map.copyOf(map))));
+        assertEquals(2, solver.solve(problem, (control, map) -> actual.add(Map.copyOf(map))));
         Set<Map<Variable, Integer>> expected = Set.of(
             Map.of(a, 1, b, 2, c, 3),
             Map.of(a, 2, b, 1, c, 3)

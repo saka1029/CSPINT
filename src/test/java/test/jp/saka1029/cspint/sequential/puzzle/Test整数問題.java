@@ -52,7 +52,7 @@ class Test整数問題 {
         p.constraint((a, d) -> a < d, A, D);
         p.constraint((d, g) -> d < g, D, G);
         SequentialSolver s = new SequentialSolver();
-        s.solve(p, a -> logger.info("answer: " + a));
+        s.solve(p, (c, a) -> logger.info("answer: " + a));
         List<List<Constraint>> order = SequentialSolver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
@@ -73,7 +73,7 @@ class Test整数問題 {
         }, vars);
         p.constraint((a, d, g) -> a < d && d < g, vars[0], vars[3], vars[6]);
         SequentialSolver s = new SequentialSolver();
-        s.solve(p, a -> logger.info("answer: " + a));
+        s.solve(p, (c, a) -> logger.info("answer: " + a));
         List<List<Constraint>> order = SequentialSolver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
@@ -94,7 +94,7 @@ class Test整数問題 {
         Variable Z = p.variable("Z", d);
         p.constraint((x, y, z) -> 6*y*z + 3*x*z + 2*x*y == 8*x*y*z, X, Y, Z);
         SequentialSolver s = new SequentialSolver();
-        assertEquals(3, s.solve(p, m -> logger.info("answer: " + m)));
+        assertEquals(3, s.solve(p, (c, a) -> logger.info("answer: " + a)));
         logger.info(Arrays.toString(s.bindCount));
     }
 
@@ -113,7 +113,7 @@ class Test整数問題 {
         Variable N = p.variable("N", d);
         p.constraint((l, m, n) -> (2*n - m*n + 2*m)*l == 4*m, L, M, N);
         SequentialSolver s = new SequentialSolver();
-        assertEquals(5, s.solve(p, m -> logger.info("answer: " + m)));
+        assertEquals(5, s.solve(p, (c, a) -> logger.info("answer: " + a)));
         logger.info(Arrays.toString(s.bindCount));
     }
 
@@ -134,7 +134,7 @@ class Test整数問題 {
 		p.constraint((b, c) -> b < c, B, C);
 		p.constraint((a, b, c) -> (a * b * c - 1) % ((a - 1) * (b - 1) * (c - 1)) == 0, A, B, C);
 		SequentialSolver s = new SequentialSolver();
-		s.solve(p, m -> logger.info("answer: " + m));
+		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Test整数問題 {
 		Variable B = p.variable("B", d);
 		p.constraint((a, b) -> a * a + b * b == RIGHT, A, B);
 		SequentialSolver s = new SequentialSolver();
-		s.solve(p, m -> logger.info("answer: " + m));
+		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 
 	/**
@@ -170,6 +170,6 @@ class Test整数問題 {
 		Variable M = p.variable("M", d);
 		p.constraint((n, m) -> n * n + 785 == (int)Math.pow(3, m), N, M);
 		SequentialSolver s = new SequentialSolver();
-		s.solve(p, m -> logger.info("answer: " + m));
+		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 }
