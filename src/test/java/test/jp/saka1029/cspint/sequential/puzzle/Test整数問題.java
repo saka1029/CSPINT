@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
+import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Problem;
 import jp.saka1029.cspint.sequential.SequentialSolver;
+import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
 
@@ -171,5 +173,24 @@ class Test整数問題 {
 		p.constraint((n, m) -> n * n + 785 == (int)Math.pow(3, m), N, M);
 		SequentialSolver s = new SequentialSolver();
 		s.solve(p, (c, a) -> logger.info("answer: " + a));
+	}
+
+	/**
+	 * The Viral Balloon Puzzle - The REAL Answer Explained (Using Ph.D. Level Math)
+	 * Channel: MindYourDecisions
+	 * URL    : https://youtu.be/DNmWtINlkhw
+	 */
+	@Test
+	public void testTheViralBalloonPuzzle() {
+	    Problem p = new Problem();
+	    Domain d = Domain.range(0, 100);
+	    Variable R = p.variable("R", d);
+	    Variable G = p.variable("G", d);
+	    Variable B = p.variable("B", d);
+	    p.constraint(r -> 3 * r == 30, R);
+	    p.constraint((r, g) -> r + 2 * g + 2 * g == 18, R, G);
+	    p.constraint((g, b) -> 2 * g - 2 * b == 2, G, B);
+	    Solver s = new ParallelSolver();
+	    s.solve(p, (c, m) -> logger.info("B + R * G = " + (m.get(B) + m.get(R) * m.get(G))));
 	}
 }

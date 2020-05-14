@@ -74,7 +74,7 @@ class Test虫食い算 {
             F, G, H, I, J, K, L, M, N, O);
         SequentialSolver s = new SequentialSolver();
         int[] count = {0};
-        s.solve(p, m -> ++count[0]);
+        s.solve(p, (c, m) -> ++count[0]);
         logger.info("解の数:" + count[0]);
     }
 
@@ -134,7 +134,7 @@ class Test虫食い算 {
         SequentialSolver s = new SequentialSolver();
         List<Variable> bindingOrder = bindingOrder(p);
         int[] count = {0};
-        s.solve(p, bindingOrder, m -> ++count[0]);
+        s.solve(p, bindingOrder, (c, m) -> ++count[0]);
 //        s.solve(p, bindingOrder, m -> logger.info("ans: " + m));
         logger.info("解の数:" + count[0]);
     }
