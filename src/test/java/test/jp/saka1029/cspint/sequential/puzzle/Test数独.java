@@ -1,7 +1,5 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
-import static org.junit.jupiter.params.provider.Arguments.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,14 +10,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.Test;
 
 import jp.saka1029.cspint.sequential.Domain;
-import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
@@ -113,14 +107,8 @@ class Test数独 {
 		solver.solve(problem, bindingOrder, (c, m) -> printResult(variables, m));
 	}
 
-	static List<Arguments> parameters() {
-	    return List.of(
-	        arguments(new SequentialSolver()),
-	        arguments(new ParallelSolver())
-	    );
-	}
-    @ParameterizedTest @MethodSource("parameters")
-	void testWikipedia(Solver solver) {
+    @Test
+	public void testWikipedia() {
 		// Wikipedia 数独 の例題
 		// https://ja.wikipedia.org/wiki/%E6%95%B0%E7%8B%AC
 		int[][] question = {
@@ -135,11 +123,11 @@ class Test数独 {
 			{ 0, 0, 0, 0, 8, 0, 0, 7, 9 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void test難問SUDOKU(Solver solver) {
+	@Test
+	void test難問SUDOKU() {
 		// 難問SUDOKU の例題
 		// https://www.danboko.net/
 		int[][] question = {
@@ -154,11 +142,11 @@ class Test数独 {
 			{ 0, 4, 9, 5, 0, 1, 8, 3, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void testナンプレ問題10(Solver solver) {
+	@Test
+	void testナンプレ問題10() {
 		// https://si-coding.net/sudoku10.html
 		int[][] question = {
 			{ 0, 0, 1, 0, 9, 0, 0, 0, 0 },
@@ -172,11 +160,11 @@ class Test数独 {
 			{ 0, 9, 2, 0, 0, 0, 0, 0, 3 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void test問題22001難問(Solver solver) {
+	@Test
+	void test問題22001難問() {
 		// https://number-place-puzzle.net/22001.html#content
 		int[][] question = {
 			{ 0, 5, 0, 7, 0, 0, 6, 0, 0 },
@@ -190,11 +178,11 @@ class Test数独 {
 			{ 0, 0, 3, 5, 0, 0, 0, 0, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void testナンプレNo601010(Solver solver) {
+	@Test
+	void testナンプレNo601010() {
 		// https://numpre7.com/np601010
 		int[][] question = {
 			{ 0, 0, 1, 0, 6, 0, 0, 0, 0 },
@@ -208,11 +196,11 @@ class Test数独 {
 			{ 0, 0, 0, 0, 7, 0, 6, 0, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void testOurHardestSudokuAndHowToSolveIt(Solver solver) {
+	@Test
+	void testOurHardestSudokuAndHowToSolveIt() {
 	    // YouTube
 		// https://youtu.be/-ZZFEgCQsvA
 		int[][] question = {
@@ -227,11 +215,11 @@ class Test数独 {
 			{ 0, 0, 5, 0, 0, 0, 0, 4, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void testEvil_sudoku_with_17_initial_values(Solver solver) {
+	@Test
+	void testEvil_sudoku_with_17_initial_values() {
 		// https://www.free-sudoku.com/sudoku.php?dchoix=evil
 		int[][] question = {
 			{ 1, 0, 0, 7, 0, 0, 0, 0, 6 },
@@ -245,11 +233,11 @@ class Test数独 {
 			{ 0, 9, 0, 0, 0, 0, 0, 0, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 
-	@ParameterizedTest @MethodSource("parameters")
-	void testGood_at_Sudoku_Heres_some_youll_never_complete(Solver solver) {
+	@Test
+	void testGood_at_Sudoku_Heres_some_youll_never_complete() {
 		// http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
 		int[][] question = {
 			{ 0, 0, 0, 7, 0, 0, 0, 0, 0 },
@@ -263,6 +251,6 @@ class Test数独 {
 			{ 0, 4, 0, 0, 0, 0, 3, 0, 0 },
 		};
 		logger.info(Common.methodName());
-		数独(question, solver);
+		数独(question, new Solver());
 	}
 }

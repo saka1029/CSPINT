@@ -1,19 +1,14 @@
 package test.jp.saka1029.cspint.sequential.puzzle;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.Test;
 
 import jp.saka1029.cspint.sequential.Domain;
-import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Predicate0;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
@@ -73,21 +68,16 @@ class Test魔方陣 {
         });
     }
 
-    @Parameters
-    static List<Solver> parameters() {
-        return List.of(new SequentialSolver(), new ParallelSolver());
+	@Test
+    public void test魔方陣3() {
+	    logger.info(Common.methodName());
+        魔方陣(3, new Solver());
     }
 
-	@ParameterizedTest @MethodSource("parameters")
-    public void test魔方陣3(Solver solver) {
+	@Test
+    public void test魔方陣4() {
 	    logger.info(Common.methodName());
-        魔方陣(3, solver);
-    }
-
-	@ParameterizedTest @MethodSource("parameters")
-    public void test魔方陣4(Solver solver) {
-	    logger.info(Common.methodName());
-        魔方陣(4, solver);
+        魔方陣(4, new Solver());
     }
 
 }

@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
-import jp.saka1029.cspint.sequential.ParallelSolver;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.SequentialSolver;
 import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 import test.jp.saka1029.cspint.Common;
@@ -53,9 +51,9 @@ class Test整数問題 {
         }, A, B, C, D, E, F, G, H, I);
         p.constraint((a, d) -> a < d, A, D);
         p.constraint((d, g) -> d < g, D, G);
-        SequentialSolver s = new SequentialSolver();
+        Solver s = new Solver();
         s.solve(p, (c, a) -> logger.info("answer: " + a));
-        List<List<Constraint>> order = SequentialSolver.constraintOrder(p, p.variables);
+        List<List<Constraint>> order = Solver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));
@@ -74,9 +72,9 @@ class Test整数問題 {
             return v[0] * ef * hi + v[3] * bc * hi + v[6] * bc * ef == bc * ef * hi;
         }, vars);
         p.constraint((a, d, g) -> a < d && d < g, vars[0], vars[3], vars[6]);
-        SequentialSolver s = new SequentialSolver();
+        Solver s = new Solver();
         s.solve(p, (c, a) -> logger.info("answer: " + a));
-        List<List<Constraint>> order = SequentialSolver.constraintOrder(p, p.variables);
+        List<List<Constraint>> order = Solver.constraintOrder(p, p.variables);
         for (int i = 0; i < order.size(); ++i)
             logger.info(p.variables.get(i) + ":" + order.get(i));
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));
@@ -95,7 +93,7 @@ class Test整数問題 {
         Variable Y = p.variable("Y", d);
         Variable Z = p.variable("Z", d);
         p.constraint((x, y, z) -> 6*y*z + 3*x*z + 2*x*y == 8*x*y*z, X, Y, Z);
-        SequentialSolver s = new SequentialSolver();
+        Solver s = new Solver();
         assertEquals(3, s.solve(p, (c, a) -> logger.info("answer: " + a)));
         logger.info(Arrays.toString(s.bindCount));
     }
@@ -114,7 +112,7 @@ class Test整数問題 {
         Variable M = p.variable("M", d);
         Variable N = p.variable("N", d);
         p.constraint((l, m, n) -> (2*n - m*n + 2*m)*l == 4*m, L, M, N);
-        SequentialSolver s = new SequentialSolver();
+        Solver s = new Solver();
         assertEquals(5, s.solve(p, (c, a) -> logger.info("answer: " + a)));
         logger.info(Arrays.toString(s.bindCount));
     }
@@ -135,7 +133,7 @@ class Test整数問題 {
 		p.constraint((a, b) -> a < b, A, B);
 		p.constraint((b, c) -> b < c, B, C);
 		p.constraint((a, b, c) -> (a * b * c - 1) % ((a - 1) * (b - 1) * (c - 1)) == 0, A, B, C);
-		SequentialSolver s = new SequentialSolver();
+		Solver s = new Solver();
 		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 
@@ -153,7 +151,7 @@ class Test整数問題 {
 		Variable A = p.variable("A", d);
 		Variable B = p.variable("B", d);
 		p.constraint((a, b) -> a * a + b * b == RIGHT, A, B);
-		SequentialSolver s = new SequentialSolver();
+		Solver s = new Solver();
 		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 
@@ -171,7 +169,7 @@ class Test整数問題 {
 		Variable N = p.variable("N", d);
 		Variable M = p.variable("M", d);
 		p.constraint((n, m) -> n * n + 785 == (int)Math.pow(3, m), N, M);
-		SequentialSolver s = new SequentialSolver();
+		Solver s = new Solver();
 		s.solve(p, (c, a) -> logger.info("answer: " + a));
 	}
 
@@ -190,7 +188,7 @@ class Test整数問題 {
 	    p.constraint(r -> 3 * r == 30, R);
 	    p.constraint((r, g) -> r + 2 * g + 2 * g == 18, R, G);
 	    p.constraint((g, b) -> 2 * g - 2 * b == 2, G, B);
-	    Solver s = new ParallelSolver();
-	    s.solve(p, (c, m) -> logger.info("B + R * G = " + (m.get(B) + m.get(R) * m.get(G))));
+	    Solver s = new Solver();
+	    s.solveParallel(p, (c, m) -> logger.info("B + R * G = " + (m.get(B) + m.get(R) * m.get(G))));
 	}
 }

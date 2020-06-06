@@ -16,7 +16,7 @@ import jp.saka1029.cspint.sequential.Constraint;
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Predicate5;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.SequentialSolver;
+import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
 class TestKyotoOsakaTokyo {
@@ -64,7 +64,7 @@ class TestKyotoOsakaTokyo {
         problem.constraint(addDigit, C3, Y, S, O, C4);
         problem.constraint(addDigit, C4, K, O, T, Z);
         problem.allDifferent(K, O, T, Y, S, A);
-        SequentialSolver solver = new SequentialSolver();
+        Solver solver = new Solver();
         solver.solve(problem, (c, m) -> {
             logger.info("answer: " + m);
             logger.info(" " + number(m.get(K), m.get(Y), m.get(O), m.get(T), m.get(O)));
@@ -114,7 +114,7 @@ class TestKyotoOsakaTokyo {
         problem.constraint(addDigit, C1, T, K, Y, C2);
         problem.constraint(addDigit,  Z, O, A, O, C1);
         problem.allDifferent(K, O, T, Y, S, A);
-        SequentialSolver solver = new SequentialSolver();
+        Solver solver = new Solver();
         List<Variable> bindOrder = constraintOrder(problem.constraints);
         logger.info("bind order: " + bindOrder);
         solver.solve(problem, (c, m) -> {

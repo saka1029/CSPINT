@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import jp.saka1029.cspint.sequential.Domain;
 import jp.saka1029.cspint.sequential.Problem;
-import jp.saka1029.cspint.sequential.SequentialSolver;
+import jp.saka1029.cspint.sequential.Solver;
 import jp.saka1029.cspint.sequential.Variable;
 
 /**
@@ -83,8 +83,8 @@ class Test春からみんな新生活 {
 			.anyMatch(r -> r[年齢列] == 30 && r[新生活列] == 新生活.ペットを飼う.ordinal()), v) ;
         // ツキコ：　　私もイクミ姉さんのように仕事頑張らないとね。
         problem.constraint((x, y) -> x < y, v[ツキコ行][年齢列], v[イクミ行][年齢列]);
-        SequentialSolver.printConstraintOrder(problem);
-        SequentialSolver solver = new SequentialSolver();
+        Solver.printConstraintOrder(problem);
+        Solver solver = new Solver();
         solver.solve(problem, (c, m) -> {
             logger.info("Answer:");
             for (名前 name : 名前.values())
