@@ -16,6 +16,16 @@ public class Solver {
 
     static Logger logger = Logger.getLogger(Solver.class.getName());
 
+    public static void printConstraintOrder(Problem problem, List<Variable> bindingOrder) {
+    	List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
+    	for (int i = 0, size = bindingOrder.size(); i < size; ++i)
+    		logger.info(String.format("%4d %s : %s", i, bindingOrder.get(i), constraints.get(i)));
+    }
+
+    public static void printConstraintOrder(Problem problem) {
+    	printConstraintOrder(problem, problem.variables);
+    }
+
     public int[] bindCount;
 
     /**
@@ -216,13 +226,69 @@ public class Solver {
         return solve(problem, problem.variables, answer);
     }
 
-    public static void printConstraintOrder(Problem problem, List<Variable> bindingOrder) {
-    	List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
-    	for (int i = 0, size = bindingOrder.size(); i < size; ++i)
-    		logger.info(String.format("%4d %s : %s", i, bindingOrder.get(i), constraints.get(i)));
+    public Map<Variable, Integer> maximize(Problem problem, List<Variable> bindingOrder,
+            Function0 maximize, Variable... variables) {
+        int variableSize = problem.variables.size();
+        if (bindingOrder.size() != variableSize)
+            throw new IllegalArgumentException("invalid bindingOrder size");
+        bindCount = new int[variableSize];
+        Map<Variable, Integer> result = new LinkedHashMap<>();
+        List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
+        SearchControl control = new SearchControl();
+        int[] maxValue = {Integer.MIN_VALUE};
+        Map<Variable, Integer> maxResult = new LinkedHashMap<>();
+        int[] testArgs = new int[variableSize];
+        int[] count = {0};
+        new Object() {
+
+            boolean test(Constraint constraint) {
+                int i = 0;
+                for (Variable v : constraint.variables)
+                    testArgs[i++] = result.get(v);
+                return constraint.predicate.test(testArgs);
+            }
+
+            boolean test(int i) {
+                for (Constraint c : constraints.get(i))
+                    if (!test(c))
+                        return false;
+                return true;
+            }
+
+            void testMax() {
+                int i = 0;
+                for (Variable v : variables)
+                    testArgs[i++] = result.get(v);
+                int value = maximize.apply(testArgs);
+                if (value > maxValue[0]) {
+                    maxValue[0] = value;
+                    maxResult.putAll(result);
+                }
+            }
+
+            void solve(int i) {
+                if (control.isStopped()) return;
+                if (i > 0) ++bindCount[i - 1];
+                if (i >= variableSize) {
+                    testMax();
+                	++count[0];
+                    return;
+                }
+                Variable variable = bindingOrder.get(i);
+                Domain domain = variable.domain;
+                for (int j = 0, size = domain.size(); j < size; ++j) {
+                    if (control.isStopped()) break;
+                    result.put(variable, domain.get(j));
+                        if (test(i))
+                            solve(i + 1);
+                }
+            }
+        }.solve(0);
+        return maxResult;
     }
 
-    public static void printConstraintOrder(Problem problem) {
-    	printConstraintOrder(problem, problem.variables);
+    public Map<Variable, Integer> maximize(Problem problem, Function0 maximize, Variable... variables) {
+        return maximize(problem, problem.variables, maximize, variables);
     }
+
 }
