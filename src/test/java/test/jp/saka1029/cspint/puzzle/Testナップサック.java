@@ -21,21 +21,22 @@ class Testナップサック {
 
     static int[] ナップサック(int maxSize, int[] sizes, int[] values) {
         int size = sizes.length;
-        Problem p = new Problem();
+        Problem problem = new Problem();
         Variable[] variables = IntStream.range(0, size)
-            .mapToObj(i -> p.variable("v" + i, Domain.rangeClosed(0, maxSize / sizes[i])))
+            .mapToObj(i -> problem.variable("v" + i, Domain.rangeClosed(0, maxSize / sizes[i])))
             .toArray(Variable[]::new);
         // 全体の単一制約
         // p.constraint(q -> IntStream.range(0, size).map(i -> q[i] *
         // sizes[i]).sum() <= maxSize, variables);
         // 分割した制約
         IntStream.range(0, size)
-            .forEach(i -> p.constraint(
+            .forEach(i -> problem.constraint(
                 q -> IntStream.rangeClosed(0, i).map(j -> q[j] * sizes[j]).sum() <= maxSize,
                 Arrays.copyOf(variables, i + 1)));
         Function0 maximize = q -> IntStream.range(0, size).map(i -> q[i] * values[i]).sum();
-        Solver s = new Solver();
-        Map<Variable, Integer> map = s.maximize(p, maximize, variables);
+        Solver solver = new Solver();
+        Map<Variable, Integer> map = solver.maximize(problem, maximize, variables);
+        System.out.println(Arrays.toString(solver.bindCount));
         return IntStream.range(0, size)
             .map(i -> map.get(variables[i]))
             .toArray();
