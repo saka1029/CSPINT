@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 
 class Testナップサック {
+
+    static final Logger logger = Logger.getLogger(Testナップサック.class.getName());
 
     static int[] ナップサック(int maxSize, int[] sizes, int[] values) {
         int size = sizes.length;
@@ -30,7 +33,6 @@ class Testナップサック {
             .forEach(i -> p.constraint(
                 q -> IntStream.rangeClosed(0, i).map(j -> q[j] * sizes[j]).sum() <= maxSize,
                 Arrays.copyOf(variables, i + 1)));
-        System.out.println(p.constraints);
         Function0 maximize = q -> IntStream.range(0, size).map(i -> q[i] * values[i]).sum();
         Solver s = new Solver();
         Map<Variable, Integer> map = s.maximize(p, maximize, variables);
@@ -65,7 +67,8 @@ class Testナップサック {
         int[] sizes = {10, 12, 7, 9, 21, 16};
         int[] values = {120, 130, 80, 100, 250, 185};
         int[] results = ナップサック(maxSize, sizes, values);
-        System.out.println(Arrays.toString(results));
+        for (int i = 0; i < sizes.length; ++i)
+            logger.info(names[i] + " : " + results[i]);
         assertArrayEquals(new int[] {3, 0, 2, 0, 1, 0}, results);
         assertEquals(770, IntStream.range(0, sizes.length).map(i -> results[i] * values[i]).sum());
     }
