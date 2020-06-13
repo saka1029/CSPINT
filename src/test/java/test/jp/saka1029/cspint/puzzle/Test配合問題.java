@@ -1,6 +1,10 @@
 package test.jp.saka1029.cspint.puzzle;
 
+<<<<<<< HEAD
 import static org.junit.jupiter.api.Assertions.assertEquals;
+=======
+import static org.junit.jupiter.api.Assertions.*;
+>>>>>>> f2b41f79a5dabcb3dd3052964fdd1f44a27ce23a
 
 import java.util.Arrays;
 import java.util.Map;
