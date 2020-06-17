@@ -1,6 +1,6 @@
 package test.jp.saka1029.cspint.puzzle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -36,7 +36,7 @@ class Test配合問題 {
      *
      * 　所望の組成を持つ合金をコストを一番安く生成するには，市販の合金を
      *   どのように混ぜ合わせれば良いでしょうか．
-     *   
+     *
      *   http://www.msi.co.jp/nuopt/docs/v20/examples/html/02-01-00.html
      */
     @Test
@@ -52,7 +52,7 @@ class Test配合問題 {
         int[] スズ = {50, 10, 50, 30, 40, 10, 10, 60, 80};
         int[] コスト = {73, 69, 73, 75, 76, 60, 58, 43, 41};
         // 目的関数
-        Function0 maximize = x -> -sum(SIZE, コスト, x);
+        Function0 minimize = x -> sum(SIZE, コスト, x);
         // 混合比率の制約
         problem.constraint(x -> sum(SIZE, ONES, x) == 100, vars);
         problem.constraint(x -> sum(SIZE, 鉛, x) == 3000, vars);
@@ -69,7 +69,7 @@ class Test配合問題 {
         // 求解
         Solver solver = new Solver();
         Solver.printConstraintOrder(problem);
-        Map<Variable, Integer> result = solver.maximize(problem, maximize, vars);
+        Map<Variable, Integer> result = solver.minimize(problem, minimize, vars);
         System.out.println(result);
         int[] 配合比率 = IntStream.range(0, SIZE)
             .map(i -> result.get(problem.variable("x" + i)))

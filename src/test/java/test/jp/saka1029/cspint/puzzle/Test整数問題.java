@@ -191,4 +191,39 @@ class Test整数問題 {
 	    Solver s = new Solver();
 	    s.solveParallel(p, (c, m) -> logger.info("B + R * G = " + (m.get(B) + m.get(R) * m.get(G))));
 	}
+
+	/**
+	 * mn - 3m - 2n + 3 = 0 (m, nは整数)
+	 *
+	 * 【整数問題が面白いほどわかる】不定方程式① / 因数分解型 #13
+	 * https://www.youtube.com/watch?v=pNAGOeTlcc8
+	 */
+	@Test
+	public void test不定方程式1() {
+	    Problem p = new Problem();
+	    Domain d = Domain.rangeClosed(-10, 10);
+	    Variable M = p.variable("m", d);
+	    Variable N = p.variable("n", d);
+	    p.constraint((m, n) -> m * n - 3 * m - 2 * n + 3 == 0, M, N);
+	    new Solver().solve(p, (c, m) -> logger.info("answer: " + m));
+	}
+
+	/**
+	 * √(c² + 72)が整数となるような正の整数cをすべて求めよ
+	 *
+	 * √(c² + 72) = m (mは整数)
+	 * c² + 72 = m²
+	 *
+	 * 【整数問題が面白いほどわかる】不定方程式① / 因数分解型 #13
+	 * https://www.youtube.com/watch?v=pNAGOeTlcc8
+	 */
+	@Test
+	public void test不定方程式2() {
+	    Problem p = new Problem();
+	    Variable C = p.variable("c", Domain.range(1, 1000));
+	    Variable M = p.variable("m", Domain.range(1, 1000));
+	    p.constraint((c, m) -> c * c + 72 == m * m, C, M);
+	    new Solver().solve(p, (c, m) -> logger.info(
+	        "answer: " + m + " √(c² + 72) = " + Math.sqrt(m.get(C) * m.get(C) + 72)));
+	}
 }

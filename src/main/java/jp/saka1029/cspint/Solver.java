@@ -291,4 +291,12 @@ public class Solver {
         return maximize(problem, problem.variables, maximize, variables);
     }
 
+    public Map<Variable, Integer> minimize(Problem problem, List<Variable> bindingOrder, Function0 minimize, Variable... variables) {
+        return maximize(problem, problem.variables, minimize.negate(), variables);
+    }
+
+    public Map<Variable, Integer> minimize(Problem problem, Function0 minimize, Variable... variables) {
+        return minimize(problem, problem.variables, minimize, variables);
+    }
+
 }
