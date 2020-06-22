@@ -226,4 +226,56 @@ class Test整数問題 {
 	    new Solver().solve(p, (c, m) -> logger.info(
 	        "answer: " + m + " √(c² + 72) = " + Math.sqrt(m.get(C) * m.get(C) + 72)));
 	}
+
+	/**
+	 * 重複組合せ［入試基礎　ワンポイント演習３］ - YouTube
+	 * https://www.youtube.com/watch?v=ln-c5VEYTCQ
+	 */
+	@Test
+	public void test重複組み合わせ1() {
+	    Common.methodName();
+	    Problem p = new Problem();
+	    Domain domain = Domain.rangeClosed(1, 8);
+	    Variable A = p.variable("a", domain);
+	    Variable B = p.variable("b", domain);
+	    Variable C = p.variable("c", domain);
+	    Variable D = p.variable("d", domain);
+	    p.constraint((a, b) -> a < b, A, B);
+	    p.constraint((b, c) -> b < c, B, C);
+	    p.constraint((c, d) -> c < d, C, D);
+	    int count = new Solver().solve(p, (c, m) -> logger.info("answer: " + m));
+	    logger.info("count=" + count);
+	}
+
+	@Test
+	public void test重複組み合わせ3() {
+	    Common.methodName();
+	    Problem p = new Problem();
+	    Domain domain = Domain.rangeClosed(1, 8);
+	    Variable A = p.variable("a", domain);
+	    Variable B = p.variable("b", domain);
+	    Variable C = p.variable("c", domain);
+	    Variable D = p.variable("d", domain);
+	    p.constraint((a, b) -> a < b, A, B);
+	    p.constraint((b, c) -> b <= c, B, C);
+	    p.constraint((c, d) -> c <= d, C, D);
+	    int count = new Solver().solve(p, (c, m) -> logger.info("answer: " + m));
+	    logger.info("count=" + count);
+	}
+
+	@Test
+	public void test重複組み合わせ2() {
+	    Common.methodName();
+	    Problem p = new Problem();
+	    Domain domain = Domain.rangeClosed(1, 8);
+	    Variable A = p.variable("a", domain);
+	    Variable B = p.variable("b", domain);
+	    Variable C = p.variable("c", domain);
+	    Variable D = p.variable("d", domain);
+	    p.constraint((a, b) -> a <= b, A, B);
+	    p.constraint((b, c) -> b <= c, B, C);
+	    p.constraint((c, d) -> c <= d, C, D);
+	    int count = new Solver().solve(p, (c, m) -> logger.info("answer: " + m));
+	    logger.info("count=" + count);
+	}
 }
