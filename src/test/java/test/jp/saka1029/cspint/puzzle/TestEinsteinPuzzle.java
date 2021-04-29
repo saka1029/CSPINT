@@ -17,6 +17,7 @@ import jp.saka1029.cspint.Domain;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
 /**
  * The following version of the puzzle appeared in Life International in 1962:
@@ -56,7 +57,7 @@ import jp.saka1029.cspint.Variable;
  */
 public class TestEinsteinPuzzle {
 
-    static final Logger logger = Logger.getLogger(TestEinsteinPuzzle.class.toString());
+    static final Logger logger = Common.getLogger(TestEinsteinPuzzle.class);
 
     static final int NUM_HOUSES = 5;
     static final int NUM_ATTRIBUTES = Attribute.values().length;
@@ -131,7 +132,7 @@ public class TestEinsteinPuzzle {
     }
 
     @Test
-    void test() {
+    public void test() {
         Problem p = new Problem();
         Domain d = Domain.range(0, NUM_VALUES);
         Variable[][] v = new Variable[NUM_HOUSES][NUM_ATTRIBUTES];

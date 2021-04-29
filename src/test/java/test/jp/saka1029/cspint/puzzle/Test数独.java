@@ -18,9 +18,9 @@ import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 import test.jp.saka1029.cspint.Common;
 
-class Test数独 {
+public class Test数独 {
 
-	static final Logger logger = Logger.getLogger(Test数独.class.getName());
+	static final Logger logger = Common.getLogger(Test数独.class);
 
 	static final int SIZE = 9;
 	static final int SSIZE = 3;
@@ -127,7 +127,7 @@ class Test数独 {
 	}
 
 	@Test
-	void test難問SUDOKU() {
+	public void test難問SUDOKU() {
 		// 難問SUDOKU の例題
 		// https://www.danboko.net/
 		int[][] question = {
@@ -146,7 +146,7 @@ class Test数独 {
 	}
 
 	@Test
-	void testナンプレ問題10() {
+	public void testナンプレ問題10() {
 		// https://si-coding.net/sudoku10.html
 		int[][] question = {
 			{ 0, 0, 1, 0, 9, 0, 0, 0, 0 },
@@ -164,7 +164,7 @@ class Test数独 {
 	}
 
 	@Test
-	void test問題22001難問() {
+	public void test問題22001難問() {
 		// https://number-place-puzzle.net/22001.html#content
 		int[][] question = {
 			{ 0, 5, 0, 7, 0, 0, 6, 0, 0 },
@@ -182,7 +182,7 @@ class Test数独 {
 	}
 
 	@Test
-	void testナンプレNo601010() {
+	public void testナンプレNo601010() {
 		// https://numpre7.com/np601010
 		int[][] question = {
 			{ 0, 0, 1, 0, 6, 0, 0, 0, 0 },
@@ -200,7 +200,7 @@ class Test数独 {
 	}
 
 	@Test
-	void testOurHardestSudokuAndHowToSolveIt() {
+	public void testOurHardestSudokuAndHowToSolveIt() {
 	    // YouTube
 		// https://youtu.be/-ZZFEgCQsvA
 		int[][] question = {
@@ -219,7 +219,7 @@ class Test数独 {
 	}
 
 	@Test
-	void testEvil_sudoku_with_17_initial_values() {
+	public void testEvil_sudoku_with_17_initial_values() {
 		// https://www.free-sudoku.com/sudoku.php?dchoix=evil
 		int[][] question = {
 			{ 1, 0, 0, 7, 0, 0, 0, 0, 6 },
@@ -237,7 +237,7 @@ class Test数独 {
 	}
 
 	@Test
-	void testGood_at_Sudoku_Heres_some_youll_never_complete() {
+	public void testGood_at_Sudoku_Heres_some_youll_never_complete() {
 		// http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
 		int[][] question = {
 			{ 0, 0, 0, 7, 0, 0, 0, 0, 0 },

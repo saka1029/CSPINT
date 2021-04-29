@@ -1,9 +1,14 @@
 package test.jp.saka1029.cspint.puzzle;
 
+import java.util.logging.Logger;
+
 import org.junit.jupiter.api.Test;
+
+import test.jp.saka1029.cspint.Common;
 
 class Test包絡分析法 {
 
+    static final Logger logger = Common.getLogger(Test包絡分析法.class);
     /**
      * 例題
      *
@@ -25,7 +30,7 @@ class Test包絡分析法 {
         int[] 売上 = {2, 6, 10, 12, 12, 20};
         int SIZE = 店員数.length;
         for (int i = 0; i < SIZE; ++i)
-            System.out.printf("店舗番号%d: %s%n", i + 1, 効率(店員数[i], 稼働時間[i], 売上[i]));
+            logger.info(String.format("店舗番号%d: %s", i + 1, 効率(店員数[i], 稼働時間[i], 売上[i])));
     }
 
     static double 効率(int 店員数, int 稼働時間, int 売上) {

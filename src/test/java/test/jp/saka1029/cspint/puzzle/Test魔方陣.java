@@ -13,9 +13,9 @@ import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 import test.jp.saka1029.cspint.Common;
 
-class Test魔方陣 {
+public class Test魔方陣 {
 
-    static Logger logger = Logger.getLogger(Test魔方陣.class.getName());
+    static Logger logger = Common.getLogger(Test魔方陣.class);
 
     static void 魔方陣(final int n, Solver solver) {
         Problem problem = new Problem();

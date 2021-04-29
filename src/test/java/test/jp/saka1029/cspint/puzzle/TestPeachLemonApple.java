@@ -28,9 +28,9 @@ import test.jp.saka1029.cspint.Common;
  *   A  P  P  L  E
  *
  */
-class TestPeachLemonApple {
+public class TestPeachLemonApple {
 
-    static Logger logger = Logger.getLogger(TestPeachLemonApple.class.getName());
+    static Logger logger = Common.getLogger(TestPeachLemonApple.class);
 
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);

@@ -17,9 +17,9 @@ import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 import test.jp.saka1029.cspint.Common;
 
-class Test整数問題 {
+public class Test整数問題 {
 
-	static final Logger logger = Logger.getLogger(Test整数問題.class.getName());
+	static final Logger logger = Common.getLogger(Test整数問題.class);
 
 	static int number(int... d) {
 		return IntStream.of(d).reduce(0, (a, b) -> a * 10 + b);

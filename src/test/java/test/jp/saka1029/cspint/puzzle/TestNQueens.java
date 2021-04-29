@@ -11,10 +11,11 @@ import jp.saka1029.cspint.Domain;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class TestNQueens {
+public class TestNQueens {
 
-    static Logger logger = Logger.getLogger(TestNQueens.class.getName());
+    static Logger logger = Common.getLogger(TestNQueens.class);
 
     static int nQueens(final int n) {
         long start = System.currentTimeMillis();
@@ -46,7 +47,7 @@ class TestNQueens {
     }
 
     @Test
-    void test() {
+    public void test() {
         assertEquals(1, nQueens(1));
         assertEquals(0, nQueens(2));
         assertEquals(0, nQueens(3));

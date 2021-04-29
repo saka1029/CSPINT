@@ -18,10 +18,11 @@ import jp.saka1029.cspint.Predicate5;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class TestKyotoOsakaTokyo {
+public class TestKyotoOsakaTokyo {
 
-    static Logger logger = Logger.getLogger(TestKyotoOsakaTokyo.class.getName());
+    static Logger logger = Common.getLogger(TestKyotoOsakaTokyo.class);
 
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);

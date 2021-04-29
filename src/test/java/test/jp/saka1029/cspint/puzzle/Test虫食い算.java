@@ -14,10 +14,11 @@ import jp.saka1029.cspint.Predicate5;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class Test虫食い算 {
+public class Test虫食い算 {
 
-    static final Logger logger = Logger.getLogger(Test虫食い算.class.getName());
+    static final Logger logger = Common.getLogger(Test虫食い算.class);
 
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (n, d) -> 10 * n + d);
@@ -44,7 +45,7 @@ class Test虫食い算 {
      *
      */
 //    @Test
-    void test完全虫食い算() {
+    public void test完全虫食い算() {
         Problem p = new Problem();
         Domain FIRST = Domain.rangeClosed(1, 9);
         Domain REST = Domain.rangeClosed(0, 9);
@@ -90,7 +91,7 @@ class Test虫食い算 {
     }
 
 //    @Test
-    void test完全虫食い算桁ごと() {
+    public void test完全虫食い算桁ごと() {
         Problem p = new Problem();
         Domain FIRST = Domain.rangeClosed(1, 9);
         Domain REST = Domain.rangeClosed(0, 9);

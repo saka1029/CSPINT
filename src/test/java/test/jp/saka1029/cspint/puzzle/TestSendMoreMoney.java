@@ -22,9 +22,9 @@ import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 import test.jp.saka1029.cspint.Common;
 
-class TestSendMoreMoney {
+public class TestSendMoreMoney {
 
-    static Logger logger = Logger.getLogger(TestSendMoreMoney.class.getName());
+    static Logger logger = Common.getLogger(TestSendMoreMoney.class);
 
     static int number(int... digits) {
         return IntStream.of(digits).reduce(0, (a, b) -> a * 10 + b);

@@ -25,7 +25,7 @@ import test.jp.saka1029.cspint.Common;
 
 public class TestNumberLink {
 
-    static final Logger logger = Logger.getLogger(TestNumberLink.class.toString());
+    static final Logger logger = Common.getLogger(TestNumberLink.class);
 
     static String name(int r, int c) {
         return r + "@" + c;
@@ -292,8 +292,7 @@ public class TestNumberLink {
      * [Numberlink - vol.1]
      * https://www.pazru.net/puzzle/numberlink/01/
      */
-    @Ignore
-    @Test
+//    @Test
     public void testNumberlinkVol1() {
         logger.info(Common.methodName());
         int[][] board = {

@@ -14,10 +14,11 @@ import jp.saka1029.cspint.Function0;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class Testナップサック {
+public class Testナップサック {
 
-    static final Logger logger = Logger.getLogger(Testナップサック.class.getName());
+    static final Logger logger = Common.getLogger(Testナップサック.class);
 
     static int[] ナップサック(int maxSize, int[] sizes, int[] values) {
         int size = sizes.length;
@@ -62,7 +63,7 @@ class Testナップサック {
      *
      */
     @Test
-    void test() {
+    public void test() {
         int maxSize = 65;
         String[] names = {"coffee", "water", "banana", "apple", "rice", "bread"};
         int[] sizes = {10, 12, 7, 9, 21, 16};

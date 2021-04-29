@@ -9,6 +9,7 @@ import jp.saka1029.cspint.Domain;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
 /**
  * この春から新生活を始めることになった５人兄弟。
@@ -33,7 +34,7 @@ import jp.saka1029.cspint.Variable;
 
 class Test春からみんな新生活 {
 
-    static final Logger logger = Logger.getLogger(Test春からみんな新生活.class.toString());
+    static final Logger logger = Common.getLogger(Test春からみんな新生活.class);
 
     enum 名前 { セツオ, イクミ, カナコ, シンイチ, ツキコ };
     static final int 人数 = 名前.values().length;

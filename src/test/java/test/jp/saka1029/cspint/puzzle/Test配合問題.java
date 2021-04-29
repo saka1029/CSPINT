@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,11 @@ import jp.saka1029.cspint.Function0;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class Test配合問題 {
+public class Test配合問題 {
+
+    static final Logger logger = Common.getLogger(Test配合問題.class);
 
     static int sum(int n, int[] k, int[] x) {
         return IntStream.range(0, n).map(i -> k[i] * x[i]).sum();
@@ -40,7 +44,7 @@ class Test配合問題 {
      *   http://www.msi.co.jp/nuopt/docs/v20/examples/html/02-01-00.html
      */
     @Test
-    void test() {
+    public void test() {
         int SIZE = 9;
         Problem problem = new Problem();
         Domain domain = Domain.of(IntStream.range(0, 10).map(i -> 10 * i).toArray());

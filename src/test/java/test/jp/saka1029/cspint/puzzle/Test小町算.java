@@ -3,6 +3,7 @@ package test.jp.saka1029.cspint.puzzle;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +11,11 @@ import jp.saka1029.cspint.Domain;
 import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
+import test.jp.saka1029.cspint.Common;
 
-class Test小町算 {
+public class Test小町算 {
+
+    static final Logger logger = Common.getLogger(Test小町算.class);
 
     static int calc(int[] digits, int[] ops) {
         int total = 0, term = 0;
@@ -41,7 +45,7 @@ class Test小町算 {
     }
 
     @Test
-    void testCalc() {
+    public void testCalc() {
         int[] digits = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         assertEquals(+1+2+3+4+5+6+7+8+9, calc(digits, new int[] {1, 1, 1, 1, 1, 1, 1, 1, 1}));
         assertEquals(-1-2-3-4-5-6-7-8-9, calc(digits, new int[] {-1, -1, -1, -1, -1, -1, -1, -1, -1}));
@@ -53,7 +57,7 @@ class Test小町算 {
     }
 
     @Test
-    void test小町算() {
+    public void test小町算() {
         int[] digits = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Problem p = new Problem();
         Domain first = Domain.of(-1, 0);
@@ -63,7 +67,7 @@ class Test小町算 {
         for (int i = 1; i < 9; ++i)
             vars[i] = p.variable("@" + i, rest);
         p.constraint(a -> calc(digits, a) == 100, vars);
-        new Solver().solve(p, (c, m) -> System.out.println(
+        new Solver().solve(p, (c, m) -> logger.info(
             format(digits,
                 Arrays.stream(vars).mapToInt(v -> m.get(v)).toArray())));
     }
