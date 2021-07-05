@@ -80,9 +80,11 @@ public class Test整数問題 {
         logger.info("束縛回数: " + Arrays.toString(s.bindCount));
     }
 	/**
+	 * <pre>
      * https://www.youtube.com/watch?v=Z6oF_MWwsD4
      * 1/x + 1/2y + 1/3z = 4/3
      * 6yz + 3xz + 2xy = 8xyz
+	 * </pre>
 	 */
     @Test
     public void test整数マスター() {
@@ -99,9 +101,11 @@ public class Test整数問題 {
     }
 
     /**
+     * <pre>
      * https://www.youtube.com/watch?v=rNDqZOnzFLo
      * (n/m - n/2 + 1)l = 2  (n, m, l は3以上の整数)
      * (2n - mn + 2m)l = 4m
+     * </pre>
      */
     @Test
     public void test整数マスター25() {
@@ -118,9 +122,11 @@ public class Test整数問題 {
     }
 
 	/**
+	 * <pre>
 	 * https://www.youtube.com/watch?v=b-OmPH4T4Vg
 	 * a, b, cは自然数で a < b < c
 	 * (a - 1)(b - 1)(c - 1) が abc - 1の約数
+	 * </pre>
 	 */
 	@Test
 	void test国際数オリ1992年の整数問題() {
@@ -138,9 +144,11 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * https://youtu.be/0tvF39-zpSg
 	 * a, b はすべて自然数
 	 * a² + b² = 2020
+	 * </pre>
 	 */
 	@Test
 	public void test整数問題2020() {
@@ -156,9 +164,11 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * https://www.youtube.com/watch?v=ZTH7m5IiJv8
 	 * n, m は自然数
 	 * n² + 785 = 3^m
+	 * </pre>
 	 */
 	@Test
 	public void test整数問題nm() {
@@ -174,9 +184,11 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * The Viral Balloon Puzzle - The REAL Answer Explained (Using Ph.D. Level Math)
 	 * Channel: MindYourDecisions
 	 * URL    : https://youtu.be/DNmWtINlkhw
+	 * </pre>
 	 */
 	@Test
 	public void testTheViralBalloonPuzzle() {
@@ -193,10 +205,12 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * mn - 3m - 2n + 3 = 0 (m, nは整数)
 	 *
 	 * 【整数問題が面白いほどわかる】不定方程式① / 因数分解型 #13
 	 * https://www.youtube.com/watch?v=pNAGOeTlcc8
+	 * </pre>
 	 */
 	@Test
 	public void test不定方程式1() {
@@ -209,6 +223,7 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * √(c² + 72)が整数となるような正の整数cをすべて求めよ
 	 *
 	 * √(c² + 72) = m (mは整数)
@@ -216,6 +231,7 @@ public class Test整数問題 {
 	 *
 	 * 【整数問題が面白いほどわかる】不定方程式① / 因数分解型 #13
 	 * https://www.youtube.com/watch?v=pNAGOeTlcc8
+	 * </pre>
 	 */
 	@Test
 	public void test不定方程式2() {
@@ -228,8 +244,10 @@ public class Test整数問題 {
 	}
 
 	/**
+	 * <pre>
 	 * 重複組合せ［入試基礎　ワンポイント演習３］ - YouTube
 	 * https://www.youtube.com/watch?v=ln-c5VEYTCQ
+	 * </pre>
 	 */
 	@Test
 	public void test重複組み合わせ1() {
