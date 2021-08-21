@@ -3,6 +3,7 @@ package jp.saka1029.cspint;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -120,7 +121,11 @@ public class Solver {
     }
 
     public int solve(Problem problem, Answer answer) {
-        return solve(problem, problem.variables, answer);
+        return solve(problem,
+            problem.variables.stream()
+                .sorted(Comparator.comparing(v -> v.domain.size()))
+                .toList(),
+            answer);
     }
 
     public int solveParallel(Problem problem, List<Variable> bindingOrder, Answer answer) {
