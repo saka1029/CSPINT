@@ -1,5 +1,6 @@
 package test.jp.saka1029.cspint;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ import jp.saka1029.cspint.Variable;
 
 class TestVariable {
 
-    static final Logger logger = Logger.getLogger(TestVariable.class.getName());
+    static final Logger logger = Common.getLogger(TestVariable.class);
 
     @Test
     void testVariable() {

@@ -115,20 +115,13 @@ public class Solver {
                 }
                 Variable variable = bindingOrder.get(i);
                 Domain domain = variable.domain;
-                for (int value : domain.values()) {
+                for (int value : domain.values) {
                     if (control.isStopped())
                         break;
                     result.put(variable, value);
                     if (test(i))
                         solve(i + 1);
                 }
-//                for (int j = 0, size = domain.size(); j < size; ++j) {
-//                    if (control.isStopped()) break;
-//                    result.put(variable, domain.get(j));
-////                    logger.info(variable + " = " + domain.get(j));
-//                    if (test(i))
-//                        solve(i + 1);
-//                }
             }
         }.solve(0);
         return count[0];

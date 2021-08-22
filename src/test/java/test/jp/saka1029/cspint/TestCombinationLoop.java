@@ -1,6 +1,6 @@
 package test.jp.saka1029.cspint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class TestCombinationLoop {
 
-    static Logger logger = Logger.getLogger(TestCombinationLoop.class.toString());
+    static Logger logger = Common.getLogger(TestCombinationLoop.class);
 
     static int[][] values = {
         {0, 1, 2},

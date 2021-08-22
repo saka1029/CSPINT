@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -35,7 +34,6 @@ class Testナンバーリンク {
         Solver solver = new Solver();
 
         new Object() {
-            List<Variable> bindingOrder;
 
             String name(int r, int c) {
                 return String.format("v%d_%d", r, c);
@@ -50,27 +48,23 @@ class Testナンバーリンク {
                     }
             }
 
-            void addNeighbors(List<Variable> list, int r, int c) {
-                if (r > 0) list.add(variables[r - 1][c]);
-                if (r < rows - 1) list.add(variables[r + 1][c]);
-                if (c > 0) list.add(variables[r][c - 1]);
-                if (c < cols - 1) list.add(variables[r][c + 1]);
+            Variable[] neighbors(int r, int c) {
+                List<Variable> neighbors = new ArrayList<>();
+                neighbors.add(variables[r][c]);
+                if (r > 0) neighbors.add(variables[r - 1][c]);
+                if (r < rows - 1) neighbors.add(variables[r + 1][c]);
+                if (c > 0) neighbors.add(variables[r][c - 1]);
+                if (c < cols - 1) neighbors.add(variables[r][c + 1]);
+                return neighbors.toArray(Variable[]::new);
             }
 
-            Predicate0 endPoint = a -> IntStream.of(a)
-                    .filter(n -> n == a[0]).count() == 2;
-            Predicate0 passingPoint = a -> IntStream.of(a)
-                    .filter(n -> n == a[0]).count() == 3;
-
             void defineConstraint() {
+                Predicate0 endPoint = a -> IntStream.of(a).filter(n -> n == a[0]).count() == 2;
+                Predicate0 passingPoint = a -> IntStream.of(a).filter(n -> n == a[0]).count() == 3;
                 for (int r = 0; r < rows; ++r)
-                    for (int c = 0; c < cols; ++c) {
-                        List<Variable> neighbors = new ArrayList<>();
-                        neighbors.add(variables[r][c]);
-                        addNeighbors(neighbors, r, c);
+                    for (int c = 0; c < cols; ++c)
                         problem.constraint(matrix[r][c] != 0 ? endPoint : passingPoint,
-                            neighbors.toArray(Variable[]::new));
-                    }
+                            neighbors(r, c));
             }
 
             void print(Map<Variable, Integer> map) {
@@ -83,39 +77,24 @@ class Testナンバーリンク {
                 }
             }
 
-            void debug() {
+            void debug(List<Variable> bindingOrder) {
                 List<List<Constraint>> co = Solver.constraintOrder(problem, bindingOrder);
                 for (int i = 0, max = bindingOrder.size(); i < max; ++i)
-                    logger.info(String.format("%s %d %s", bindingOrder.get(i), solver.bindCount[i], co.get(i)));
-            }
-
-            int complicated(int r, int c) {
-                if (matrix[r][c] != 0) return 0;
-                int count = 0;
-                if (r > 0 && matrix[r - 1][c] == 0) ++count;
-                if (r < rows - 1 && matrix[r + 1][c] == 0) ++count;
-                if (c > 0 && matrix[r][c - 1] == 0) ++count;
-                if (c < cols - 1 && matrix[r][c + 1] == 0) ++count;
-                return count;
+                    logger.info(String.format("%s %d %s", bindingOrder.get(i), solver.bindCount[i],
+                        co.get(i)));
             }
 
             void solve() {
                 defineVariables();
                 defineConstraint();
-                List<Entry<Integer, Variable>> vc = new ArrayList<>();
-                for (int r = 0; r < rows; ++r)
-                    for (int c = 0; c < cols; ++c)
-                        vc.add(Map.entry(complicated(r, c), variables[r][c]));
-                bindingOrder = vc.stream()
-                    .sorted(Comparator.comparing(Entry::getKey))
-                    .map(Entry::getValue)
+                List<Variable> bindingOrder = problem.variables.stream()
+                    .sorted(Comparator.comparing(v -> v.domain.size()))
                     .toList();
-//                bindingOrder = problem.variables.stream()
-//                    .sorted(Comparator.comparing(v -> v.domain.size()))
-//                    .toList();
-//                Solver.printConstraintOrder(problem, bindingOrder);
-                solver.solve(problem, bindingOrder, (c, map) -> print(map));
-                debug();
+                solver.solve(problem, bindingOrder, (c, map) -> {
+                    print(map);
+                    c.stop();
+                });
+                debug(bindingOrder);
             }
         }.solve();
         return solver.bindCount;
@@ -172,6 +151,26 @@ class Testナンバーリンク {
             {1, 2, 1},
             {0, 2, 0},
             {0, 0, 0},
+        };
+        int[] c = numberLink(question);
+    }
+
+    @Test
+    void testナンバーリンク_6() {
+        logger.info(Common.methodName());
+        // ナンバーリンク #6 / ノーム さんのイラスト - ニコニコ静画 (イラスト)
+        // https://seiga.nicovideo.jp/seiga/im6656815
+        int[][] question = {
+            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 3, 0, 5, 0, 0},
+            {1, 0, 4, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 7, 0, 4, 0},
+            {0, 5, 0, 8, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 8, 0, 2},
+            {0, 0, 6, 0, 6, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 7, 0},
+            {0, 0, 0, 0, 0, 3, 0, 0, 0, 0},
         };
         int[] c = numberLink(question);
     }

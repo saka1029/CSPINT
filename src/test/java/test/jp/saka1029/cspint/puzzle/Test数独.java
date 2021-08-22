@@ -109,6 +109,7 @@ public class Test数独 {
 
     @Test
 	public void testWikipedia() {
+		logger.info(Common.methodName());
 		// Wikipedia 数独 の例題
 		// https://ja.wikipedia.org/wiki/%E6%95%B0%E7%8B%AC
 		int[][] question = {
@@ -122,12 +123,12 @@ public class Test数独 {
 			{ 0, 0, 0, 4, 1, 9, 0, 0, 5 },
 			{ 0, 0, 0, 0, 8, 0, 0, 7, 9 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void test難問SUDOKU() {
+		logger.info(Common.methodName());
 		// 難問SUDOKU の例題
 		// https://www.danboko.net/
 		int[][] question = {
@@ -141,12 +142,12 @@ public class Test数独 {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 4, 9, 5, 0, 1, 8, 3, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void testナンプレ問題10() {
+		logger.info(Common.methodName());
 		// https://si-coding.net/sudoku10.html
 		int[][] question = {
 			{ 0, 0, 1, 0, 9, 0, 0, 0, 0 },
@@ -159,12 +160,12 @@ public class Test数独 {
 			{ 0, 0, 0, 0, 0, 4, 0, 7, 0 },
 			{ 0, 9, 2, 0, 0, 0, 0, 0, 3 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void test問題22001難問() {
+		logger.info(Common.methodName());
 		// https://number-place-puzzle.net/22001.html#content
 		int[][] question = {
 			{ 0, 5, 0, 7, 0, 0, 6, 0, 0 },
@@ -177,12 +178,12 @@ public class Test数独 {
 			{ 0, 0, 0, 0, 0, 7, 0, 3, 0 },
 			{ 0, 0, 3, 5, 0, 0, 0, 0, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void testナンプレNo601010() {
+		logger.info(Common.methodName());
 		// https://numpre7.com/np601010
 		int[][] question = {
 			{ 0, 0, 1, 0, 6, 0, 0, 0, 0 },
@@ -195,12 +196,12 @@ public class Test数独 {
 			{ 0, 0, 9, 6, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 7, 0, 6, 0, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void testOurHardestSudokuAndHowToSolveIt() {
+		logger.info(Common.methodName());
 	    // YouTube
 		// https://youtu.be/-ZZFEgCQsvA
 		int[][] question = {
@@ -214,12 +215,12 @@ public class Test数独 {
 			{ 7, 0, 0, 6, 0, 9, 0, 3, 0 },
 			{ 0, 0, 5, 0, 0, 0, 0, 4, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void testEvil_sudoku_with_17_initial_values() {
+		logger.info(Common.methodName());
 		// https://www.free-sudoku.com/sudoku.php?dchoix=evil
 		int[][] question = {
 			{ 1, 0, 0, 7, 0, 0, 0, 0, 6 },
@@ -232,12 +233,12 @@ public class Test数独 {
 			{ 0, 0, 0, 2, 0, 0, 4, 0, 0 },
 			{ 0, 9, 0, 0, 0, 0, 0, 0, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 
 	@Test
 	public void testGood_at_Sudoku_Heres_some_youll_never_complete() {
+		logger.info(Common.methodName());
 		// http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
 		int[][] question = {
 			{ 0, 0, 0, 7, 0, 0, 0, 0, 0 },
@@ -250,7 +251,6 @@ public class Test数独 {
 			{ 0, 0, 2, 0, 0, 0, 0, 5, 0 },
 			{ 0, 4, 0, 0, 0, 0, 3, 0, 0 },
 		};
-		logger.info(Common.methodName());
 		数独(question, new Solver());
 	}
 }

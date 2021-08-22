@@ -1,8 +1,12 @@
 package test.jp.saka1029.cspint;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +16,8 @@ import jp.saka1029.cspint.Problem;
 import jp.saka1029.cspint.Variable;
 
 class TestConstraint {
+
+    static final Logger logger = Common.getLogger(TestConstraint.class);
 
     @Test
     void testVariables() {

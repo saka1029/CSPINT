@@ -1,8 +1,11 @@
 package test.jp.saka1029.cspint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -10,6 +13,8 @@ import org.junit.Test;
 import jp.saka1029.cspint.Domain;
 
 public class TestDomain {
+
+    static final Logger logger = Common.getLogger(TestDomain.class);
 
     @Test
     public void testOf() {

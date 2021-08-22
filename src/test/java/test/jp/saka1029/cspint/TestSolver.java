@@ -1,6 +1,7 @@
 package test.jp.saka1029.cspint;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import jp.saka1029.cspint.Variable;
 
 class TestSolver {
 
-    static Logger logger = Logger.getLogger(TestSolver.class.getName());
+    static Logger logger = Common.getLogger(TestSolver.class);
 
     @Test
     void testSimple() {

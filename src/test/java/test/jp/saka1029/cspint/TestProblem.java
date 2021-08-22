@@ -1,6 +1,9 @@
 package test.jp.saka1029.cspint;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +29,7 @@ import jp.saka1029.cspint.Variable;
 
 class TestProblem {
 
-    static final Logger logger = Logger.getLogger(TestProblem.class.toString());
+    static final Logger logger = Common.getLogger(TestProblem.class);
 
     @Test
     void testVariable() {
@@ -111,7 +114,7 @@ class TestProblem {
         assertEquals(List.of(CA, CB, CC, CD, CE, CF, CG, CH, CI, CJ), problem.constraints);
         assertTrue(CJ.predicate.test(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
     }
-    
+
     @Test
     public void testConstraint2D() {
     	Problem p = new Problem();
@@ -126,7 +129,7 @@ class TestProblem {
         assertTrue(c.predicate.test(0, 2, 1, 1));
     }
 
-    
+
     @Test
     public void testAllDifferentEachRows() {
     	Problem p = new Problem();
@@ -141,7 +144,7 @@ class TestProblem {
         assertEquals(Set.of(List.of(A, B), List.of(C, D)),
         	p.constraints.stream().map(c -> c.variables).collect(Collectors.toSet()));
     }
-    
+
     @Test
     public void testAllDifferentEachColumns() {
     	Problem p = new Problem();
