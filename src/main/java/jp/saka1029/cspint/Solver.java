@@ -81,11 +81,17 @@ public class Solver {
         Map<Variable, Integer> protectedResult = Collections.unmodifiableMap(result);
         List<List<Constraint>> constraints = constraintOrder(problem, bindingOrder);
         SearchControl control = new SearchControl();
-        int[] testArgs = new int[variableSize];
+        int[][] argsArrays = new int[variableSize + 1][];
         int[] count = {0};
         new Object() {
 
+            int[] argsArray(int n) {
+                int[] a = argsArrays[n];
+                return a != null ? a : new int[n];
+            }
+
             boolean test(Constraint constraint) {
+                int[] testArgs = argsArray(constraint.variables.size());
                 int i = 0;
                 for (Variable v : constraint.variables)
                     testArgs[i++] = result.get(v);
@@ -109,12 +115,20 @@ public class Solver {
                 }
                 Variable variable = bindingOrder.get(i);
                 Domain domain = variable.domain;
-                for (int j = 0, size = domain.size(); j < size; ++j) {
-                    if (control.isStopped()) break;
-                    result.put(variable, domain.get(j));
-                        if (test(i))
-                            solve(i + 1);
+                for (int value : domain.values()) {
+                    if (control.isStopped())
+                        break;
+                    result.put(variable, value);
+                    if (test(i))
+                        solve(i + 1);
                 }
+//                for (int j = 0, size = domain.size(); j < size; ++j) {
+//                    if (control.isStopped()) break;
+//                    result.put(variable, domain.get(j));
+////                    logger.info(variable + " = " + domain.get(j));
+//                    if (test(i))
+//                        solve(i + 1);
+//                }
             }
         }.solve(0);
         return count[0];

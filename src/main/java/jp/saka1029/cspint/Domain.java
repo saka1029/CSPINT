@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public class Domain {
 
-    private final int[] values;
+    final int[] values;
 
     private Domain(int[] values) {
         this.values = values;
@@ -34,7 +34,7 @@ public class Domain {
     public int get(int index) {
         return values[index];
     }
-
+    
     public IntStream stream() {
         return IntStream.of(values);
     }

@@ -122,7 +122,8 @@ class Testナンバーリンク {
     }
 
     @Test
-    void testSimple() {
+    void testSample() {
+        logger.info(Common.methodName());
         // ナンバーリンクの遊び方、ルール、解き方 | WEBニコリ
         // https://www.nikoli.co.jp/ja/puzzles/numberlink/
         int[][] question = {
@@ -135,7 +136,44 @@ class Testナンバーリンク {
             {4, 0, 0, 0, 0, 0, 5},
         };
         int[] c = numberLink(question);
+    }
 
+    @Test
+    void testWikipedia() {
+        logger.info(Common.methodName());
+        int[][] question = {
+            {3, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0},
+            {0, 2, 0, 3, 0},
+            {0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 2},
+        };
+        int[] c = numberLink(question);
+    }
+
+    @Test
+    void testTECH_PROjin() {
+        logger.info(Common.methodName());
+        // 【C++】ナンバーリンク【前編】 | TECH PROjin
+        // https://tech.pjin.jp/blog/2020/09/01/numberlink-1/#numberlink_02
+        int[][] question = {
+            {1, 2, 3, 1},
+            {0, 0, 0, 0},
+            {0, 2, 3, 0},
+            {0, 0, 0, 0},
+        };
+        int[] c = numberLink(question);
+    }
+
+    @Test
+    void testSimple3x3() {
+        logger.info(Common.methodName());
+        int[][] question = {
+            {1, 2, 1},
+            {0, 2, 0},
+            {0, 0, 0},
+        };
+        int[] c = numberLink(question);
     }
 
 }
