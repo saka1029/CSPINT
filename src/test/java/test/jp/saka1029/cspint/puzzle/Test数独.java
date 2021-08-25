@@ -253,4 +253,23 @@ public class Test数独 {
 		};
 		数独(question, new Solver());
 	}
+
+	@Test
+	public void testA_Breakthrough_In_Sudoku_Technique() {
+		logger.info(Common.methodName());
+		// A Breakthrough In Sudoku Technique - YouTube
+		// https://www.youtube.com/watch?v=Ui1hrp7rovw
+		int[][] question = {
+			{ 0, 0, 0, 1, 0, 2, 0, 0, 0 },
+			{ 0, 6, 0, 0, 0, 0, 0, 7, 0 },
+			{ 0, 0, 8, 0, 0, 0, 9, 0, 0 },
+			{ 4, 0, 0, 0, 0, 0, 0, 0, 3 },
+			{ 0, 5, 0, 0, 0, 7, 0, 0, 0 },
+			{ 2, 0, 0, 0, 8, 0, 0, 0, 1 },
+			{ 0, 0, 9, 0, 0, 0, 8, 0, 5 },
+			{ 0, 7, 0, 0, 0, 0, 0, 6, 0 },
+			{ 0, 0, 0, 3, 0, 4, 0, 0, 0 },
+		};
+		数独(question, new Solver());
+	}
 }
