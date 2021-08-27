@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jp.saka1029.cspint.Constraint;
@@ -19,6 +18,7 @@ import jp.saka1029.cspint.Predicate3;
 import jp.saka1029.cspint.Predicate4;
 import jp.saka1029.cspint.Predicate5;
 import jp.saka1029.cspint.Problem;
+import jp.saka1029.cspint.SearchControl;
 import jp.saka1029.cspint.Solver;
 import jp.saka1029.cspint.Variable;
 import test.jp.saka1029.cspint.Common;
@@ -181,7 +181,7 @@ public class TestNumberLink {
 //        return new ArrayList<>(bindingOrder);
 //    }
 
-    static void answer(Variable[][] variables, Map<Variable, Integer> m) {
+    static void answer(SearchControl control, Variable[][] variables, Map<Variable, Integer> m) {
         logger.info("answer:");
         int rows = variables.length;
         int cols = variables[0].length;
@@ -213,7 +213,7 @@ public class TestNumberLink {
         List<Variable> bindingOrder = defineBindingOrder(problem, variables);
         printBindingOrder(variables, bindingOrder);
         Solver solver = new Solver();
-        solver.solve(problem, bindingOrder, (c, m) -> answer(variables, m));
+        solver.solve(problem, bindingOrder, (c, m) -> answer(c, variables, m));
         logger.info("binding count: " + Arrays.toString(solver.bindCount));
     }
 
@@ -252,8 +252,7 @@ public class TestNumberLink {
         solveNumberLink(board);
     }
 
-    @Ignore
-    @Test
+//    @Test
     public void testNumberlink0() {
         logger.info(Common.methodName());
         int[][] board = {
@@ -270,8 +269,7 @@ public class TestNumberLink {
         solveNumberLink(board);
     }
 
-    @Ignore
-    @Test
+//    @Test
     public void testNumberlink1() {
         logger.info(Common.methodName());
         int[][] board = {
